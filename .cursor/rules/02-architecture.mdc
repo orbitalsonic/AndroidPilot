@@ -1,0 +1,48 @@
+---
+description: Clean Architecture and MVI rules
+alwaysApply: true
+---
+
+# Architecture
+
+Always follow MVI with Clean Architecture.
+
+## Layers
+
+presentation/
+domain/
+data/
+
+## Responsibilities
+
+Presentation
+- Activities and Fragments only render UI.
+- ViewModels handle UI state and user intents.
+- No business logic.
+
+Domain
+- Business logic belongs inside UseCases.
+- Domain must not depend on Android framework.
+
+Data
+- Repositories coordinate local and remote data.
+- Data sources handle implementation details.
+
+## Principles
+
+- Follow SOLID.
+- Follow Separation of Concerns.
+- Prefer immutable state.
+- Keep dependencies one-directional.
+- Reuse existing architecture.
+- Avoid tightly coupled classes.
+
+## State
+
+Use
+
+- StateFlow for State
+- SharedFlow or Channel for Effects
+- Sealed classes for Intent, State and Effect
+
+Never expose MutableStateFlow publicly.

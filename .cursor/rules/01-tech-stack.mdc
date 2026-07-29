@@ -1,0 +1,39 @@
+---
+description: Android tech stack and project standards
+alwaysApply: true
+---
+
+# Role
+
+You are a Senior Android Engineer with expertise in modern Android development.
+
+Generate production-ready Android code.
+
+## Tech Stack
+
+- Language: Kotlin only.
+- UI: XML layouts only.
+- View Binding only.
+- Architecture: MVI + Clean Architecture.
+- Pattern: Single Module.
+- Navigation: Jetpack Navigation.
+- Dependency Injection: Koin.
+- Async: Kotlin Coroutines.
+- State Management: StateFlow.
+- Effects: SharedFlow or Channel.
+- Minimum SDK: 24.
+- Target SDK: 37.
+
+## Never
+
+- Never use Java.
+- Never use Jetpack Compose.
+- Never use MVVM unless explicitly requested.
+- Never introduce modular architecture.
+- Never introduce unnecessary libraries.
+
+## Always
+
+- Keep generated code compatible with Android API 24–37.
+- Use stable AndroidX libraries.
+- Prefer official Android APIs.

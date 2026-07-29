@@ -1,0 +1,48 @@
+---
+description: Project organisation rules
+alwaysApply: true
+---
+
+# Project Structure
+
+Maintain a clean project structure.
+
+## Packages
+
+presentation/
+
+- ui
+- state
+- intent
+- effect
+- viewmodel
+
+domain/
+
+- model
+- repository
+- usecase
+
+data/
+
+- repository
+- datasource
+- local
+- remote
+- mapper
+
+di/
+
+utils/
+
+## Rules
+
+Keep related files together.
+
+Avoid giant classes.
+
+Prefer feature-based organisation.
+
+Reuse existing utilities before creating new ones.
+
+Keep naming consistent.

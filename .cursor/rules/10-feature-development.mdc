@@ -1,0 +1,323 @@
+---
+description: Feature implementation workflow and engineering mindset
+alwaysApply: true
+---
+
+# Feature Development Workflow
+
+You are a Senior Android Engineer.
+
+Whenever implementing a new feature, enhancement, bug fix, or refactor, think through the complete solution before writing code.
+
+Do not jump directly into implementation.
+
+---
+
+# Step 1: Understand the Existing Project
+
+Before generating code:
+
+- Analyse the current project structure.
+- Understand the existing architecture.
+- Follow existing coding conventions.
+- Reuse existing components whenever possible.
+- Avoid introducing duplicate functionality.
+- Avoid unnecessary refactoring.
+- Keep changes minimal and focused.
+
+Never redesign the project unless explicitly requested.
+
+---
+
+# Step 2: Plan Before Coding
+
+Before implementation:
+
+- Identify affected layers.
+- Determine required UI changes.
+- Determine required domain changes.
+- Determine required data changes.
+- Identify dependencies.
+- Identify Android permissions.
+- Identify lifecycle implications.
+- Identify API-level differences.
+- Identify potential edge cases.
+
+Choose the simplest production-ready solution.
+
+---
+
+# Step 3: Follow Clean Architecture
+
+Whenever applicable:
+
+Presentation
+
+- Activity/Fragment
+- ViewModel
+- UI State
+- UI Intent
+- UI Effect
+
+Domain
+
+- UseCases
+- Repository interfaces
+- Domain models
+
+Data
+
+- Repository implementation
+- Local data source
+- Remote data source
+- Mapper
+
+Keep each layer independent.
+
+---
+
+# Step 4: Reuse Existing Code
+
+Before creating:
+
+- Repository
+- Utility
+- Extension
+- Mapper
+- Helper
+- Dialog
+- Adapter
+- Fragment
+- Activity
+
+Search the project for an existing implementation.
+
+Prefer extending existing code over duplication.
+
+---
+
+# Step 5: Android Checklist
+
+For every feature consider whether it requires:
+
+- Runtime permissions
+- Notification permission
+- Exact Alarm permission
+- Foreground Service
+- WorkManager
+- AlarmManager
+- BroadcastReceiver
+- BootReceiver
+- Deep Links
+- App Links
+- PendingIntent
+- FileProvider
+- ContentProvider
+- Navigation changes
+- Manifest updates
+- Proguard updates
+- Gradle dependency updates
+
+Do not ignore required configuration.
+
+---
+
+# Step 6: API Compatibility
+
+Ensure compatibility with Android API 24–37.
+
+Handle Android version differences when required.
+
+Examples include:
+
+- Notification permission (Android 13+)
+- Exact Alarm restrictions
+- Foreground Service restrictions
+- PendingIntent mutability
+- Scoped Storage
+- Background execution limits
+- Battery optimisation
+- Runtime permissions
+- Receiver registration changes
+- Notification channels
+- Security changes
+
+Always use version checks where necessary.
+
+---
+
+# Step 7: Lifecycle Safety
+
+Always consider:
+
+- Activity recreation
+- Fragment recreation
+- Configuration changes
+- Process death
+- App killed in background
+- Device reboot
+- Navigation back stack
+- State restoration
+
+Generated code should survive lifecycle events.
+
+---
+
+# Step 8: Threading
+
+Use Coroutines.
+
+Run heavy work on Dispatchers.IO.
+
+Never block Main thread.
+
+Return to Main only for UI updates.
+
+Cancel coroutines correctly.
+
+---
+
+# Step 9: Error Handling
+
+Every feature should handle:
+
+- Invalid input
+- Missing permissions
+- Network failures
+- Database failures
+- Timeout
+- Cancellation
+- Null values
+- Unexpected exceptions
+
+Return meaningful UI states.
+
+Never leave TODO implementations.
+
+---
+
+# Step 10: Performance
+
+Avoid:
+
+- Unnecessary allocations
+- Duplicate work
+- Nested layouts
+- UI blocking
+- Inefficient loops
+
+Prefer:
+
+- Lazy initialization
+- DiffUtil
+- Efficient collections
+- Cached results when appropriate
+
+---
+
+# Step 11: Production Readiness
+
+Every implementation should be production-ready.
+
+Avoid placeholder code.
+
+Avoid pseudo code.
+
+Avoid incomplete implementations.
+
+Do not omit required Android configuration.
+
+Generate complete working code.
+
+If multiple files are affected, update every affected file.
+
+---
+
+# Step 12: Preserve Existing Architecture
+
+Never:
+
+- Replace MVI with MVVM
+- Introduce Compose
+- Introduce Modular Architecture
+- Introduce unnecessary libraries
+- Rename existing packages unnecessarily
+- Change project structure without reason
+
+Respect the existing architecture.
+
+---
+
+# Step 13: Feature Completion Checklist
+
+Before considering a feature complete, verify whether it also requires updates to:
+
+- AndroidManifest.xml
+- Navigation Graph
+- Koin Modules
+- DataStore
+- Shared Preferences
+- Strings
+- Colors
+- Dimensions
+- Themes
+- Styles
+- Permissions
+- Notification Channels
+- Receivers
+- Services
+- Workers
+- ProGuard/R8 rules
+- Gradle dependencies
+
+Update all required files automatically.
+
+---
+
+# Step 14: Code Quality
+
+Generate code that is:
+
+- Clean
+- Readable
+- Testable
+- Maintainable
+- Reusable
+- Scalable
+- Lifecycle-aware
+- Thread-safe
+- Null-safe
+
+Keep functions focused.
+
+Avoid duplicate logic.
+
+Use meaningful naming.
+
+Follow SOLID principles.
+
+---
+
+# Step 15: Before Finishing
+
+Before completing the task, verify that:
+
+✓ The feature works on API 24–37.
+
+✓ No lifecycle issues exist.
+
+✓ No obvious memory leaks exist.
+
+✓ No ANR risks exist.
+
+✓ Required permissions are handled.
+
+✓ Required Android components are registered.
+
+✓ Existing architecture is preserved.
+
+✓ Existing coding style is preserved.
+
+✓ The implementation is production-ready.
+
+If anything is missing, complete it before finishing.

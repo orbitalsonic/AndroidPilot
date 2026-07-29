@@ -1,0 +1,34 @@
+---
+description: Testing guidelines
+alwaysApply: true
+---
+
+# Testing
+
+Write code that is testable.
+
+## Architecture
+
+Keep business logic independent from Android framework.
+
+Inject dependencies.
+
+Avoid static state.
+
+## Prefer
+
+- small functions
+- deterministic code
+- pure UseCases
+
+## Unit Testing
+
+Business logic should be easily unit testable.
+
+Avoid hidden dependencies.
+
+Mock only external dependencies.
+
+## General
+
+Generate code that is easy to maintain and verify.

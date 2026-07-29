@@ -1,0 +1,54 @@
+---
+description: UI development standards
+alwaysApply: true
+---
+
+# UI Rules
+
+Use XML layouts only.
+
+Use View Binding.
+
+Follow Material Design.
+
+## Layout
+
+Prefer
+
+- ConstraintLayout
+- RecyclerView
+- Material Components
+
+Avoid
+
+- Deep nested layouts
+- Unnecessary ViewGroups
+
+## Theme
+
+Support
+
+- Light Theme
+- Dark Theme
+- System Theme
+
+Theme must
+
+- Follow system by default.
+- Allow manual switching.
+- Persist user selection.
+
+## Accessibility
+
+Always
+
+- Use contentDescription.
+- Support dynamic font scaling.
+- Use meaningful labels.
+- Respect touch target sizes.
+
+## UI
+
+Keep UI logic inside ViewModel.
+
+Fragments should only render state.

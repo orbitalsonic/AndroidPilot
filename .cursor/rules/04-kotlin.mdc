@@ -1,0 +1,49 @@
+---
+description: Kotlin coding standards
+alwaysApply: true
+---
+
+# Kotlin Rules
+
+Use idiomatic Kotlin.
+
+## Prefer
+
+- data class
+- sealed class
+- object
+- extension functions
+- scope functions when appropriate
+
+## Coroutines
+
+Use
+
+- viewModelScope
+- lifecycleScope
+
+Use Dispatchers.IO for
+
+- database
+- network
+- file operations
+
+Never block Main thread.
+
+Never use GlobalScope.
+
+## Naming
+
+Use meaningful names.
+
+Functions should
+
+- do one thing
+- remain small
+- be self-documenting
+
+Avoid magic numbers.
+
+Prefer constants.
+
+Prefer immutable collections.

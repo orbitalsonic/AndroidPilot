@@ -1,0 +1,43 @@
+---
+description: Error handling rules
+alwaysApply: true
+---
+
+# Error Handling
+
+Handle failures gracefully.
+
+## Never
+
+- Swallow exceptions.
+- Leave empty catch blocks.
+- Ignore coroutine failures.
+
+## Always
+
+Return meaningful Result or State objects.
+
+Log useful debugging information.
+
+Show user-friendly error messages.
+
+Recover whenever possible.
+
+## Coroutines
+
+Use structured concurrency.
+
+Handle CancellationException correctly.
+
+Don't convert cancellation into failure.
+
+## Validation
+
+Validate
+
+- input
+- permissions
+- null values
+- API responses
+
+before use.

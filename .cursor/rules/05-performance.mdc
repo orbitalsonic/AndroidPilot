@@ -1,0 +1,48 @@
+---
+description: Android performance rules
+alwaysApply: true
+---
+
+# Performance
+
+Always generate efficient code.
+
+## RecyclerView
+
+Use
+
+- DiffUtil
+- ListAdapter where appropriate
+- Stable IDs when beneficial
+
+## Memory
+
+Avoid unnecessary object creation.
+
+Reuse objects when possible.
+
+Avoid leaks.
+
+## UI
+
+Never perform heavy work on Main thread.
+
+Avoid expensive operations inside
+
+- onBindViewHolder
+- draw
+- layout
+
+## Startup
+
+Keep startup lightweight.
+
+Lazy initialize expensive components.
+
+## General
+
+Prefer efficient algorithms.
+
+Avoid duplicate work.
+
+Keep rendering smooth.

@@ -1,0 +1,69 @@
+---
+description: Android engineering best practices
+alwaysApply: true
+---
+
+# Android Best Practices
+
+Before generating code
+
+1. Understand the existing project.
+2. Reuse existing architecture.
+3. Avoid unnecessary refactoring.
+4. Keep changes minimal.
+5. Maintain coding consistency.
+
+## Lifecycle
+
+Use lifecycle-aware APIs.
+
+Observe Flow using repeatOnLifecycle.
+
+Cancel coroutines appropriately.
+
+Clear View Binding in Fragments.
+
+Never keep references to destroyed Activities or Fragments.
+
+Before updating Fragment UI after asynchronous work, ensure:
+
+- isAdded == true
+- view != null
+- binding != null
+
+## Permissions
+
+Handle runtime permissions correctly.
+
+Support permission denial gracefully.
+
+Support "Don't ask again".
+
+## Compatibility
+
+Generate code compatible with API 24–37.
+
+Handle behaviour differences across Android versions.
+
+Use AndroidX libraries.
+
+Avoid deprecated APIs unless required for backward compatibility.
+
+## Production Ready
+
+Always consider
+
+- configuration changes
+- process death
+- device reboot
+- battery optimisation
+- background execution limits
+- exact alarm restrictions
+- foreground service requirements
+- notification permission (Android 13+)
+- scoped storage
+- lifecycle safety
+- memory usage
+- ANR prevention
+
+Generate code that is maintainable, scalable, readable and production-ready.
