@@ -11,11 +11,11 @@
 These rules transform AI coding assistants into experienced Android engineers by enforcing:
 
 - Modern Android development practices
-- Clean Architecture
-- MVI architecture
+- MVVM (Baseline) + MVI (State-heavy)
+- AGP 9 / Gradle 9 Standards
 - Kotlin best practices
 - XML + ViewBinding
-- Material Design
+- Material 3
 - Performance optimization
 - Lifecycle safety
 - Error handling
@@ -29,21 +29,26 @@ Instead of repeatedly explaining your project standards, simply include these ru
 
 These rules are designed for projects using:
 
-- Kotlin
-- XML Layouts
-- ViewBinding
-- MVI Architecture
-- Clean Architecture
+- Kotlin only
+- XML Layouts only
+- ViewBinding only
+- MVVM / MVI Architecture
 - Koin
 - Kotlin Coroutines
 - StateFlow
 - Jetpack Navigation
-- Material Components
+- AGP 9 / Gradle 9 Standards
+- sdp / ssp for dimensions
+- Glide for images
+- Firebase (Analytics, Crashlytics, Remote Config)
+- Splash Screen (androidx.core.splashscreen)
 
 Supported Android versions:
 
 - Minimum SDK: 24
 - Target SDK: 37
+- Compile SDK: 37
+- Java Compatibility: 17
 
 ---
 
@@ -61,7 +66,10 @@ Supported Android versions:
     ├── 07-testing.mdc
     ├── 08-project-structure.mdc
     ├── 09-android-best-practices.mdc
-    └── 10-feature-development.mdc
+    ├── 10-feature-development.mdc
+    ├── 11-template-conventions.mdc
+    ├── 12-new-project.mdc
+    └── 13-updating-project.mdc
 ```
 
 ---
@@ -70,15 +78,15 @@ Supported Android versions:
 
 ## 01 - Tech Stack
 
-Defines the project's technology stack including:
+Defines the project's technology stack and modern standards including:
 
-- Kotlin
-- XML
-- ViewBinding
-- Koin
-- MVI
-- Clean Architecture
-- Android SDK versions
+- Kotlin only (No Java)
+- XML + ViewBinding only (No Compose)
+- MVVM + MVI
+- Koin DI
+- AGP 9 / Gradle 9 standards (No Kotlin plugin, new optimization DSL)
+- SDK versions (24-37)
+- Dimens (sdp/ssp)
 
 ---
 
@@ -86,13 +94,11 @@ Defines the project's technology stack including:
 
 Enforces:
 
-- MVI
-- Clean Architecture
-- SOLID Principles
-- Separation of Concerns
+- MVVM (Baseline) / MVI (State-heavy)
 - Repository Pattern
-- Use Cases
+- Separation of Concerns
 - Immutable UI State
+- SharedFlow/Channel for Effects
 
 ---
 
@@ -101,12 +107,11 @@ Enforces:
 Defines UI standards:
 
 - XML only
-- Material Design
-- ViewBinding
-- Dark Mode
-- System Theme
-- Accessibility
-- Responsive layouts
+- ViewBinding only
+- Material 3
+- Edge-to-edge support
+- Accessibility & Dark Mode
+- Responsive layouts with sdp/ssp
 
 ---
 
@@ -161,13 +166,12 @@ Promotes:
 
 ## 08 - Project Structure
 
-Defines a consistent package structure:
+Defines a consistent single-module (`:app`) package structure:
 
-- presentation
-- domain
-- data
-- di
-- utils
+- `common/` (App-wide features)
+- `helpers/` (Stateless Kotlin extensions)
+- `presentation/` (Activities, Fragments, ViewModels)
+- `storage/` (Preferences, Data Providers)
 
 ---
 
@@ -176,10 +180,10 @@ Defines a consistent package structure:
 Ensures:
 
 - Lifecycle safety
+- AGP 9 / Gradle 9 standards
+- R8 optimization (.keep files)
 - Permission handling
-- API compatibility
-- Background execution
-- Android platform recommendations
+- API compatibility (24-37)
 
 ---
 
@@ -187,12 +191,43 @@ Ensures:
 
 A senior-engineer workflow that guides AI to:
 
-- Analyse the project before coding
-- Reuse existing components
-- Consider Android lifecycle
-- Handle permissions
-- Implement edge cases
-- Produce complete, production-ready features
+- Analyze the project before coding
+- Reuse existing building blocks in `helpers/` and `presentation/base/`
+- Implement production-ready features with proper error handling
+- Handle Android lifecycle and permissions
+
+---
+
+## 11 - Template Conventions
+
+Catalog of reusable building blocks:
+
+- Base classes (Activity/Fragment)
+- Helper catalog (Navigation, Theme, Permissions, etc.)
+- Common components (Firebase, Network, Observers)
+- Adapter & Dialog standards
+
+---
+
+## 12 - New Project
+
+Workflow for starting a new app:
+
+- Identity & Branding updates
+- Firebase setup
+- Signing configuration
+- Template cleanup
+
+---
+
+## 13 - Updating Project
+
+Workflow for maintaining an existing project:
+
+- Establishing baselines
+- Dependency & SDK upgrades
+- Safe migrations & deprecations
+- Resource management
 
 ---
 
@@ -222,7 +257,7 @@ Project
 │   └── rules
 │       ├── 01-tech-stack.mdc
 │       ├── ...
-│       └── 10-feature-development.mdc
+│       └── 13-updating-project.mdc
 ```
 
 Cursor will automatically load these rules for your project.

@@ -9,25 +9,30 @@ Write code that is testable.
 
 ## Architecture
 
-Keep business logic independent from Android framework.
-
-Inject dependencies.
-
-Avoid static state.
+- Keep business logic independent from the Android framework.
+- Inject dependencies (constructor parameters, or Koin when wired) instead of building them inline.
+- Avoid static/global mutable state.
+- Keep ViewModels free of `Context`; pass what they need or use `AndroidViewModel` only when unavoidable.
 
 ## Prefer
 
 - small functions
 - deterministic code
-- pure UseCases
+- pure functions for calculations, formatting, filtering, validation
 
 ## Unit Testing
 
-Business logic should be easily unit testable.
+- Business logic should be unit testable without Robolectric.
+- Avoid hidden dependencies (no singletons reached from inside a function body).
+- Mock only external dependencies.
+- Test the ViewModel through its public state and public entry points.
 
-Avoid hidden dependencies.
+## Scope
 
-Mock only external dependencies.
+This template ships no test suite. Do not scaffold a testing framework unless asked.
+
+When asked for tests, place them in `app/src/test` (JVM) or `app/src/androidTest` (instrumented)
+and add the test dependencies to `gradle/libs.versions.toml`.
 
 ## General
 

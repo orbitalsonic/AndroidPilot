@@ -1,0 +1,95 @@
+---
+description: Workflow for updating an existing project - dependency and SDK upgrades, migrations, refactors, bug fixes
+alwaysApply: false
+---
+
+# Update Workflow
+
+Use this when changing an existing, working project: upgrading dependencies or SDK levels, migrating
+a deprecated API, refactoring, or fixing a bug.
+
+The bar is different from new code: **do not break what already works.**
+
+---
+
+# Step 1: Establish the Baseline
+
+- Read the current state before changing anything (`git status`, `git log`, the affected files).
+- Reproduce the bug, or state precisely what the upgrade is meant to achieve.
+- Confirm the project builds before your change. If it does not, report that first.
+
+---
+
+# Step 2: Scope the Change
+
+- List every file the change touches.
+- Keep the diff minimal and focused - no drive-by reformatting, renaming, or restyling.
+- Do not "modernise" unrelated code while fixing something.
+- If you find a second problem, report it instead of silently fixing it.
+
+---
+
+# Step 3: Dependency and SDK Upgrades
+
+- Change versions in `gradle/libs.versions.toml` only.
+- Upgrade one group at a time (AGP/Kotlin, AndroidX, Firebase BOM, ...) and build between steps.
+- Read the release notes for breaking changes before bumping a major version.
+- AGP upgrades: bump the Gradle wrapper with it (including `distributionSha256Sum`), and check
+  whether the DSL moved again (AGP 9 already replaced `compileSdk =`, `isMinifyEnabled`,
+  `proguardFiles`, and the `kotlin-android` plugin).
+- Adding a KSP-based library (Room, Glide's generated API, …) needs a KSP version compatible with
+  AGP's built-in Kotlin - verify it builds before committing to it.
+- `targetSdk` bumps are behaviour changes, not version numbers. For each new API level, check
+  permissions, background limits, foreground service types, exported components, and edge-to-edge.
+- After the bump, search the project for newly deprecated APIs and fix them or note them.
+
+---
+
+# Step 4: Migrations and Deprecations
+
+- Replace a deprecated API with the AndroidX / Compat equivalent, keeping API 24 support.
+- When behaviour differs by version, branch on `Build.VERSION.SDK_INT` instead of dropping support.
+- Keep the public shape of shared helpers stable; if a signature must change, update every call site
+  in the same change.
+- When a helper gains a smarter default (for example a theme-aware default color), verify every
+  existing caller still behaves correctly.
+
+---
+
+# Step 5: Data and Preference Migrations
+
+- Never rename or repurpose a SharedPreferences key without a migration path, or users lose settings.
+- If a key must change, read the old key once, write the new one, and remove the old one.
+- The same applies to Room schemas, DataStore keys, and cached file formats.
+
+---
+
+# Step 6: Resource Changes
+
+- Renaming or deleting a resource requires updating every reference (layouts, drawables, styles,
+  Kotlin, navigation graphs, manifest).
+- A new semantic color goes into `values/colors.xml` AND `values-night/colors.xml`.
+- A new string goes into `values/strings.xml`; state that translations are pending.
+- Never delete a localized `values-<lang>` string while the default key still exists.
+
+---
+
+# Step 7: Verify
+
+- `gradlew clean assembleDebug` (and `assembleRelease` when R8-sensitive code changed).
+- Test the changed flow, plus one flow you did not touch, in both light and dark theme.
+- Check the oldest supported API level when the change is platform-sensitive.
+- Report exactly what you verified and what you could not.
+
+---
+
+# Step 8: Report Honestly
+
+State
+
+- what changed and why
+- what you verified, and how
+- what you deliberately left out
+- any risk the user should re-test manually
+
+Never claim a build or a test passed if you did not run it.

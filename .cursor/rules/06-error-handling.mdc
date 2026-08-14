@@ -9,35 +9,46 @@ Handle failures gracefully.
 
 ## Never
 
-- Swallow exceptions.
-- Leave empty catch blocks.
+- Swallow exceptions silently.
+- Leave an empty `catch` block. Log, recover, or surface the failure.
 - Ignore coroutine failures.
+- Crash on a null, an empty list, or a missing resource.
 
 ## Always
 
-Return meaningful Result or State objects.
+- Return a meaningful `Result`, sealed result type, or UI state.
+- Log useful debugging information with a consistent TAG.
+- Show a user-friendly message (`showToast`, `showSnackBar`) - never a raw exception message.
+- Recover whenever possible.
+- Report non-fatal failures with `Throwable.recordException(logTag)` from `common/firebase/FirebaseUtils.kt`.
 
-Log useful debugging information.
-
-Show user-friendly error messages.
-
-Recover whenever possible.
+The template contains legacy `try { } catch (ex: Exception) { ex.printStackTrace() }` blocks in helper
+files. When adding code to those files keep the defensive style, but log with a TAG instead of only
+printing the stack trace. Do not copy that pattern into new feature code.
 
 ## Coroutines
 
-Use structured concurrency.
-
-Handle CancellationException correctly.
-
-Don't convert cancellation into failure.
+- Use structured concurrency; scope work to `viewModelScope` / `lifecycleScope`.
+- Handle `CancellationException` correctly - rethrow it, never convert cancellation into a failure state.
+- Use `CoroutineExceptionHandler` for fire-and-forget work.
 
 ## Validation
 
-Validate
+Validate before use
 
-- input
-- permissions
+- user input
+- permission state
 - null values
-- API responses
+- API and Remote Config responses
+- list indices (`Int.isValidPosition(list)` in `helpers/utils/CommonUtils.kt`)
 
-before use.
+## UI Safety
+
+Before touching UI after async work, ensure the view is still alive:
+
+- `isAdded == true`
+- `view != null`
+- binding is not null
+- `Activity?.isActivityExist()` for activity-scoped work
+
+Prefer the template's `launchWhenCreated` / `launchWhenStarted` / `launchWhenResumed` helpers.

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="NONE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="64be090b-99b6-4d58-a39c-4586ed02d018" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.cursor/rules/01-tech-stack.mdc" beforeDir="false" afterPath="$PROJECT_DIR$/.cursor/rules/01-tech-stack.mdc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.cursor/rules/02-architecture.mdc" beforeDir="false" afterPath="$PROJECT_DIR$/.cursor/rules/02-architecture.mdc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.cursor/rules/03-ui.mdc" beforeDir="false" afterPath="$PROJECT_DIR$/.cursor/rules/03-ui.mdc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.cursor/rules/04-kotlin.mdc" beforeDir="false" afterPath="$PROJECT_DIR$/.cursor/rules/04-kotlin.mdc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.cursor/rules/05-performance.mdc" beforeDir="false" afterPath="$PROJECT_DIR$/.cursor/rules/05-performance.mdc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.cursor/rules/06-error-handling.mdc" beforeDir="false" afterPath="$PROJECT_DIR$/.cursor/rules/06-error-handling.mdc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.cursor/rules/07-testing.mdc" beforeDir="false" afterPath="$PROJECT_DIR$/.cursor/rules/07-testing.mdc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.cursor/rules/08-project-structure.mdc" beforeDir="false" afterPath="$PROJECT_DIR$/.cursor/rules/08-project-structure.mdc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.cursor/rules/09-android-best-practices.mdc" beforeDir="false" afterPath="$PROJECT_DIR$/.cursor/rules/09-android-best-practices.mdc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.cursor/rules/10-feature-development.mdc" beforeDir="false" afterPath="$PROJECT_DIR$/.cursor/rules/10-feature-development.mdc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ClangdSettings">
+    <option name="formatViaClangd" value="false" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "orbitalsonic"
+  }
+}]]></component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/orbitalsonic/AndroidPilot.git",
+    "accountId": "2ff3c0b1-d442-4dc2-a3db-d1299e2b8e76"
+  }
+}]]></component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 6,
+  "fromUser": false
+}]]></component>
+  <component name="ProjectId" id="3HtbQiwNUPlxnCa6OuG4VHOqaYx" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.cidr.known.project.marker": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.readMode.enableVisualFormatting": "true",
+    "cf.first.check.clang-format": "false",
+    "cidr.known.project.marker": "true",
+    "git-widget-placeholder": "master",
+    "kotlin-language-version-configured": "true"
+  }
+}]]></component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="64be090b-99b6-4d58-a39c-4586ed02d018" name="Changes" comment="" />
+      <created>1786690297939</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1786690297939</updated>
+    </task>
+    <servers />
+  </component>
+</project>

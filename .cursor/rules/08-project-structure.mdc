@@ -1,48 +1,68 @@
 ---
-description: Project organisation rules
+description: Project organisation and package structure
 alwaysApply: true
 ---
 
 # Project Structure
 
-Maintain a clean project structure.
+Single module (`:app`). Package root is the app namespace (`<namespace>`).
 
-## Packages
+```
+<namespace>/
+├── MainApplication.kt          // theme + locale restore, app-wide init
+├── common/                     // app-wide, feature-independent
+│   ├── firebase/               // EventsProvider, FirebaseUtils, RemoteConfiguration, RemoteConstants
+│   ├── network/                // InternetManager
+│   ├── observers/              // SingleLiveEvent
+│   ├── permissions/
+│   ├── repository/             // repositories shared by several features
+│   └── viewmodel/              // ViewModels shared by several features
+├── helpers/                    // stateless Kotlin extensions, grouped by concern
+│   ├── constants/  datetime/  handlers/  lifecycle/  listener/  locale/
+│   ├── menu/  navigation/  permissions/  settings/  theme/  ui/  utils/
+├── presentation/
+│   ├── MainActivity.kt
+│   ├── base/                   // BaseActivity, BaseFragment, InsetsMode
+│   ├── dialogs/                // reusable dialogs + dialogs/base builders
+│   ├── startup/                // splash + onboarding
+│   ├── home/
+│   └── <feature>/              // one package per feature
+└── storage/
+    ├── preferences/            // SharedPrefManager
+    └── provider/               // static/bundled data providers
+```
 
-presentation/
+## Feature Package
 
-- ui
-- state
-- intent
-- effect
-- viewmodel
-
-domain/
-
-- model
-- repository
-- usecase
-
-data/
-
-- repository
-- datasource
-- local
-- remote
-- mapper
-
-di/
-
-utils/
+```
+presentation/<feature>/
+    Fragment<Feature>.kt
+    <Feature>ViewModel.kt       // when the screen holds state
+    adapters/
+    interfaces/
+    models/
+    repository/
+```
 
 ## Rules
 
-Keep related files together.
+- Keep related files together; prefer feature-based organisation over type-based.
+- A helper used by two or more features moves to `helpers/` or `common/`.
+- Reuse existing utilities before creating new ones. Search `helpers/` first.
+- Never create a second helper that duplicates an existing one (toast, dialog, navigation, permission, date, screen size, image loading are all already covered).
+- Never rename or move existing packages while implementing a feature.
+- Avoid giant classes; split adapters, mappers and dialogs into their own files.
+- Keep naming consistent with the existing files around you.
 
-Avoid giant classes.
+## Resources
 
-Prefer feature-based organisation.
-
-Reuse existing utilities before creating new ones.
-
-Keep naming consistent.
+```
+res/
+├── color/          // state selectors (ColorStateList)
+├── drawable/       // bg_*, ic_*, flag_*
+├── layout/         // activity_*, fragment_*, item_*, dialog_*
+├── navigation/     // *_nav_graph.xml
+├── values/         // colors, strings, themes, splash, urls, dimens
+├── values-night/   // dark theme colour overrides
+└── values-<lang>/  // localized strings
+```
