@@ -2,7 +2,7 @@
 
 > Production-ready AI coding rules for Android development.
 >
-> A collection of reusable Cursor Rules (`.cursor/rules`) that help AI assistants generate clean, maintainable, and production-ready Android code.
+> A collection of reusable AI rules (Cursor `.mdc` and Claude `CLAUDE.md`) that help AI assistants generate clean, maintainable, and production-ready Android code.
 
 ---
 
@@ -58,18 +58,10 @@ Supported Android versions:
 .cursor/
 └── rules/
     ├── 01-tech-stack.mdc
-    ├── 02-architecture.mdc
-    ├── 03-ui.mdc
-    ├── 04-kotlin.mdc
-    ├── 05-performance.mdc
-    ├── 06-error-handling.mdc
-    ├── 07-testing.mdc
-    ├── 08-project-structure.mdc
-    ├── 09-android-best-practices.mdc
-    ├── 10-feature-development.mdc
-    ├── 11-template-conventions.mdc
-    ├── 12-new-project.mdc
+    ├── ...
     └── 13-updating-project.mdc
+.claude/
+└── CLAUDE.md
 ```
 
 ---
@@ -231,6 +223,21 @@ Workflow for maintaining an existing project:
 
 ---
 
+## CLAUDE.md
+
+A comprehensive, single-file rule set specifically optimized for **Claude Code**, **Roo Code**, and **Cline**. It consolidates all project standards, tech stack details, and engineering workflows into a format that Claude can easily consume.
+
+It also includes a set of specialized **Claude Skills** (in `.claude/skills/`) for:
+- Feature development
+- UI & Theming
+- Template helpers catalog
+- Build configuration & R8
+- New project setup
+- Project updates & migrations
+- Pre-flight verification
+
+---
+
 # 💡 Why These Rules?
 
 Most AI assistants are excellent at generating code, but they don't automatically understand your project's architecture or engineering standards.
@@ -248,7 +255,7 @@ These rules ensure generated code is:
 
 # 🚀 Installation
 
-Clone or copy the `.cursor/rules` directory into your Android project.
+Clone or copy the `.cursor/rules` and `.claude/CLAUDE.md` into your Android project.
 
 ```
 Project
@@ -258,6 +265,8 @@ Project
 │       ├── 01-tech-stack.mdc
 │       ├── ...
 │       └── 13-updating-project.mdc
+└── .claude
+    └── CLAUDE.md
 ```
 
 Cursor will automatically load these rules for your project.
