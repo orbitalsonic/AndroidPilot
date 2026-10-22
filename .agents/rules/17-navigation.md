@@ -1,0 +1,130 @@
+---
+description: Navigation Component, Safe Args, nav animations, and nav graph conventions
+paths:
+  - "**/navigation/**/*.xml"
+  - "**/anim*/**/*.xml"
+  - "**/presentation/**/*.kt"
+  - "**/ui/**/*.kt"
+---
+
+## Architecture
+
+- Prefer single-Activity + Navigation
+- **xml:** Navigation Component + Safe Args + `res/navigation/nav_*.xml` (in `:presentation`)
+- **compose:** Navigation Compose + `:app` `navigation/NavGraph.kt` (AnimeHub). Route constants on `*Screen.kt`. Features never take `NavController` — `onNavigate*` lambdas. Nested tab `NavHost` + content slots (`28-compose-ui`)
+- ViewModels emit navigation **Effects**; UI performs `NavController` calls
+- Never navigate from ViewModel (no NavController / FragmentManager there)
+
+## Graph count (xml)
+
+| Case | Graphs |
+|------|--------|
+| Default (no bottom nav) | **One** `nav_graph.xml` only |
+| BottomNavigation present (usually Dashboard) | **Two:** `nav_graph.xml` + `nav_graph_dashboard.xml` |
+| Large / separate concerns | Suggest optional `nav_graph_<feature>` to the developer |
+
+### Dual-graph rules (BottomNavigation)
+
+- `nav_graph_dashboard` contains **only** bottom-tab destinations — destination ids must match menu item ids for `setupWithNavController`
+- Nested tab screens navigate to **root** destinations via `navigateRootTo` (`FragmentExtensions` in `:core-ui`) — not by stuffing root destinations into the dashboard graph
+- Dashboard host: `app:defaultNavHost="false"` on the child `FragmentContainerView`; Activity host keeps `defaultNavHost="true"`
+
+### NavController lazy pattern
+
+```kotlin
+// MainActivity — root
+private val navController by lazy {
+    (supportFragmentManager.findFragmentById(binding.fcvContainerMain.id) as NavHostFragment).navController
+}
+
+// DashboardFragment — nested tabs
+private val navController by lazy {
+    (childFragmentManager.findFragmentById(binding.fcvContainerDashboard.id) as NavHostFragment).navController
+}
+```
+
+### `navigateRootTo`
+
+Use for nested-graph → root-graph navigation (e.g. Home tab → Premium on root):
+
+```kotlin
+navigateRootTo(
+    navHostContainerId = R.id.fcvContainerMain,
+    currentDestinationId = R.id.dashboardFragment,
+    action = R.id.action_dashboardFragment_to_premiumFragment,
+)
+```
+
+## Resources (xml)
+
+- Graphs: `res/navigation/nav_graph.xml`, optional `nav_graph_dashboard.xml`, optional `nav_graph_<feature>.xml`
+- Action / destination IDs: snake_case matching feature (`action_home_to_detail`)
+- Transition anims live in **`:core-ui`** `res/anim/` (+ `res/anim-ldrtl/` for RTL)
+
+Compose uses `slideInHorizontally` / `slideOutHorizontally` on the root `NavHost` (`28-compose-ui`) — skip XML anim files when `uiFramework` is `compose` unless splash XML theme still needs them.
+
+## Default action animations (mandatory)
+
+Every forward `<action>` in `nav_graph` (and nested graphs) must set the reference slide set unless product explicitly wants no animation:
+
+```xml
+<action
+    android:id="@+id/action_featureA_to_featureB"
+    app:destination="@id/featureBFragment"
+    app:enterAnim="@anim/slide_in_right"
+    app:exitAnim="@anim/slide_out_left"
+    app:popEnterAnim="@anim/slide_in_left"
+    app:popExitAnim="@anim/slide_out_right" />
+```
+
+| Attr | Anim |
+|------|------|
+| `enterAnim` | `@anim/slide_in_right` |
+| `exitAnim` | `@anim/slide_out_left` |
+| `popEnterAnim` | `@anim/slide_in_left` |
+| `popExitAnim` | `@anim/slide_out_right` |
+
+Required files in `:core-ui` (create during `hsg-setup-new-project` if missing):
+
+```
+res/anim/slide_in_right.xml
+res/anim/slide_out_left.xml
+res/anim/slide_in_left.xml
+res/anim/slide_out_right.xml
+res/anim-ldrtl/slide_in_right.xml
+res/anim-ldrtl/slide_out_left.xml
+res/anim-ldrtl/slide_in_left.xml
+res/anim-ldrtl/slide_out_right.xml
+```
+
+- Match reference timing/interpolators (translate + settle, ~400–500ms, accelerate)
+- `anim-ldrtl` mirrors directions for RTL — do not skip RTL variants
+- Optional: `item_anim_fade_slide.xml` for RecyclerView item animation only — not a nav action default
+
+## Safe Args
+
+- Property name is always **`navArgs`** — never `args` / `arguments` for the delegate:
+  ```kotlin
+  private val navArgs: ConversationFragmentArgs by navArgs()
+  ```
+- Pass only primitive / Parcelable / Serializable types approved by the project
+- Read `navArgs` in UI or inject into ViewModel via DI `parametersOf` / SavedStateHandle
+- Do not pass large objects or domain repositories through nav args
+
+## Back stack / UX
+
+- Prefer Fragment helpers `navigateTo(...)` / `popFrom(...)` / `navigateRootTo(...)` from `FragmentExtensions` — only navigate when `isAdded` and current destination matches (see `19-base-ui`)
+- Do not call raw `findNavController().navigate` / `popBackStack` in feature Fragments when the helpers exist
+- Use `popUpTo` / `inclusive` deliberately for login and tab roots (onboarding funnel often `popUpToInclusive="true"`)
+- Dashboard backpress: see `32-screen-dashboard`
+- Predictive back / `OnBackPressedDispatcher`: **only add when the feature explicitly asks for custom `onBackPressed`** — map to Intent/Effect when ViewModel must know; otherwise leave default Nav back alone
+- Deep links declared in nav graph + manifest; validate args before use (see `10-manifest`, `14-security-secrets`)
+
+## Forbidden
+
+- Nav actions without the four anim attrs (unless explicitly no-animation)
+- Defining slide anims only in `:presentation` — keep shared transitions in `:core-ui`
+- Navigating from ViewModel
+- Putting non-tab destinations into `nav_graph_dashboard`
+- Collecting Flows on Fragment `lifecycleScope` instead of **`viewLifecycleOwner`** (duplicate collectors after back nav)
+- Shared `FlowCollectionExtensions.kt` / `LifecycleFlowExtensions.kt` — use `FragmentExtensions` + `ActivityExtensions`

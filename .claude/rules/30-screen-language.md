@@ -1,0 +1,32 @@
+---
+description: Language selection screen conventions
+paths:
+  - "**/language/**"
+  - "**/LanguageFragment*"
+  - "**/LanguageScreen*"
+  - "**/InAppLanguage*"
+---
+
+# Language screen
+
+## Behavior
+
+- Shows app languages; apply locale like the demo (AppCompat / AppLocales + prefs `isLanguageCompleted`)
+- When implementing a design that pre-selects a language, **ask** whether English should be selected by default
+- Sticky Continue (or equivalent) outside the list scroll region (`09-resources-xml`)
+
+## UI helpers
+
+```kotlin
+setupRecyclerView()
+screenStarted() // launchWhenResumed { handleIntent(ScreenStarted) } when appropriate
+```
+
+- List: `layoutManager` / orientation in XML; `ListAdapter` + DiffUtil
+- Continue: `ButtonStyle.Primary`; enable when a language is selected (unless product says otherwise)
+- MainActivity: block back while on Language during first-time funnel
+
+## Forbidden
+
+- Hardcoded language display names in Kotlin when they belong in `strings.xml`
+- Setting `layoutManager` in Kotlin for a fixed vertical list

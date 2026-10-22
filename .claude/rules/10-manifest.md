@@ -1,0 +1,85 @@
+---
+description: AndroidManifest.xml conventions
+paths:
+  - "**/AndroidManifest.xml"
+---
+
+## Module roles
+
+| Module | Manifest content |
+|--------|-----------------|
+| `:app` | Full merged manifest — Application, Activities, Services, Receivers, Providers, meta-data |
+| `:gmaAds` | `INTERNET` + AdMob components / debugger meta-data as shipped |
+| `:core-platform` | `ACCESS_NETWORK_STATE` when connectivity helpers need it |
+| Other modules | **No** manifest unless a permission or component is truly required — do **not** add empty `<manifest />` boilerplate |
+
+## Application class
+
+- Single Application in `:app` — DI init only, keep minimal
+- Declare with `android:name=".App"`
+- `allowBackup` configured explicitly with backup/extraction XML rules
+- `supportsRtl="true"`
+- Application theme: product theme (e.g. `@style/Theme.App` / `Theme.Calculator`) — **not** splash
+
+## `<application>` child order (mandatory)
+
+Inside `<application>`, declare in this order:
+
+1. Launcher `MainActivity` first
+2. Other activities (if any)
+3. Services
+4. Broadcast receivers
+5. `meta-data`
+
+## Activities
+
+- Prefer single-Activity architecture with Navigation Component
+- Launcher Activity: `exported="true"` + MAIN/LAUNCHER intent-filter; theme `@style/Theme.App.Starting` (splash)
+- All other Activities: `exported="false"`
+- **Never leave `exported` unspecified** when intent-filters exist
+- Support **portrait and landscape** — do not set `android:screenOrientation="portrait"` (or landscape-only) unless product explicitly requires it
+
+## Fragments
+
+- Not declared in manifest — hosted via Navigation graphs
+
+## Services and receivers
+
+- Default: `exported="false"`
+- System receivers (BOOT_COMPLETED, etc.): `exported="true"` only when required
+- Foreground services: set `foregroundServiceType` + matching permissions
+- Custom actions: namespace with `applicationId`
+
+## Permissions
+
+- Declare in the module that needs them — app merges all
+- Dangerous permissions: request at runtime, never assume granted
+- Optional hardware: `uses-feature ... required="false"`
+
+## Secrets and placeholders
+
+- API keys via manifest placeholders sourced from `local.properties` or CI
+
+## Themes
+
+- Splash: create `:core-ui` `res/values/splash.xml` with `Theme.App.Starting` (`Theme.SplashScreen`)
+- Apply `@style/Theme.App.Starting` on the **launcher Activity only**
+- Application tag uses main product theme (`Theme.App` / product name)
+- `postSplashScreenTheme` → main Material3 DayNight theme (defined in `themes.xml`)
+- See `23-app-startup` for full splash wiring
+
+## Startup providers
+
+- If WorkManager is unused, remove `WorkManagerInitializer` via AndroidX Startup `tools:node="remove"` (see `23-app-startup`)
+- Do not leave crashy default initializers enabled
+
+## Deep Links
+
+- New apps from this template start with **no app deep links** unless product requires them.
+- If adding deep links: declare on the host Activity with explicit `intent-filter`, `autoVerify` only when App Links are configured, and handle navigation via Nav Component.
+
+## Intent filters (extra)
+
+- Launcher: `MAIN` + `LAUNCHER` only on MainActivity.
+- Receivers: whitelist only needed system actions.
+- Custom actions must be namespaced with applicationId / package.

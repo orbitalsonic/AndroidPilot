@@ -1,0 +1,93 @@
+package YOUR.PACKAGE.core.common
+
+/**
+ * Template — copy to `:core-common`.
+ * Replace `YOUR.PACKAGE` with the applicationId root.
+ *
+ * Kotlin name is SCREAMING_SNAKE. The string is the GA4 name (lowercase snake_case).
+ * Add a screen or element constant only when that screen or control exists.
+ * Do not rename a name that has already shipped.
+ */
+object EventsProvider {
+
+    const val SCREEN_VIEW = "screen_view"
+    const val UI_CLICK = "ui_click"
+    const val SPLASH_COMPLETE = "splash_complete"
+    const val LANGUAGE_CONFIRM = "language_confirm"
+    const val ONBOARDING_COMPLETE = "onboarding_complete"
+    const val PERMISSION_GRANT = "permission_grant"
+    const val PERMISSION_DENY = "permission_deny"
+    const val ADS_CLICK = "ads_click"
+    const val ADS_RETURN = "ads_return"
+    const val ADS_SHOW_FAIL = "ads_show_fail"
+    const val PREMIUM_VIEW = "premium_view"
+    const val PREMIUM_CLOSE = "premium_close"
+    const val IAP_START = "iap_start"
+    const val IAP_SUCCESS = "iap_success"
+    const val IAP_FAIL = "iap_fail"
+    const val FEATURE_START = "feature_start"
+    const val FEATURE_COMPLETE = "feature_complete"
+    const val FEATURE_FAIL = "feature_fail"
+    const val ERROR_SHOWN = "error_shown"
+    const val EXIT_CONFIRM = "exit_confirm"
+
+    const val SPLASH_FT_SCREEN = "splash_ft_screen"
+    const val SPLASH_ST_SCREEN = "splash_st_screen"
+    const val LANGUAGE_SCREEN = "language_screen"
+    const val PERMISSION_SCREEN = "permission_screen"
+    const val HOME_SCREEN = "home_screen"
+    const val SETTINGS_SCREEN = "settings_screen"
+    const val PREMIUM_SPLASH_FT_SCREEN = "premium_splash_ft_screen"
+    const val PREMIUM_ONBOARDING_SCREEN = "premium_onboarding_screen"
+    const val PREMIUM_SPLASH_ST_SCREEN = "premium_splash_st_screen"
+    const val PREMIUM_HOME_SCREEN = "premium_home_screen"
+    const val PREMIUM_FEATURE_SCREEN = "premium_feature_screen"
+    const val PREMIUM_LIMIT_SCREEN = "premium_limit_screen"
+    const val PREMIUM_SETTINGS_SCREEN = "premium_settings_screen"
+    const val PREMIUM_SUCCESS_SCREEN = "premium_success_screen"
+    const val EXIT_DIALOG = "exit_dialog"
+    const val RATE_DIALOG = "rate_dialog"
+    const val NO_INTERNET_DIALOG = "no_internet_dialog"
+    const val PRIVACY_POLICY_SCREEN = "privacy_policy_screen"
+    const val TERMS_SCREEN = "terms_screen"
+
+    const val PREVIOUS_SCREEN = "previous_screen"
+    const val ENTRY_SOURCE = "entry_source"
+    const val ELEMENT_NAME = "element_name"
+    const val ELEMENT_TYPE = "element_type"
+    const val LANGUAGE_CODE = "language_code"
+    const val SOURCE = "source"
+    const val DURATION_MS = "duration_ms"
+    const val AD_SHOWN = "ad_shown"
+    const val NEXT_SCREEN = "next_screen"
+    const val TOTAL_STEPS = "total_steps"
+    const val SKIPPED = "skipped"
+    const val PERMISSION_TYPE = "permission_type"
+    const val AD_FORMAT = "ad_format"
+    const val AD_PLACEMENT = "ad_placement"
+    const val TIME_AWAY_SEC = "time_away_sec"
+    const val REASON = "reason"
+    const val PREMIUM_ID = "premium_id"
+    const val PRODUCT_ID = "product_id"
+    const val FEATURE_NAME = "feature_name"
+    const val ERROR_TYPE = "error_type"
+    const val ERROR_CODE = "error_code"
+    const val SESSION_DURATION_SEC = "session_duration_sec"
+
+    const val ENTRY_ORGANIC = "organic"
+    const val ENTRY_NOTIFICATION = "notification"
+    const val ENTRY_DEEPLINK = "deeplink"
+    const val ENTRY_AD = "ad"
+    const val ENTRY_WIDGET = "widget"
+
+    const val TYPE_BUTTON = "button"
+    const val TYPE_ICON = "icon"
+    const val TYPE_TAB = "tab"
+    const val TYPE_CARD = "card"
+    const val TYPE_ITEM = "item"
+    const val TYPE_TOGGLE = "toggle"
+    const val TYPE_LINK = "link"
+    const val TYPE_FAB = "fab"
+    const val TYPE_CHIP = "chip"
+    const val TYPE_SLIDER = "slider"
+}
