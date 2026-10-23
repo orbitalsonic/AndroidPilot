@@ -2,7 +2,7 @@
 
 Company-grade **rules** + **skills** for Clean Architecture Android apps (XML + View Binding **or** Jetpack Compose via `uiFramework`, MVI, Koin `module` / `lazyModule`).
 
-This folder is part of the [ai-workflow](https://github.com/orbitalsonic/ai-workflow) template. Share with the team by copying `.cursor/` into a project. Claude Code teammates use [`.claude/`](../.claude/). Gemini teammates use [`.agents/`](../.agents/). Keep all three in sync.
+This folder is part of the [AndroidPilot](https://github.com/orbitalsonic/AndroidPilot) template. Share with the team by copying `.cursor/` into a project. Claude Code teammates use [`.claude/`](../.claude/). Gemini teammates use [`.agents/`](../.agents/). Keep all three in sync.
 
 ## Rules vs Skills
 
@@ -21,8 +21,8 @@ This folder is part of the [ai-workflow](https://github.com/orbitalsonic/ai-work
 - Invoke as **`/sonic-…`** (type `/sonic` with no space after — Cursor matches the **folder** name)
 - Description always starts with **Sonic Cursor Skill:**
 - Skill folders are also `sonic-*` (example: `ui/sonic-figma-to-xml`)
-- Claude Code twins in this repo use **`/hsc-…`**
-- Gemini twins in this repo use **`@hsg-…`** (description starts with **OrbitalSonic Gemini Skill:**)
+- Claude Code twins in this repo use **`/sonicc-…`**
+- Gemini twins in this repo use **`@sonicg-…`** (description starts with **OrbitalSonic Gemini Skill:**)
 - Do not pick Figma plugin skills (`figma:design-to-code`, "Created by Figma") for Android screens — `/sonic-figma-to-xml` / `/sonic-figma-to-compose` load those internally
 
 ## Project settings

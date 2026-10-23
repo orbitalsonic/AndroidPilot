@@ -14,7 +14,7 @@ paths:
 |---------|--------|
 | `InternetManager` | `:core-platform` |
 | `PlatformFirebase` object | `:core-platform` |
-| **`firebase-messaging` dependency** | `:core-platform` (mandatory on new projects via `hsg-setup-new-project`; no service in template) |
+| **`firebase-messaging` dependency** | `:core-platform` (mandatory on new projects via `sonicg-setup-new-project`; no service in template) |
 | Event name constants (`EventsProvider`) | `:core-common` |
 | Remote Config DataSource | `:data` |
 | RC cache in `SharedPrefManager` | `:data` |
@@ -22,7 +22,7 @@ paths:
 
 ## PlatformFirebase
 
-Speak-Translate shape (`:core-platform` `firebase/PlatformFirebase.kt` — see `hsg-setup-new-project` template):
+Speak-Translate shape (`:core-platform` `firebase/PlatformFirebase.kt` — see `sonicg-setup-new-project` template):
 
 ```kotlin
 object PlatformFirebase {
@@ -40,13 +40,13 @@ object PlatformFirebase {
 
 ## Firebase Cloud Messaging (new projects)
 
-- **`hsg-setup-new-project`** must add `firebase-messaging` to the catalog + `implementation(libs.firebase.messaging)` on **`:core-platform`** only
+- **`sonicg-setup-new-project`** must add `firebase-messaging` to the catalog + `implementation(libs.firebase.messaging)` on **`:core-platform`** only
 - Dependency only — **no** `FirebaseMessagingService`, manifest FCM entries, or token code in the template bootstrap
-- Later push handling: separate feature work; optional dep-only add for existing apps → skill `hsg-implement-firebase-messaging`
+- Later push handling: separate feature work; optional dep-only add for existing apps → skill `sonicg-implement-firebase-messaging`
 
 ## Analytics events
 
-- Keys in `EventsProvider` (`:core-common`). String values are lowercase snake_case (`home_screen`). Event names are the closed list in `events.md` (`screen_view`, `ui_click`, …).
+- Keys in `EventsProvider` (`:core-common`). String values are lowercase snake_case (`home_screen`). Event names are the closed list in `firebase/events.md` (`screen_view`, `ui_click`, …).
 - `PlatformFirebase.postScreenView(EventsProvider.HOME_SCREEN, …)` — no raw event string literals in UI
 - Manifest: `google_analytics_automatic_screen_reporting_enabled` = `false`
 
@@ -61,7 +61,7 @@ object PlatformFirebase {
 
 DataSource: **no** dispatcher. Repository: `withContext(ioDispatcher)`.
 
-Adding keys later (existing cache): skill **`hsg-add-firebase-remote-config`**.
+Adding keys later (existing cache): skill **`sonicg-add-firebase-remote-config`**.
 
 ## Connectivity
 

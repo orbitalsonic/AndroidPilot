@@ -17,7 +17,7 @@ Applies to XML `Parent*` / `Base*` when `uiFramework` is `xml`. Compose screens 
 ## Must follow
 
 - Hierarchy: `:core-ui` Parent* (Activity/Fragment/Dialog/Sheet) → optional `:presentation` Base* → Feature
-- Templates: `.claude/skills/project/hsc-setup-new-project/templates/base/` (+ that folder’s README)
+- Templates: `.claude/skills/sonicc-setup-new-project/templates/base/` (+ that folder’s README)
 - `ParentActivity`: default `includeTopPadding = false` — MainActivity sets `true` for non-Entrance destinations (`23-app-startup`)
 - Clear `_binding` in `onDestroyView`; ParentSheet **null-safe** (no `!!`)
 - Theme: apply after Koin via `runOnKoinStarted` in Application — no `GlobalContext` probes (`07`, `23`)

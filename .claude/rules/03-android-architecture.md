@@ -36,7 +36,7 @@ Dependencies always point inward.
 - Local/remote DataSources — **sync or thin SDK wrappers; no dispatcher injection**
 - DTO ↔ entity mapping (heavy parsing / list shaping belongs here when data-bound)
 - **IO dispatcher (`withContext`) on Repository impl** — not on DataSource
-- DI: `dataModule = lazyModule { //// DataSources … //// Repositories … }` (see `07-dependency-injection`)
+- DI: `dataModule = module { //// DataSources … //// Repositories … }` when cold-start; `lazyModule` only for deferred data splits (see `07-dependency-injection`)
 
 ## Mapping ownership
 
@@ -70,7 +70,7 @@ Dependencies always point inward.
 - Naming: `Get*`, `Save*`, `Check*`, `Schedule*` + `UseCase`
 - Depend only on repository **interfaces**
 - **Source + DI live in `:domain`** — never create UseCases under `:data`
-- Register with `factory { }` inside domain `useCaseModule = lazyModule { }`
+- Register with `factory { }` inside domain `useCaseModule` (`module` if used at cold start, else `lazyModule`)
 - Prefer putting reusable heavy business mapping here rather than in UI
 
 ## Repository

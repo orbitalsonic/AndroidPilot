@@ -79,4 +79,4 @@ Feature folders: camelCase (`userProfile`, `onBoarding`). Compose Gradle modules
 | UI model | `UserUiItem` |
 | Mapper | `UserUiMapper.toUi(...)` — call from ViewModel; heavy data mapping in Repo/UseCase |
 | Base UI | xml: `ParentFragment`, `BaseFragment`, `ParentActivity`, `ParentDialog`, `ParentSheet`. compose: `*Screen` / `*ScreenContent` / `AppTheme` |
-| DI modules | `dataModule` / `useCaseModule` / `*PresentationModule` (xml) / `*FeatureModule` (compose) — always `lazyModule { }` |
+| DI modules | `dataModule` / `useCaseModule` / `*PresentationModule` (xml) / `*FeatureModule` (compose) — `module` (cold-start) or `lazyModule` (deferred) per `07` |

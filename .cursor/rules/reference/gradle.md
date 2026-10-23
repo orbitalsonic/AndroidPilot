@@ -159,7 +159,7 @@ Format: `{AppName}-{Account}-v{versionCode}({versionName})`
 
 Examples from reference apps: `Qibla-Finder-sonic-v35(1.3.5)`, `Music-Player-DGH-v8(1.0.8)`, `Speak-Translate-sonic-v1(1.0.1)`.
 
-## Dependencies block â€” sections (mandatory)
+## Dependencies block — sections (mandatory)
 
 Group with **comment headers**. Prefer this order (omit empty sections):
 
@@ -196,7 +196,7 @@ Rules:
 
 - One blank line between section groups when helpful
 - Keep related libs together under the matching header
-- Comment out unused deps with `#` / `//` â€” do not leave orphan versions without a section
+- Comment out unused deps with `#` / `//` — do not leave orphan versions without a section
 
 ## Version catalog (`libs.versions.toml`)
 
@@ -210,7 +210,7 @@ Keep **three** TOML tables. Inside `[versions]` and `[libraries]`, use the **sam
 agp = "…"   # latest stable 9.x (9.3+)
 
 # -------------- Dependencies -------------- #
-coreKtx = "â€¦"
+coreKtx = "…"
 # Splash Screen Api
 # Fragment Ktx
 # Navigational Components
@@ -221,7 +221,7 @@ coreKtx = "â€¦"
 # Kotlin Coroutines
 # Dependency Injection -> Koin
 # Testing
-# â€¦
+# …
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
@@ -233,11 +233,11 @@ android-library = { id = "com.android.library", version.ref = "agp" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 
 # Splash Screen Api
-androidx-core-splashscreen = { â€¦ }
+androidx-core-splashscreen = { … }
 
 # Dependency Injection -> Koin
-koin-android = { â€¦ }
-# â€¦
+koin-android = { … }
+# …
 ```
 
 ### Catalog naming
@@ -257,10 +257,10 @@ Rules:
 - **Never** hardcode `"group:artifact:version"` in module scripts
 
 ```kotlin
-// âœ… GOOD
+// ✅ GOOD
 implementation(libs.androidx.core.ktx)
 
-// âŒ BAD
+// ❌ BAD
 implementation("androidx.core:core-ktx:1.12.0")
 ```
 
@@ -323,14 +323,14 @@ glide = { group = "com.github.bumptech.glide", name = "glide", version.ref = "gl
 | Scope                       | When                                            |
 |-----------------------------|-------------------------------------------------|
 | `implementation`            | Default for almost everything                   |
-| `api`                       | Rare â€” only when types must leak to consumers |
+| `api`                       | Rare — only when types must leak to consumers |
 | `testImplementation`        | Unit tests                                      |
 | `androidTestImplementation` | Instrumentation tests                           |
 | `coreLibraryDesugaring`     | `desugar_jdk_libs` when using `java.time`       |
 
 ## Module rules
 
-- Keep modules independent â€” no circular deps
+- Keep modules independent — no circular deps
 - Feature modules must not depend on each other directly
 - xml UI modules: View Binding on — never Data Binding
 - compose `:core-ui` + `:feature-*`: `buildFeatures { compose = true }` + Compose Compiler plugin (`kotlin-compose`) — never `kotlin-android`, never Data Binding; skip View Binding on feature modules

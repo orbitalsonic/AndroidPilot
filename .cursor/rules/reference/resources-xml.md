@@ -40,7 +40,7 @@ Do not put themes/strings/colors in `:app` or layouts in `:core-ui`.
 | `cpi` | CircularProgressIndicator |
 | `lpi` | LinearProgressIndicator |
 
-Pattern: `{prefix}{Role}{Context}` â†’ `mtvHeadingHome`, `sivLogoEntrance`, `mbContinueLogin`
+Pattern: `{prefix}{Role}{Context}` → `mtvHeadingHome`, `sivLogoEntrance`, `mbContinueLogin`
 
 ## Drawable naming
 
@@ -89,24 +89,24 @@ Same rule for `bg_shape_*`, `fg_*`, and any `<shape>` / `<layer-list>` that embe
 
 - Fonts in shared UI module (`res/font/`) + `preloaded_fonts.xml` when using downloadable/preloaded fonts
 - Transitions: `res/anim/` (and `anim-ldrtl/` for RTL flips)
-- Nav transitions: mandatory `slide_in_right` / `slide_out_left` / `slide_in_left` / `slide_out_right` on actions â€” see `17-navigation`
-- Night-specific assets: `drawable-night/`, `values-night/` â€” avoid duplicating full layouts for dark mode
+- Nav transitions: mandatory `slide_in_right` / `slide_out_left` / `slide_in_left` / `slide_out_right` on actions — see `17-navigation`
+- Night-specific assets: `drawable-night/`, `values-night/` — avoid duplicating full layouts for dark mode
 
 ## Spacing & text sizes (no dimens.xml)
 
 - **Never create `dimens.xml`** (or other dimens resource files)
 - Use inline `dp` / `sp` in layouts and styles
-- All sizes must be **multiples of 4**: `4dp`, `8dp`, `12dp`, `16dp`, `20dp`, `24dp`, `32dp`, `40dp`, `48dp`, â€¦
+- All sizes must be **multiples of 4**: `4dp`, `8dp`, `12dp`, `16dp`, `20dp`, `24dp`, `32dp`, `40dp`, `48dp`, …
 - Text: prefer multiples of 4 (`12sp`, `14sp` only if design requires; prefer `12sp`/`16sp`/`20sp`/`24sp`/`28sp`)
 - Prefer shared `TextStyle.*` / `ButtonStyle.*` over one-off sizes when possible
 
 ```xml
-<!-- âœ… GOOD -->
+<!-- ✅ GOOD -->
 android:layout_margin="16dp"
 android:padding="8dp"
 android:textSize="16sp"
 
-<!-- âŒ BAD -->
+<!-- ❌ BAD -->
 android:layout_margin="@dimen/margin_default"
 android:padding="10dp"
 android:textSize="15sp"
@@ -116,9 +116,9 @@ android:textSize="15sp"
 
 In `:core-ui` `strings.xml`, `colors.xml`, and `themes.xml`, organize with **XML comment section headers**. Always order:
 
-1. **App-level** (top) â€” identity, Material theme tokens, base app theme
-2. **General / common** â€” actions, toasts, dialogs, **content descriptions**, text/button styles, semantic colors
-3. **Screen-wise** (bottom) â€” per feature/screen blocks
+1. **App-level** (top) — identity, Material theme tokens, base app theme
+2. **General / common** — actions, toasts, dialogs, **content descriptions**, text/button styles, semantic colors
+3. **Screen-wise** (bottom) — per feature/screen blocks
 
 ```xml
 <!-- _____________________________ App ______________________________ -->
@@ -127,7 +127,7 @@ In `:core-ui` `strings.xml`, `colors.xml`, and `themes.xml`, organize with **XML
 <!-- _______________________________ Home _______________________________ -->
 ```
 
-When adding a string/color/style: put it in the correct section â€” do not append at the file end out of order. Mirror order in `values-night/` and `values-xx/` locale files.
+When adding a string/color/style: put it in the correct section — do not append at the file end out of order. Mirror order in `values-night/` and `values-xx/` locale files.
 
 ## Strings (single source of truth)
 
@@ -140,9 +140,9 @@ When adding a string/color/style: put it in the correct section â€” do not 
 | Order | Section | Examples |
 |-------|---------|----------|
 | 1 | App | `app_name` |
-| 2 | General â€” Ads / Toast / Actions / Dialogs / Bottom sheets | `toast_*`, `action_*` |
+| 2 | General — Ads / Toast / Actions / Dialogs / Bottom sheets | `toast_*`, `action_*` |
 | 3 | **Content Descriptions** (dedicated) | `cd_*` |
-| 4 | Screen-wise UI | `<!-- Entrance -->`, `<!-- Home -->`, â€¦ |
+| 4 | Screen-wise UI | `<!-- Entrance -->`, `<!-- Home -->`, … |
 
 Naming: `app_name`; `toast_*` / `action_*`; `cd_{what}`; `{screen}_title` / `{feature}_*`
 
@@ -154,7 +154,7 @@ Naming: `app_name`; `toast_*` / `action_*`; `cd_{what}`; `{screen}_title` / `{fe
 <string name="cd_app_logo">App logo</string>
 ```
 
-- Always set `android:contentDescription="@string/cd_â€¦"` on `ShapeableImageView`, icon `MaterialButton`s, and meaningful icons
+- Always set `android:contentDescription="@string/cd_…"` on `ShapeableImageView`, icon `MaterialButton`s, and meaningful icons
 - Decorative only: `android:contentDescription="@null"` + `android:importantForAccessibility="no"`
 - Never hardcode contentDescription in XML/Kotlin
 
@@ -164,9 +164,9 @@ File: `:core-ui` `values/colors.xml` (+ `values-night/colors.xml` when needed).
 
 | Order | Section | Examples |
 |-------|---------|----------|
-| 1 | App â€” Material 3 tokens | `md_theme_primary`, â€¦ |
-| 2 | General / common | `colorPrimary`, `colorTextBody`, â€¦ |
-| 3 | Screen / feature-wise | `premiumGradientStart`, â€¦ |
+| 1 | App — Material 3 tokens | `md_theme_primary`, … |
+| 2 | General / common | `colorPrimary`, `colorTextBody`, … |
+| 3 | Screen / feature-wise | `premiumGradientStart`, … |
 
 - Prefer `?attr/colorOnSurface` (and other theme color attrs) for **text / icons**
 - **Default screen fill belongs on the theme**, not the layout:
@@ -365,7 +365,7 @@ If `ButtonStyle.IconButton` is missing, add it under Button Styles in `:core-ui`
 ### MaterialButton solid + stroke (no shape drawable)
 
 ```xml
-<!-- BAD â€” extra oval drawable + background override + inset hacks -->
+<!-- BAD — extra oval drawable + background override + inset hacks -->
 <com.google.android.material.button.MaterialButton
     android:id="@+id/mbCloseOcr"
     style="@style/ButtonStyle.IconButton"
@@ -406,7 +406,7 @@ If `ButtonStyle.IconButton` is missing, add it under Button Styles in `:core-ui`
 ### MaterialButton height (filled / text actions)
 
 ```xml
-<!-- BAD â€” fixed height + inset hacks -->
+<!-- BAD — fixed height + inset hacks -->
 <com.google.android.material.button.MaterialButton
     android:id="@+id/mbTranslateTranslate"
     style="@style/Widget.Material3.Button"
@@ -415,9 +415,9 @@ If `ButtonStyle.IconButton` is missing, add it under Button Styles in `:core-ui`
     android:insetTop="0dp"
     android:insetBottom="0dp"
     android:text="@string/translate_action_translate"
-    â€¦ />
+    … />
 
-<!-- GOOD â€” wrap_content, no insets -->
+<!-- GOOD — wrap_content, no insets -->
 <com.google.android.material.button.MaterialButton
     android:id="@+id/mbTranslateTranslate"
     style="@style/Widget.Material3.Button"
@@ -425,13 +425,13 @@ If `ButtonStyle.IconButton` is missing, add it under Button Styles in `:core-ui`
     android:layout_height="wrap_content"
     android:text="@string/translate_action_translate"
     android:textAppearance="@style/TextStyle.Heading.H6.Medium"
-    â€¦ />
+    … />
 ```
 
 ### Clickable language / chip selectors (text + end icon)
 
 ```xml
-<!-- BAD â€” MaterialTextView + custom chip background + drawableEnd -->
+<!-- BAD — MaterialTextView + custom chip background + drawableEnd -->
 <com.google.android.material.textview.MaterialTextView
     android:id="@+id/mtvFromLanguageTranslate"
     style="@style/TextStyle.Heading.H6.Medium"
@@ -446,10 +446,10 @@ If `ButtonStyle.IconButton` is missing, add it under Button Styles in `:core-ui`
     app:layout_constraintHorizontal_weight="1"
     tools:text="English" />
 
-<!-- ALSO BAD â€” LinearLayout + TextView + ImageView -->
+<!-- ALSO BAD — LinearLayout + TextView + ImageView -->
 <!-- Prefer neither wrapper nor MTV chip for tappable selectors -->
 
-<!-- GOOD â€” MaterialButton + Material surface + icon end (no bg_shape_*) -->
+<!-- GOOD — MaterialButton + Material surface + icon end (no bg_shape_*) -->
 <com.google.android.material.button.MaterialButton
     android:id="@+id/mbFromLanguageTranslate"
     style="@style/Widget.Material3.Button.OutlinedButton"
@@ -466,4 +466,4 @@ If `ButtonStyle.IconButton` is missing, add it under Button Styles in `:core-ui`
     tools:text="English" />
 ```
 
-Use project `ButtonStyle.*` when available instead of raw `Widget.Material3.*`. Do **not** assign `android:background="@drawable/bg_shape_â€¦"` â€” delete those chip backgrounds for button selectors.
+Use project `ButtonStyle.*` when available instead of raw `Widget.Material3.*`. Do **not** assign `android:background="@drawable/bg_shape_…"` — delete those chip backgrounds for button selectors.

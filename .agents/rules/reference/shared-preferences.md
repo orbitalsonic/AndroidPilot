@@ -61,10 +61,12 @@ class SharedPrefRepositoryImpl(
 
 Prefer injecting `ioDispatcher` from DI when project provides dispatchers in `core-platform`.
 
-## DI (`lazyModule` only)
+## DI (cold-start → `module`)
+
+SharedPref is used at Entrance — register with **eager `module`** (see `07`).
 
 ```kotlin
-val dataModule = lazyModule {
+val dataModule = module {
 
     //// DataSources
     single { SharedPrefManager(androidContext()) }
@@ -76,13 +78,13 @@ val dataModule = lazyModule {
 
 - Interface `SharedPrefRepository` + any related UseCases live in **`:domain`**
 - `factory { …UseCase }` in domain `useCaseModule` — not in `:data`
-- Never `module { }` — always `lazyModule { }`
+- Load `dataModule` via `modules(...)` (eager list)
 
 Register in `data/di/DataModule.kt` (or split module val).
 
 ## Remote Config cache pattern (optional)
 
-`RemoteConfigRepositoryImpl` may write fetched RC ints into `SharedPrefManager` properties inside repository (on IO dispatcher), same as reference app. Extra keys on an existing cache → skill **`hsg-add-firebase-remote-config`**.
+`RemoteConfigRepositoryImpl` may write fetched RC ints into `SharedPrefManager` properties inside repository (on IO dispatcher), same as reference app. Extra keys on an existing cache → skill **`sonicg-add-firebase-remote-config`**.
 
 ## Consumption
 
@@ -94,7 +96,7 @@ Register in `data/di/DataModule.kt` (or split module val).
 - `SharedPreferences` in Fragment / ViewModel
 - Dispatcher on DataSource / `SharedPrefManager`
 - UseCase or repository **interface** under `:data`
-- `module { }` — use `lazyModule { }` only
+- Registering SharedPref / Entrance deps only as `lazyModule` (must be eager `module`)
 - `suspend` on sync prefs data source class
 
 ## Tests

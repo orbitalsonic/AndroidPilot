@@ -1,8 +1,8 @@
 # Premium / In-App Billing — reference
 
-Full playbook for subscriptions and one-time in-app products using [hypersoftdev/inappbilling](https://github.com/hypersoftdev/inappbilling) (`4.0.0+`, Play Billing Library 9.1.0).
+Full playbook for subscriptions and one-time in-app products using [orbitalsonic/SonicInApp](https://github.com/orbitalsonic/SonicInApp) (`4.0.0+`, Play Billing Library 9.1.0).
 
-**Skills:** `premium/hsc-implement-in-app-billing`, `premium/hsc-add-subscription-packages`, `premium/hsc-add-inapp-packages`.
+**Skills:** `sonicc-implement-in-app-billing`, `sonicc-add-subscription-packages`, `sonicc-add-inapp-packages`.
 
 Do not invent a parallel `BillingClient` wrapper — use the library + Clean Architecture below.
 
@@ -16,7 +16,7 @@ Do not invent a parallel `BillingClient` wrapper — use the library + Clean Arc
 | **One-time in-app**  | Non-consumable (lifetime unlock) or consumable (credits) via same `BillingManager`           |
 | **Entitlement flag** | `isAppPurchased` in SharedPreferences — source of truth for ads/UI (subs + lifetime in-app)  |
 | **Paywalls**         | Splash premium (optional) + in-app Premium screen                                            |
-| **Library**          | `com.github.hypersoftdev:inappbilling` via JitPack — **not** raw `BillingClient` in features |
+| **Library**          | `com.github.orbitalsonic:SonicInApp` via JitPack — **not** raw `BillingClient` in features |
 
 ---
 
@@ -24,16 +24,17 @@ Do not invent a parallel `BillingClient` wrapper — use the library + Clean Arc
 
 ```toml
 # gradle/libs.versions.toml — # Billing section
+# Source: https://github.com/orbitalsonic/SonicInApp
 [versions]
-inappbilling = "4.0.0"
+sonicInApp = "4.0.0"
 
 [libraries]
-hypersoft-inappbilling = { group = "com.github.hypersoftdev", name = "inappbilling", version.ref = "inappbilling" }
+orbitalsonic-sonic-in-app = { group = "com.github.orbitalsonic", name = "SonicInApp", version.ref = "sonicInApp" }
 ```
 
 ```kotlin
 // :data and :presentation (purchase needs Activity)
-implementation(libs.hypersoft.inappbilling)
+implementation(libs.orbitalsonic.sonic.in.app)
 ```
 
 JitPack in `settings.gradle.kts`:
@@ -46,7 +47,7 @@ maven(url = "https://jitpack.io")
 
 Add `const val TAG_BILLING = "TAG_BILLING"` in `:core-common` `Constants`. Internal library logs use tag `BillingManager`.
 
-**Requires human approval** before adding the library if not already in the catalog (`13-libraries-stack.mdc`).
+**Requires human approval** before adding the library if not already in the catalog (`13-libraries-stack.md`).
 
 ---
 
@@ -161,7 +162,7 @@ app (Application: start BillingDataSource)
 
 | Layer            | Owns                                                                    | Must not                       |
 |------------------|-------------------------------------------------------------------------|--------------------------------|
-| **Domain**       | `BillingProductIds`, entities, `BillingRepository`, use cases           | Import `com.hypersoft.billing` |
+| **Domain**       | `BillingProductIds`, entities, `BillingRepository`, use cases           | Import `com.orbitalsonic.billing` |
 | **Data**         | Singleton `BillingManager`, `connect()`, mappers, sync `isAppPurchased` | Launch Play purchase UI        |
 | **Presentation** | MVI paywalls, `LaunchSubsPurchase` / `LaunchInAppPurchase` effects      | Duplicate product IDs          |
 
@@ -262,7 +263,7 @@ koin.get<BillingDataSource>().start(applicationScope)
 
 ### 3.x → 4.0.0 migration
 
-**Workflow skill:** `billing/hsc-update-in-app-billing` (`.cursor`) / `hsc-update-in-app-billing` (`.claude`).
+**Workflow skill:** `billing/sonic-update-in-app-billing` (`.cursor`) / `sonicc-update-in-app-billing` (`.claude`) / `sonicg-update-in-app-billing` (`.agents`).
 
 | 3.x                                        | 4.0.0                                      |
 |--------------------------------------------|--------------------------------------------|
@@ -271,7 +272,7 @@ koin.get<BillingDataSource>().start(applicationScope)
 | `fetchProductDetails(listener)`            | `productsState`                            |
 | `fetchPurchaseHistory(listener)`           | `purchasesState`                           |
 | `purchaseSubs(…, BillingPurchaseListener)` | `suspend purchaseSubs(…): PurchaseOutcome` |
-| `com.hypersoft.billing.data.entities.*`    | `com.hypersoft.billing.model.*`            |
+| `com.orbitalsonic.billing.data.entities.*`    | `com.orbitalsonic.billing.model.*`            |
 
 ---
 
@@ -292,7 +293,7 @@ Never log purchase tokens or PII.
 
 ## 9. Checklist
 
-**Gradle:** JitPack, catalog `4.0.0+`, deps on `:data` + `:presentation`, `TAG_BILLING`
+**Gradle:** JitPack, [SonicInApp](https://github.com/orbitalsonic/SonicInApp) catalog `4.0.0+` (`com.github.orbitalsonic:SonicInApp`), deps on `:data` + `:presentation`, `TAG_BILLING`
 
 **Console:** Option 1 IDs, trial offers active, license testers, in-app products created
 

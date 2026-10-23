@@ -30,7 +30,7 @@ feature-<name>      One screen cluster per module
 ```
 feature-home/src/main/java/…/feature/home/
   HomeScreen.kt                 # HOME_ROUTE + HomeScreen + HomeScreenContent + items/previews
-  di/HomeFeatureModule.kt       # lazyModule { viewModel { HomeViewModel(get(), …) } }
+  di/HomeFeatureModule.kt       # lazyModule { … } for secondary features; module { … } if Entrance/cold-start
   intent/HomeIntent.kt
   state/HomeState.kt
   effect/HomeEffect.kt
@@ -38,7 +38,7 @@ feature-home/src/main/java/…/feature/home/
   components/                   # optional shared items / dialogs / sheets
 ```
 
-DI val name: `homeFeatureModule` (feature + `FeatureModule`). Register in `:app` `KoinModules` `featureList`.
+DI val name: `homeFeatureModule` (feature + `FeatureModule`). Register in `:app` `KoinModules` — Entrance on **eager** list; other features on **lazy** list (`07`).
 
 ## Naming
 
@@ -208,7 +208,7 @@ Do **not** enable View Binding on Compose-only feature modules. XML `:core-ui` m
 
 **One module for the full design system** — same as xml. XML tokens in `res/values/`; Compose in Kotlin under `core/ui/theme/`:
 
-- `Color.kt` — primitive + semantic colors; light/dark `ColorScheme` mapping (`hsc-setup-design-system`)
+- `Color.kt` — primitive + semantic colors; light/dark `ColorScheme` mapping (`sonicc-setup-design-system`)
 - `Type.kt` — `Typography` from Figma `TextStyle.*` ramp (Poppins / design family)
 - `Theme.kt` — `@Composable fun AppTheme(darkTheme, content)` wrapping `MaterialTheme` — **no dynamic color** when Figma tokens exist
 - `themes.xml` / `colors.xml` still set `android:windowBackground`, splash (`Theme.App.Starting`), and Material bridge attrs

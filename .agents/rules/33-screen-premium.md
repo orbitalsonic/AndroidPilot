@@ -9,7 +9,7 @@ paths:
 
 # Premium / paywall screen
 
-Full billing playbook: [reference/premium-billing.md](reference/premium-billing.md). Skills: `hsg-implement-in-app-billing`, `hsg-add-subscription-packages`, `hsg-add-inapp-packages`.
+Full billing playbook: [reference/premium-billing.md](reference/premium-billing.md). Skills: `sonicg-implement-in-app-billing`, `sonicg-add-subscription-packages`, `sonicg-add-inapp-packages`.
 
 ## Layout
 

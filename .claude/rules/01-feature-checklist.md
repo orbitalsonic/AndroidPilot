@@ -1,5 +1,5 @@
 ---
-description: New feature / screen scaffolding checklist — use when adding a feature, hsc-create-screen, hsc-create-mvi, hsc-create-clean-architecture, or verifying a feature is complete
+description: New feature / screen scaffolding checklist — use when adding a feature, sonicc-create-screen, sonicc-create-mvi, sonicc-create-clean-architecture, or verifying a feature is complete
 ---
 
 ## New feature checklist
@@ -11,8 +11,8 @@ description: New feature / screen scaffolding checklist — use when adding a fe
 - [ ] Domain UseCase(s) + repository **interface** in `:domain` (never under `:data`)
 - [ ] Data repository impl + DataSource if needed (heavy work / DTO mapping off Main); Room → `:core-database`, Retrofit → `:core-network` when adding those stacks
 - [ ] Mapping: Repo/UseCase for heavy work; `toUi()` in ViewModel if needed — not in UI classes
-- [ ] DI: **`lazyModule` / `lazyModules` only** with `//// Section` headers; theme/billing after `runOnKoinStarted` (never `GlobalContext` probes); UseCases in domain `useCaseModule`; new module listed in `KoinModules`
-- [ ] If feature is **cold-start / Entrance / Splash / MainActivity inject**: verify full ctor inject graph (VM → UseCases → repos/managers) is registered before merge (`23`, `07`, `hsc-review-architecture`)
+- [ ] DI: **`module` (cold-start) or `lazyModule` (deferred)** with `//// Section` headers — see `07`; theme/billing that needs lazy bindings after `runOnKoinStarted` (never `GlobalContext` probes); UseCases in domain `useCaseModule`; new module listed in `KoinModules` (eager or lazy list)
+- [ ] If feature is **cold-start / Startup / Splash / MainActivity inject**: verify full ctor inject graph (VM → UseCases → repos/managers) is registered before merge (`23`, `07`, `sonicc-review-architecture`)
 - [ ] Strings in the **single** shared strings file (+ translations); layouts in `:presentation` only (xml)
 - [ ] Logs use `Constants.TAG*` format; prefer Repository; ViewModel sparse (`handleError` for failures)
 - [ ] Permissions via Intent → Effect → base permission helper when needed
@@ -25,4 +25,4 @@ description: New feature / screen scaffolding checklist — use when adding a fe
 - [ ] If ads/premium: gate on entitlement + RC; use existing ads extensions — not raw SDK in Fragments. **Do not** wrap ads in MVI unless the user explicitly asks (`21-ads-billing`). Paywalls: sticky footer + 3s delayed close (`33-screen-premium`)
 - [ ] Funnel / Dashboard: obey `29`–`32` + `reference/app-flow.md` when touching those screens
 - [ ] Obey `.claude/project-settings.json` (tests / orientation / theme modes / **`uiFramework`**)
-- [ ] Full screen scaffold via `hsc-create-screen` (UI + MVI + optional domain/data); or leaf skills: presentation via `hsc-create-mvi`, new domain/data via `hsc-create-clean-architecture` (feature screens only — not ads)
+- [ ] Full screen scaffold via `sonicc-create-screen` (UI + MVI + optional domain/data); or leaf skills: presentation via `sonicc-create-mvi`, new domain/data via `sonicc-create-clean-architecture` (feature screens only — not ads)

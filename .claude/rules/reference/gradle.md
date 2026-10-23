@@ -157,9 +157,9 @@ bundle {
 
 Format: `{AppName}-{Account}-v{versionCode}({versionName})`
 
-Examples from reference apps: `Qibla-Finder-HS-v35(1.3.5)`, `Music-Player-DGH-v8(1.0.8)`, `Speak-Translate-HS-v1(1.0.1)`.
+Examples from reference apps: `Qibla-Finder-sonic-v35(1.3.5)`, `Music-Player-DGH-v8(1.0.8)`, `Speak-Translate-sonic-v1(1.0.1)`.
 
-## Dependencies block â€” sections (mandatory)
+## Dependencies block — sections (mandatory)
 
 Group with **comment headers**. Prefer this order (omit empty sections):
 
@@ -196,7 +196,7 @@ Rules:
 
 - One blank line between section groups when helpful
 - Keep related libs together under the matching header
-- Comment out unused deps with `#` / `//` â€” do not leave orphan versions without a section
+- Comment out unused deps with `#` / `//` — do not leave orphan versions without a section
 
 ## Version catalog (`libs.versions.toml`)
 
@@ -210,7 +210,7 @@ Keep **three** TOML tables. Inside `[versions]` and `[libraries]`, use the **sam
 agp = "…"   # latest stable 9.x (9.3+)
 
 # -------------- Dependencies -------------- #
-coreKtx = "â€¦"
+coreKtx = "…"
 # Splash Screen Api
 # Fragment Ktx
 # Navigational Components
@@ -221,7 +221,7 @@ coreKtx = "â€¦"
 # Kotlin Coroutines
 # Dependency Injection -> Koin
 # Testing
-# â€¦
+# …
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
@@ -233,11 +233,11 @@ android-library = { id = "com.android.library", version.ref = "agp" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 
 # Splash Screen Api
-androidx-core-splashscreen = { â€¦ }
+androidx-core-splashscreen = { … }
 
 # Dependency Injection -> Koin
-koin-android = { â€¦ }
-# â€¦
+koin-android = { … }
+# …
 ```
 
 ### Catalog naming
@@ -257,10 +257,10 @@ Rules:
 - **Never** hardcode `"group:artifact:version"` in module scripts
 
 ```kotlin
-// âœ… GOOD
+// ✅ GOOD
 implementation(libs.androidx.core.ktx)
 
-// âŒ BAD
+// ❌ BAD
 implementation("androidx.core:core-ktx:1.12.0")
 ```
 
@@ -271,28 +271,28 @@ implementation("androidx.core:core-ktx:1.12.0")
 - Prefer stable over alpha/beta/rc unless the user explicitly asks for a pre-release
 - Keep **AGP 9.3+** (latest stable 9.x) and the Gradle wrapper compatible when bumping. Do **not** apply `org.jetbrains.kotlin.android`
 - Update the version in `[versions]` only — all aliases using `version.ref` pick it up
-- When scaffolding a new project (`hsc-setup-new-project`), seed the catalog with latest stable for the whole core stack
-- **`hsc-setup-new-project` mandatory:** Firebase BOM + `firebase-analytics` / `firebase-crashlytics` / `firebase-messaging` on **`:core-platform`**; `firebase-config` + `kotlinx-coroutines-play-services` on **`:data`** (see `hsc-implement-firebase-messaging` — no MessagingService). Place `kotlinx-coroutines-play-services` under `# Kotlin Coroutines` / `// Kotlin Coroutines`.
+- When scaffolding a new project (`sonicc-setup-new-project`), seed the catalog with latest stable for the whole core stack
+- **`sonicc-setup-new-project` mandatory:** Firebase BOM + `firebase-analytics` / `firebase-crashlytics` / `firebase-messaging` on **`:core-platform`**; `firebase-config` + `kotlinx-coroutines-play-services` on **`:data`** (see `sonicc-implement-firebase-messaging` — no MessagingService). Place `kotlinx-coroutines-play-services` under `# Kotlin Coroutines` / `// Kotlin Coroutines`.
 
-### `hsc-gradle-update` (mandatory behavior)
+### `sonicc-gradle-update` (mandatory behavior)
 
-When the user runs **`hsc-gradle-update`** (or asks to bump dependencies):
+When the user runs **`sonicc-gradle-update`** (or asks to bump dependencies):
 
-1. If Groovy `build.gradle` / `settings.gradle` remain → convert to Kotlin DSL **first** (same contract as `hsc-setup-old-project` Step 2 / `hsc-gradle-update` Step 0). Keep versions during conversion; bump after.
-2. Bump to **AGP 9.3+** (latest stable 9.x). Remove `kotlin-android` / `kotlin-kapt` / `android.kotlinOptions` / `android.builtInKotlin=false` (`hsc-gradle-update` Step 0.5). Built-in Kotlin — do not re-add the Kotlin Android plugin. Then migrate legacy minify/ProGuard to `optimization { enable = true }` + `src/main/keepRules/*.keep` (Step 0.6).
+1. If Groovy `build.gradle` / `settings.gradle` remain → convert to Kotlin DSL **first** (same contract as `sonicc-setup-old-project` Step 2 / `sonicc-gradle-update` Step 0). Keep versions during conversion; bump after.
+2. Bump to **AGP 9.3+** (latest stable 9.x). Remove `kotlin-android` / `kotlin-kapt` / `android.kotlinOptions` / `android.builtInKotlin=false` (`sonicc-gradle-update` Step 0.5). Built-in Kotlin — do not re-add the Kotlin Android plugin. Then migrate legacy minify/ProGuard to `optimization { enable = true }` + `src/main/keepRules/*.keep` (Step 0.6).
 3. Inventory **both** `libs.versions.toml` `[versions]` **and** every hardcoded `"group:artifact:version"` in module Gradle scripts
 4. Resolve latest stable for **each** (do not skip Glide / ads / Firebase / etc. because they were hardcoded)
-5. If `gradle/libs.versions.toml` is missing → **create** it (`[versions]` / `[plugins]` / `[libraries]` + section comments per this doc / `hsc-gradle-organize`)
+5. If `gradle/libs.versions.toml` is missing → **create** it (`[versions]` / `[plugins]` / `[libraries]` + section comments per this doc / `sonicc-gradle-organize`)
 6. Migrate each hardcoded dep into the catalog (version key + library alias under the correct section, e.g. `# Glide`), then replace with `implementation(libs.…)`
 7. Place module `implementation` lines under the matching `//` header (`// Glide`, not under `// Testing`)
 8. Migrating an **existing** hardcoded dependency into the catalog is **not** “adding a new library” — it is required on every update run
 9. Leave **zero** hardcoded Maven coordinates in `*.gradle.kts` when the update finishes
 10. Leave **zero** Groovy module/settings scripts when conversion was possible
 
-Editing this section → also update `hsc-gradle-update`, `hsc-gradle-organize`, `hsc-setup-old-project` (+ `migration.md`), `08-gradle.md`, and `.cursor` twins.
+Editing this section → also update `sonicc-gradle-update`, `sonicc-gradle-organize`, `sonicc-setup-old-project` (+ `migration.md`), `08-gradle.md`, and `.cursor` / `.agents` twins.
 
 ```kotlin
-// ❌ BAD — leftover hardcode after hsc-gradle-update
+// ❌ BAD — leftover hardcode after sonicc-gradle-update
 implementation("com.github.bumptech.glide:glide:5.0.5")
 
 // ✅ GOOD — catalog + correct section
@@ -323,14 +323,14 @@ glide = { group = "com.github.bumptech.glide", name = "glide", version.ref = "gl
 | Scope                       | When                                            |
 |-----------------------------|-------------------------------------------------|
 | `implementation`            | Default for almost everything                   |
-| `api`                       | Rare â€” only when types must leak to consumers |
+| `api`                       | Rare — only when types must leak to consumers |
 | `testImplementation`        | Unit tests                                      |
 | `androidTestImplementation` | Instrumentation tests                           |
 | `coreLibraryDesugaring`     | `desugar_jdk_libs` when using `java.time`       |
 
 ## Module rules
 
-- Keep modules independent â€” no circular deps
+- Keep modules independent — no circular deps
 - Feature modules must not depend on each other directly
 - xml UI modules: View Binding on — never Data Binding
 - compose `:core-ui` + `:feature-*`: `buildFeatures { compose = true }` + Compose Compiler plugin (`kotlin-compose`) — never `kotlin-android`, never Data Binding; skip View Binding on feature modules
@@ -380,7 +380,7 @@ Do **not** disable obfuscation to “fix” crashes — add a targeted keep inst
 
 ### Migrating old ProGuard files
 
-When `proguard-rules.pro` / `consumer-rules.pro` / `proguardFiles` / `isMinifyEnabled` still exist (`hsc-gradle-update` Step 0.6 / `hsc-setup-old-project`):
+When `proguard-rules.pro` / `consumer-rules.pro` / `proguardFiles` / `isMinifyEnabled` still exist (`sonicc-gradle-update` Step 0.6 / `sonicc-setup-old-project`):
 
 1. Copy rule bodies into `src/main/keepRules/rules.keep` on the **same module** (create the folder). Update class names if packages moved.
 2. Delete the `.pro` files.

@@ -94,15 +94,15 @@ class FeatureViewModel(
 
 ### Structure rules
 
-1. **Single launch at the edge** â€” `handleIntent` = `viewModelScope.launch(exceptionHandler) { when â€¦ }`
-2. **Handlers are `suspend`** â€” `private suspend fun onX()`; do **not** nest another `viewModelScope.launch` per intent
-3. **`exceptionHandler`** â†’ `viewModelScope.launch { handleError(throwable) }` (not inline logging/state updates in the handler lambda)
-4. **`handleError` last** in the class â€” log + Crashlytics + clear loading / emit error Effect as needed
+1. **Single launch at the edge** — `handleIntent` = `viewModelScope.launch(exceptionHandler) { when … }`
+2. **Handlers are `suspend`** — `private suspend fun onX()`; do **not** nest another `viewModelScope.launch` per intent
+3. **`exceptionHandler`** → `viewModelScope.launch { handleError(throwable) }` (not inline logging/state updates in the handler lambda)
+4. **`handleError` last** in the class — log + Crashlytics + clear loading / emit error Effect as needed
 5. **No per-method `launch(exceptionHandler)`** inside each `onX`
 
 ### Logging in ViewModels
 
-- Prefer **Repository** (and domain when useful) for flow logs â€” not every ViewModel step
+- Prefer **Repository** (and domain when useful) for flow logs — not every ViewModel step
 - Do **not** log `Started` / `Success` on every intent handler
 - ViewModel: **zero or one** meaningful log when helpful; always log failures in `handleError`
 - `Log.w` for empty/guard paths when useful (e.g. confirm with no selection)
@@ -135,7 +135,7 @@ Full packaging: [compose-ui.md](compose-ui.md).
 ## Mapping (`toUi`)
 
 - Prefer heavy mapping in **Repository** or **UseCase** (wherever the concern belongs)
-- Domain â†’ UI (`FeatureUiMapper.toUi(...)`) may run in **ViewModel** when needed
+- Domain → UI (`FeatureUiMapper.toUi(...)`) may run in **ViewModel** when needed
 - If mapping looks heavy (large lists), use a dispatcher (`withContext(defaultDispatcher)`) before updating State
 - Never map inside Fragment, Activity, Adapter, XML, or `*ScreenContent`
 
@@ -145,7 +145,7 @@ Full packaging: [compose-ui.md](compose-ui.md).
 - Map/filter/sort large collections in Repo / UseCase / ViewModel (off Main) before State / `submitList`
 - Keep State lean; do not dump entire raw datasets into UI state when unnecessary
 - Prefer pagination / windowed loading when the feature loads open-ended data
-- **`DiffUtil.ItemCallback`:** keep simple `areItemsTheSame` / `areContentsTheSame` as **one-liners** (same line as `=`) â€” do not break the expression body onto the next line
+- **`DiffUtil.ItemCallback`:** keep simple `areItemsTheSame` / `areContentsTheSame` as **one-liners** (same line as `=`) — do not break the expression body onto the next line
 
 ```kotlin
 // BAD
@@ -157,8 +157,8 @@ override fun areItemsTheSame(oldItem: ConversationUiItem, newItem: ConversationU
 override fun areContentsTheSame(oldItem: ConversationUiItem, newItem: ConversationUiItem): Boolean = oldItem == newItem
 ```
 
-- Same idea for other short single-expression overrides / properties â€” prefer one line when readable (~140 cols OK)
+- Same idea for other short single-expression overrides / properties — prefer one line when readable (~140 cols OK)
 
 ## Orientation
 
-- Screens must work in **portrait and landscape** â€” layouts adapt; do not assume portrait-only
+- Screens must work in **portrait and landscape** — layouts adapt; do not assume portrait-only

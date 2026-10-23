@@ -12,8 +12,8 @@ paths:
 | UseCases | High — pure JVM, fake repositories |
 | ViewModels | High — drive via Intents, assert State + Effects (**feature** ViewModels). Ads / `:gmaAds` ViewModels are not MVI — do not require Intent/State/Effect tests unless the user asked to convert ads |
 | Mappers | Medium |
-| Flow (with fakes) | Medium — emission order / failures under `hsg-test-unit` |
-| Repositories (real layers) | Medium — Room in-memory / MockWebServer under `hsg-test-integration` |
+| Flow (with fakes) | Medium — emission order / failures under `sonicg-test-unit` |
+| Repositories (real layers) | Medium — Room in-memory / MockWebServer under `sonicg-test-integration` |
 | E2E | Critical user-visible flows only — Espresso when xml; Compose UI test (`compose.ui.test`) when compose |
 
 ## Approach
@@ -50,14 +50,14 @@ Examples:
 
 | Skill | Use for |
 |-------|---------|
-| `test/hsg-test-unit` | Write missing JVM unit/Flow tests → run → report (no device) |
-| `test/hsg-test-integration` | Write missing multi-layer tests → run → report (device if `androidTest`) |
-| `test/hsg-test-e2e` | Write missing E2E → run on device → report (device required) |
-| `test/hsg-test-complete` | Full suite run + walkthrough (device required) |
+| `sonicg-test-unit` | Write missing JVM unit/Flow tests → run → report (no device) |
+| `sonicg-test-integration` | Write missing multi-layer tests → run → report (device if `androidTest`) |
+| `sonicg-test-e2e` | Write missing E2E → run on device → report (device required) |
+| `sonicg-test-complete` | Full suite run + walkthrough (device required) |
 
 ### Write → run → consent → fix → retest
 
-Authoring skills (`hsg-test-unit`, `hsg-test-integration`, `hsg-test-e2e`) and `hsg-test-complete` must: write/discover as applicable → execute → show Pass/Fail → **ask user consent** before changing production code on failures → fix → retest. Do not silently weaken assertions. If the user declines, leave failures listed.
+Authoring skills (`sonicg-test-unit`, `sonicg-test-integration`, `sonicg-test-e2e`) and `sonicg-test-complete` must: write/discover as applicable → execute → show Pass/Fail → **ask user consent** before changing production code on failures → fix → retest. Do not silently weaken assertions. If the user declines, leave failures listed.
 
 ### Start banner
 
@@ -67,7 +67,7 @@ When any `test-*` skill runs, the agent’s **first** user-visible sentence must
 
 - Prefer `runTest` + test dispatchers (`StandardTestDispatcher` / `UnconfinedTestDispatcher`)
 - Assert Flow emissions with Turbine **only if** already in catalog + approved
-- Never real network/DB in unit tests → use `hsg-test-integration`
+- Never real network/DB in unit tests → use `sonicg-test-integration`
 
 ## Integration
 
@@ -82,7 +82,7 @@ When any `test-*` skill runs, the agent’s **first** user-visible sentence must
 - Keep tests independent — no shared mutable state between tests
 - Emulator or physical device required
 
-## Emulator walkthrough (`hsg-test-complete`)
+## Emulator walkthrough (`sonicg-test-complete`)
 
 - Run unit + integration + E2E suites that already exist
 - Structured manual/agent checklist through main nav paths on an emulator

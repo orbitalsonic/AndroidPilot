@@ -1,6 +1,6 @@
 # XML layouts, drawables, strings, colors, and themes
 
-Full detail for `09-resources-xml.md`. Do not delete lines from this file � edit here and keep the rule stub in sync.
+Full detail for `09-resources-xml.md`. Do not delete lines from this file — edit here and keep the rule stub in sync.
 
 ## Layout naming (snake_case)
 
@@ -64,11 +64,11 @@ Android only accepts gradient `android:angle` values that are **multiples of 45*
 When converting Figma gradients:
 
 1. Round the design angle to the **nearest multiple of 45**
-2. Prefer exact Figma angle when it is already 0/45/90/�
-3. Document in a comment if you rounded (e.g. Figma `30�` ? `45`)
+2. Prefer exact Figma angle when it is already 0/45/90/…
+3. Document in a comment if you rounded (e.g. Figma `30°` → `45`)
 
 ```xml
-<!-- BAD � crashes on inflate -->
+<!-- BAD — crashes on inflate -->
 <gradient
     android:angle="30"
     android:startColor="?attr/colorPrimary"
@@ -171,19 +171,19 @@ File: `:core-ui` `values/colors.xml` (+ `values-night/colors.xml` when needed).
 - Prefer `?attr/colorOnSurface` (and other theme color attrs) for **text / icons**
 - **Default screen fill belongs on the theme**, not the layout:
   - Set `android:windowBackground` (and `android:colorBackground` / `colorSurface`) in `:core-ui` `themes.xml` / `values-night/themes.xml`
-  - Do **not** set `android:background="?attr/colorSurface"` (or `@color/md_theme_surface`) on default screen roots � the window already paints that color
+  - Do **not** set `android:background="?attr/colorSurface"` (or `@color/md_theme_surface`) on default screen roots — the window already paints that color
   - Set `android:background` on a view **only** when that region is a **different** surface (card, overlay, tinted header)
 - Light/dark via `values` + `values-night`
 
 ```xml
-<!-- BAD � default root repeating the window color -->
+<!-- BAD — default root repeating the window color -->
 <androidx.constraintlayout.widget.ConstraintLayout
     android:id="@+id/clRootHome"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/colorSurface">
 
-<!-- GOOD � inherit windowBackground; tint only a different region -->
+<!-- GOOD — inherit windowBackground; tint only a different region -->
 <androidx.constraintlayout.widget.ConstraintLayout
     android:id="@+id/clRootHome"
     android:layout_width="match_parent"
@@ -194,7 +194,7 @@ File: `:core-ui` `values/colors.xml` (+ `values-night/colors.xml` when needed).
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:cardBackgroundColor="?attr/colorPrimaryContainer"
-        � />
+        … />
 ```
 
 ## Themes
@@ -204,7 +204,7 @@ File: `:core-ui` `values/colors.xml` (+ `values-night/colors.xml` when needed).
 | `themes.xml` | App base theme + common widget styles |
 | `splash.xml` | `Theme.App.Starting` only (`23-app-startup`) |
 
-Order in `themes.xml` (section comments): **App** ? **Shapes** ? **Text Styles** ? **Button Styles** ? extras / screen-specific styles only if needed.
+Order in `themes.xml` (section comments): **App** → **Shapes** → **Text Styles** → **Button Styles** → extras / screen-specific styles only if needed.
 
 `Base.Theme.App` (parent `Theme.Material3.DayNight.NoActionBar`):
 
@@ -212,7 +212,7 @@ Order in `themes.xml` (section comments): **App** ? **Shapes** ? **Text Styles**
 - Fonts: `android:includeFontPadding=false`, both `android:fontFamily` and `fontFamily`
 - Typography / shapeAppearance refs to project `TextStyle.*` / `ShapeAppearance.App.*`
 - Custom semantic attrs (`colorText*`, `colorIcon*`) as Figma requires
-- **Do not** set `materialButtonStyle` (or similar) to force all buttons through one parent style unless product asks � define standalone `ButtonStyle.*` / `TextStyle.*` from Figma
+- **Do not** set `materialButtonStyle` (or similar) to force all buttons through one parent style unless product asks — define standalone `ButtonStyle.*` / `TextStyle.*` from Figma
 - **Never add until the user asks:**
   - `android:statusBarColor`
   - `android:navigationBarColor`
@@ -221,12 +221,12 @@ Order in `themes.xml` (section comments): **App** ? **Shapes** ? **Text Styles**
 
 **BottomNavigation (theme-driven):**
 
-- On `Base.Theme.App` set `bottomNavigationStyle` ? e.g. `@style/Widget.App.BottomNavigationView`
-- That style sets `itemIconTint` / `itemTextColor` to color state lists using theme attrs (selected � `colorPrimary` or Figma semantic; unselected � `colorOnSurfaceVariant` / Figma icon secondary)
-- Map concrete colors from Figma during `hsc-setup-design-system` � do not leave Material default tints that ignore app tokens
+- On `Base.Theme.App` set `bottomNavigationStyle` → e.g. `@style/Widget.App.BottomNavigationView`
+- That style sets `itemIconTint` / `itemTextColor` to color state lists using theme attrs (selected ≈ `colorPrimary` or Figma semantic; unselected ≈ `colorOnSurfaceVariant` / Figma icon secondary)
+- Map concrete colors from Figma during `sonicc-setup-design-system` — do not leave Material default tints that ignore app tokens
 - Avoid one-off `app:itemIconTint` only on the BNV XML unless Figma forces a one-screen exception
 
-Default window fill: `android:windowBackground` on the app theme � see Colors above. Figma design-system import: `hsc-setup-design-system`.
+Default window fill: `android:windowBackground` on the app theme — see Colors above. Figma design-system import: `sonicc-setup-design-system`.
 
 ### `ButtonStyle.IconButton` (mandatory when missing)
 
@@ -251,48 +251,48 @@ Layouts may override `app:iconTint` (`?attr/colorIconSecondary`, brand color, or
 - Root screen: `ConstraintLayout` id `clRoot<Screen>`; `tools:context` to the Fragment class
 - No root `android:background` for default screens (theme `windowBackground`)
 - Material widgets: `MaterialTextView`, `MaterialButton`, `MaterialCardView`, `ShapeableImageView`
-- **Images (non-clickable):** always `ShapeableImageView` � never `ImageView` / `AppCompatImageView`; IDs use `siv` prefix
-- **Programmatic image loads:** always Glide via `ImageView.loadImage(...)` (`:core-ui` `ImageViewExtensions`) � never `setImageResource` / `setImageBitmap` / raw `Glide.with` in adapters/Fragments for content images
-  - Template: `hsc-setup-new-project/templates/base/ImageViewExtensions.kt`
+- **Images (non-clickable):** always `ShapeableImageView` — never `ImageView` / `AppCompatImageView`; IDs use `siv` prefix
+- **Programmatic image loads:** always Glide via `ImageView.loadImage(...)` (`:core-ui` `ImageViewExtensions`) — never `setImageResource` / `setImageBitmap` / raw `Glide.with` in adapters/Fragments for content images
+  - Template: `sonicc-setup-new-project/templates/base/ImageViewExtensions.kt`
   - Supports `@DrawableRes`, URL `String`, `Uri`, etc.; optional `placeholder` / `error` / `CachePolicy`
-  - Static icons declared in XML with `app:srcCompat` / `app:icon` are fine; dynamic/list/remote/drawable-from-code ? `loadImage`
-- **Clickable icons / icon-only actions:** always `MaterialButton` with `ButtonStyle.IconButton` � **not** `ShapeableImageView` + click listener
+  - Static icons declared in XML with `app:srcCompat` / `app:icon` are fine; dynamic/list/remote/drawable-from-code → `loadImage`
+- **Clickable icons / icon-only actions:** always `MaterialButton` with `ButtonStyle.IconButton` — **not** `ShapeableImageView` + click listener
   - Project style: `style="@style/ButtonStyle.IconButton"` (parent `Widget.Material3.Button.IconButton` in `:core-ui` `themes.xml`)
   - Else fallback: `style="@style/Widget.Material3.Button.IconButton"`
-  - ID prefix `mb�`; use `app:icon` (not `app:srcCompat`); keep `android:contentDescription="@string/cd_�"`
+  - ID prefix `mb…`; use `app:icon` (not `app:srcCompat`); keep `android:contentDescription="@string/cd_…"`
   - Style defaults: padding `8dp`, `iconSize` `0dp`, `iconTint` `?attr/colorIcon`; override tint in layout when needed
-- **Sticky footers:** when design shows a fixed CTA (Language continue, Premium start + legal), keep those views **outside** `NestedScrollView` / list � constrain to bottom of root; scrollable content `layout_constraintBottom_toTopOf` the sticky block
+- **Sticky footers:** when design shows a fixed CTA (Language continue, Premium start + legal), keep those views **outside** `NestedScrollView` / list — constrain to bottom of root; scrollable content `layout_constraintBottom_toTopOf` the sticky block
 - **Lists / scroll:** prefer `android:overScrollMode="ifContentScrolls"`; `clipToPadding` as needed
-- **MaterialButton fill + stroke (glass / outlined / tinted surfaces):** set attrs **on the button** � **do not** create `bg_shape_*` oval/rect drawables just for solid + stroke
+- **MaterialButton fill + stroke (glass / outlined / tinted surfaces):** set attrs **on the button** — **do not** create `bg_shape_*` oval/rect drawables just for solid + stroke
   - Fill: `app:backgroundTint`
   - Stroke: `app:strokeColor` + `app:strokeWidth`
-  - Shape: `app:cornerRadius` (circle � half of width/height) or `app:shapeAppearance`
-  - **Forbidden for this case:** `android:background="@drawable/bg_shape_�"`, `app:backgroundTint="@null"`, and `insetTop`/`insetBottom` `0dp` only to force a custom drawable to fit
+  - Shape: `app:cornerRadius` (circle ≈ half of width/height) or `app:shapeAppearance`
+  - **Forbidden for this case:** `android:background="@drawable/bg_shape_…"`, `app:backgroundTint="@null"`, and `insetTop`/`insetBottom` `0dp` only to force a custom drawable to fit
   - Reserve `bg_shape_*` for non-button views (roots, cards wrappers, RecyclerView items) or gradients / selectors Material attrs cannot express
-- **MaterialButton height (filled / tonal / outlined text buttons):** use `android:layout_height="wrap_content"` � **do not** force a fixed height (e.g. `40dp`) with `android:insetTop` / `android:insetBottom` `0dp` to fake it
+- **MaterialButton height (filled / tonal / outlined text buttons):** use `android:layout_height="wrap_content"` — **do not** force a fixed height (e.g. `40dp`) with `android:insetTop` / `android:insetBottom` `0dp` to fake it
   - Let Material min height + padding/`textAppearance` define size; override via theme/`ButtonStyle.*` if product needs a shorter button globally
-  - Icon-only `ButtonStyle.IconButton` stays `wrap_content` unless design needs a fixed tap target (still use tint/stroke/cornerRadius � no shape drawable)
-- **Clickable chips / language selectors (text + trailing arrow):** use **`MaterialButton`** � **not** `MaterialTextView` + `drawableEnd`, and **not** `LinearLayout` + text + `ShapeableImageView`
-  - ID prefix `mb�`; `android:layout_height="wrap_content"`; no `insetTop`/`insetBottom` hacks
+  - Icon-only `ButtonStyle.IconButton` stays `wrap_content` unless design needs a fixed tap target (still use tint/stroke/cornerRadius — no shape drawable)
+- **Clickable chips / language selectors (text + trailing arrow):** use **`MaterialButton`** — **not** `MaterialTextView` + `drawableEnd`, and **not** `LinearLayout` + text + `ShapeableImageView`
+  - ID prefix `mb…`; `android:layout_height="wrap_content"`; no `insetTop`/`insetBottom` hacks
   - Icon on the **right**: `app:icon` + `app:iconGravity="end"` (+ `app:iconPadding` as needed)
-  - Surface via Material style + `backgroundTint` / stroke attrs � **do not** set `android:background="@drawable/bg_shape_�"`
+  - Surface via Material style + `backgroundTint` / stroke attrs — **do not** set `android:background="@drawable/bg_shape_…"`
   - Non-clickable text + decorative icon only: compound drawables on `MaterialTextView` are OK; interactive selectors must be buttons
-- **View Binding only** � never `findViewById`, never Data Binding
-- Shallow ConstraintLayout trees � avoid extra wrappers
-- **Static layout config in XML** � not Kotlin � unless it must change at runtime:
+- **View Binding only** — never `findViewById`, never Data Binding
+- Shallow ConstraintLayout trees — avoid extra wrappers
+- **Static layout config in XML** — not Kotlin — unless it must change at runtime:
   - `RecyclerView`: set `app:layoutManager`, `android:orientation`, `app:spanCount` (grids) in XML
   - `LinearLayout` / `LinearLayoutCompat`: `android:orientation` in XML
   - Do **not** call `layoutManager = LinearLayoutManager(...)` / `setOrientation(...)` in Fragment/Activity for fixed lists
-  - Code only when dynamic (e.g. swap horizontal?vertical or span count from state/config)
+  - Code only when dynamic (e.g. swap horizontal↔vertical or span count from state/config)
 - RecyclerView: `ListAdapter` + `DiffUtil`; declare manager in XML as above
-- Inline `dp`/`sp` multiples of 4 � **no `dimens.xml`**
+- Inline `dp`/`sp` multiples of 4 — **no `dimens.xml`**
 - **XML closing / EOF formatting (layouts):**
   - Put a **blank line between nested container closing tags** (e.g. after `</ConstraintLayout>` before `</MaterialCardView>`, and before the root close)
-  - End the file on the **root closing tag** � **no** extra blank line after `</Root>` (single trailing newline for EOF only)
+  - End the file on the **root closing tag** — **no** extra blank line after `</Root>` (single trailing newline for EOF only)
   - Do **not** jam nested closes back-to-back without the blank line between major containers
 
 ```xml
-<!-- BAD � no blank between nested closes; extra blank after root -->
+<!-- BAD — no blank between nested closes; extra blank after root -->
             </LinearLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -300,7 +300,7 @@ Layouts may override `app:iconTint` (`?attr/colorIconSecondary`, brand color, or
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 
-<!-- GOOD � blank line between nested container closes; no blank after root -->
+<!-- GOOD — blank line between nested container closes; no blank after root -->
             </LinearLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -338,7 +338,7 @@ Layouts may override `app:iconTint` (`?attr/colorIconSecondary`, brand color, or
 ### Icon button conversion example
 
 ```xml
-<!-- BAD � clickable image pretending to be a button -->
+<!-- BAD — clickable image pretending to be a button -->
 <com.google.android.material.imageview.ShapeableImageView
     android:id="@+id/sivMenuHome"
     android:layout_width="40dp"
@@ -347,7 +347,7 @@ Layouts may override `app:iconTint` (`?attr/colorIconSecondary`, brand color, or
     android:scaleType="centerInside"
     app:srcCompat="@drawable/ic_svg_menu_home" />
 
-<!-- GOOD � ButtonStyle.IconButton -->
+<!-- GOOD — ButtonStyle.IconButton -->
 <com.google.android.material.button.MaterialButton
     android:id="@+id/mbMenuHome"
     style="@style/ButtonStyle.IconButton"
@@ -378,12 +378,12 @@ If `ButtonStyle.IconButton` is missing, add it under Button Styles in `:core-ui`
     app:backgroundTint="@null"
     app:icon="@drawable/ic_svg_back"
     app:iconTint="@color/white"
-    � />
+    … />
 
-<!-- BAD drawable � do not create for button solid+stroke -->
+<!-- BAD drawable — do not create for button solid+stroke -->
 <!-- bg_shape_ocr_glass_circle.xml: oval + solid + stroke -->
 
-<!-- GOOD � tint + stroke + cornerRadius on the button -->
+<!-- GOOD — tint + stroke + cornerRadius on the button -->
 <com.google.android.material.button.MaterialButton
     android:id="@+id/mbCloseOcr"
     style="@style/ButtonStyle.IconButton"

@@ -8,22 +8,22 @@ paths:
   - "**/*.gradle.kts"
 ---
 
-Apply when the project includes ads and/or IAP. Setup skills **always place** `:gmaAds` from GitHub; screen wiring needs user yes (or `/hsc-implement-admob-ads`).
+Apply when the project includes ads and/or IAP. Setup skills **always place** `:gmaAds` from GitHub; screen wiring needs user yes (or `/sonicc-implement-admob-ads`).
 
 ## Ads are not MVI
 
 - Ads stay on **`:gmaAds`** (facade + controllers + Fragment/Activity extensions) — **not** Intent / State / Effect
-- Do **not** apply `hsc-create-mvi` to ads; do not inject `AdsManager` in screens
+- Do **not** apply `sonicc-create-mvi` to ads; do not inject `AdsManager` in screens
 - Screens call extensions (`loadBannerAd`, `showInterstitialAd`, …) with placement keys
 - Convert ads to MVI **only** if the user **explicitly** asks
 
 Full playbook: [reference/ads-gma.md](reference/ads-gma.md)
 
-Skills: `hsc-implement-admob-ads`, `hsc-add-admob-banner`, `hsc-add-admob-interstitial`, `hsc-add-admob-native`, `hsc-add-admob-rewarded`, `hsc-add-admob-rewarded-interstitial`, `hsc-add-admob-appOpen-Entrance`, `hsc-add-admob-appOpen-lifecycle`
+Skills: `sonicc-implement-admob-ads`, `sonicc-add-admob-banner`, `sonicc-add-admob-interstitial`, `sonicc-add-admob-native`, `sonicc-add-admob-rewarded`, `sonicc-add-admob-rewarded-interstitial`, `sonicc-add-admob-appOpen-Entrance`, `sonicc-add-admob-appOpen-lifecycle`
 
 ## Placing `:gmaAds`
 
-1. Download from [hypersoftdev/Admob-Ads](https://github.com/hypersoftdev/Admob-Ads) — exact module copy
+1. Download from [orbitalsonic/Admob-Ads](https://github.com/orbitalsonic/Admob-Ads) — exact module copy
 2. Package / namespace only: `{applicationId}.gmaAds`
 3. Remap Gradle + host imports (`Constants.TAG_ADS`, `InternetManager`, `SharedPrefManager`, extensions) to this app’s `:core-common` / `:core-platform` / `:data`
 4. During place: **do not** edit engine or catalog (controllers, validators, `AdsSdk`, `FullscreenAdGate`, `ConsentManager`, `*AdConfig`)
@@ -46,8 +46,9 @@ Skills: `hsc-implement-admob-ads`, `hsc-add-admob-banner`, `hsc-add-admob-inters
 - Premium screens follow normal MVI feature packages (`premium/`)
 - Product IDs: constants in data/domain — not duplicated in UI
 - After purchase success: update entitlement, then let ads/UI react
+- Library: [orbitalsonic/SonicInApp](https://github.com/orbitalsonic/SonicInApp) via JitPack (`com.github.orbitalsonic:SonicInApp`)
 - Full subs + in-app playbook: [reference/premium-billing.md](reference/premium-billing.md)
-- Skills: `hsc-implement-in-app-billing`, `hsc-add-subscription-packages`, `hsc-add-inapp-packages`
+- Skills: `sonicc-implement-in-app-billing`, `sonicc-add-subscription-packages`, `sonicc-add-inapp-packages`
 
 ## Forbidden
 

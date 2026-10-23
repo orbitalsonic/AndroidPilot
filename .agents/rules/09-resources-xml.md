@@ -8,7 +8,7 @@ paths:
 
 **Full detail (all naming tables, examples, BAD/GOOD):** [reference/resources-xml.md](reference/resources-xml.md)
 
-Applies to `res/**/*.xml` (strings, colors, themes, drawables, and XML layouts). When `uiFramework` is `compose`, still obey string/color/theme/drawable rules; **do not** author `fragment_*` screen layouts — use `28-compose-ui` + `hsg-figma-to-compose`.
+Applies to `res/**/*.xml` (strings, colors, themes, drawables, and XML layouts). When `uiFramework` is `compose`, still obey string/color/theme/drawable rules; **do not** author `fragment_*` screen layouts — use `28-compose-ui` + `sonicg-figma-to-compose`.
 
 ## Resource module placement (mandatory)
 
@@ -44,7 +44,7 @@ Applies to `res/**/*.xml` (strings, colors, themes, drawables, and XML layouts).
 - Always: `android:includeFontPadding=false`, both `android:fontFamily` and `fontFamily`
 - **Never until user asks:** `android:statusBarColor`, `android:navigationBarColor`, `android:windowLightStatusBar`, `android:windowLightNavigationBar`
 - `ButtonStyle.IconButton`: padding `8dp`, `iconSize` `0dp`, default `iconTint` `?attr/colorIcon` (layouts may override)
-- BottomNavigation: set `bottomNavigationStyle` on `Base.Theme.App` → project style with theme-attr `itemIconTint` / `itemTextColor` selectors (map from Figma in `hsg-setup-design-system`)
+- BottomNavigation: set `bottomNavigationStyle` on `Base.Theme.App` → project style with theme-attr `itemIconTint` / `itemTextColor` selectors (map from Figma in `sonicg-setup-design-system`)
 
 ## Premium paywall layout
 

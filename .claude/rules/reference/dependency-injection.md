@@ -6,27 +6,58 @@ Full detail for `07-dependency-injection.md`. Do not delete lines from this file
 
 Use the DI framework already in the project. Default stack: **Koin**.
 
-- Bootstrap in Application class â€” keep Application minimal
+- Bootstrap in Application class — keep Application minimal
 - Aggregate modules in a single composition root (e.g. `KoinModules`)
 - Prefer constructor injection and `by inject()` / `by viewModel()` over service locators
-- If the project already has a limited `DIComponent` / `KoinComponent` faÃ§ade on base Fragments, follow it â€” do not expand it for new features without need
+- If the project already has a limited `DIComponent` / `KoinComponent` façade on base Fragments, follow it — do not expand it for new features without need
 
-## Mandatory: `lazyModule` everywhere
+## `module` vs `lazyModule` (choose by usage)
 
-- **Every** Koin module is declared with `lazyModule { }` â€” never `module { }`
-- Application loads them via `lazyModules(...)` â€” never `modules(...)` for these definitions
-- Applies to `:app`, `:data`, `:domain`, `:presentation`, `:core-*`, ads, features
-- Do **not** mix `module` + `lazyModule` in the same composition root
+Use **both** when appropriate. Do **not** force one style for the whole app.
+
+| Declare with | Load with | When |
+|--------------|-----------|------|
+| `module { }` | `modules(...)` | **Eager** — needed at cold start / first frame |
+| `lazyModule { }` | `lazyModules(...)` | **Deferred** — secondary screens, heavy/optional graphs |
+
+### Use `module` (eager)
+
+Cold-start graph — bindings resolved by `App`, `MainActivity` (if it injects), or the start destination (**Entrance** / legacy **Splash**) without waiting:
+
+- `appModule`, `coreModule`, `corePlatformModule`
+- `dataModule` (SharedPref, RC cache, repos used at Entrance)
+- `useCaseModule` factories used by Entrance / Splash / MainActivity
+- `entrancePresentationModule` (xml) / `entranceFeatureModule` (compose)
+- Dispatchers, InternetManager, and any other ctor deps on the first-screen ViewModel chain
+
+Eager modules are ready when `startKoin { modules(...) }` returns — no `runOnKoinStarted` required for those bindings.
+
+### Use `lazyModule` (deferred)
+
+Not required to paint the first screen:
+
+- Secondary feature modules (`homePresentationModule` / `homeFeatureModule`, settings, premium paywall UI, …)
+- Ads modules (`gmaAdsModule`, banner/interstitial/native/… placement modules)
+- Heavy optional feature graphs loaded after launch
+- Billing UI modules that are not on the cold-start path (BillingDataSource itself may still be eager if started from `Application`)
+
+Resolve lazy bindings after they are ready (`runOnKoinStarted` / wait APIs) — never assume they exist the instant `startKoin` returns.
+
+### Rule of thumb
+
+> If Entrance / Splash / MainActivity needs it on first open → **`module`**.  
+> If it is a later screen, ads, or optional heavy wiring → **`lazyModule`**.
+
+Mixing `modules(...)` + `lazyModules(...)` in the same `startKoin` block is **expected**.
 
 ### Migrating an existing project
 
-When converting from eager Koin modules:
-
-1. Replace every `module { }` â†’ `lazyModule { }` (all layers)
-2. Replace `modules(â€¦)` â†’ `lazyModules(â€¦)` in `startKoin`
-3. Keep `//// Section` headers while converting
-4. Register the same list in `KoinModules` â€” do not drop modules mid-migration
-5. Apply any DI-backed or Dynamic Colors theme **after** `startKoin` finishes (see below) â€” never probe Koin via `GlobalContext`
+1. Classify each existing module: cold-start → `module`; deferred → `lazyModule`
+2. Split composition root into eager + lazy lists (or two getters on `KoinModules`)
+3. `startKoin { modules(eager); lazyModules(deferred) }`
+4. Keep `//// Section` headers while converting
+5. Apply theme / billing that needs **lazy** bindings inside `runOnKoinStarted`; eager-only work can run right after `startKoin`
+6. Never probe Koin via `GlobalContext`
 
 ### Bootstrap (`Application`)
 
@@ -34,36 +65,72 @@ When converting from eager Koin modules:
 class App : Application() {
     override fun onCreate() {
         super.onCreate()
-        initKoin()
-        // Theme / Dynamic Colors that need a live process â€” only AFTER Koin start
-        applyAppTheme()
+        startKoin()
+        onKoinStarted()
     }
 
-    private fun initKoin() {
+    private fun startKoin() {
         startKoin {
             androidContext(this@App)
-            lazyModules(KoinModules().getKoinModules())
+            modules(KoinModules().getEagerModules())
+            lazyModules(KoinModules().getLazyModules())
         }
     }
 
-    private fun applyAppTheme() {
-        // e.g. DynamicColors.applyToActivitiesIfAvailable(this)
-        // or read prefs via inject() â€” safe here because startKoin already returned
+    private fun onKoinStarted() {
+        getKoin().runOnKoinStarted {
+            applyAppTheme()
+            // billing connect, ads preload, etc. — anything that needs lazyModule bindings
+        }
     }
 }
 ```
 
-### Theme apply â€” after Koin start (mandatory)
+`KoinModules` example:
+
+```kotlin
+fun getEagerModules() = listOf(
+    //// Core
+    appModule,
+    coreModule,
+    corePlatformModule,
+
+    //// Data
+    dataModule,
+
+    //// Domain
+    useCaseModule,
+
+    //// Presentation (cold-start only)
+    entrancePresentationModule, // or entranceFeatureModule when compose
+)
+
+fun getLazyModules() = listOf(
+    //// Presentation / Feature (deferred)
+    homePresentationModule,
+    settingsPresentationModule,
+
+    //// Ads
+    gmaAdsModule,
+    bannerAdModule,
+    nativeAdModule,
+)
+```
+
+(Compose: put secondary `*FeatureModule`s in the lazy list; keep Entrance in the eager list.)
+
+### Theme apply — after Koin start (mandatory)
 
 - **Do not** use `GlobalContext.getOrNull()` (or any GlobalContext probe) to gate theme / DI
-- **Do** sequence work: `startKoin { lazyModules(...) }` first, then theme apply in the same `Application.onCreate`
-- Activity helpers (`enableMaterialDynamicTheme`) may call `DynamicColors.applyToActivityIfAvailable(this)` directly â€” Application always starts Koin before any Activity
-- Keep `startKoin` **only** in `Application` â€” never in Activity (theme change recreates Activity â†’ `KoinAppAlreadyStartedException`)
-- If you must `get()` a dependency right after `lazyModules`, use `waitAllStartJobs()` / `awaitAllStartJobs()` â€” not GlobalContext checks
+- **Do** sequence work: `startKoin { modules(...); lazyModules(...) }` first, then theme
+- Eager-only theme/prefs: safe immediately after `startKoin` returns
+- Anything that needs **lazyModule** bindings: inside `runOnKoinStarted`
+- Activity helpers (`enableMaterialDynamicTheme`) may call `DynamicColors.applyToActivityIfAvailable(this)` directly — Application always starts Koin before any Activity
+- Keep `startKoin` **only** in `Application` — never in Activity (theme change recreates Activity → `KoinAppAlreadyStartedException`)
 
 ## Readable sections (mandatory)
 
-Every `lazyModule` body must use **clear section headers** so bindings stay readable and separated by concern.
+Every `module` / `lazyModule` body must use **clear section headers** so bindings stay readable and separated by concern.
 
 ### Comment style
 
@@ -74,7 +141,7 @@ Every `lazyModule` body must use **clear section headers** so bindings stay read
 - Exactly four slashes + space + PascalCase / Title-style name
 - Blank line **before** each section (except the first)
 - Blank line **after** the last binding of a section when another section follows
-- One concern per section â€” do not mix DataSources with ViewModels in the same block
+- One concern per section — do not mix DataSources with ViewModels in the same block
 - Skip empty sections; add a section only when it has bindings
 - Tiny modules (single `viewModel`) still get one section header for consistency
 
@@ -82,8 +149,8 @@ Every `lazyModule` body must use **clear section headers** so bindings stay read
 
 | Module                           | Section order (use only what applies)                                                                                                          |
 |----------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------|
-| `dataModule` / data area modules | `//// DataSources` â†’ `//// Repositories` (optional `//// Managers` / SDK wrappers **before** DataSources if needed)                          |
-| `useCaseModule`                  | Group by domain area: `//// Entrance`, `//// Location`, `//// Prayer`, â€¦ â€” never dump all factories in one unsorted list when areas differ |
+| `dataModule` / data area modules | `//// DataSources` → `//// Repositories` (optional `//// Managers` / SDK wrappers **before** DataSources if needed)                          |
+| `useCaseModule`                  | Group by domain area: `//// Entrance`, `//// Location`, `//// Prayer`, … — never dump all factories in one unsorted list when areas differ |
 | `*PresentationModule`            | `//// ViewModels` (optional `//// Helpers` if feature-scoped singles) — **xml** |
 | `*FeatureModule`                 | `//// ViewModels` — **compose** (`homeFeatureModule`, AnimeHub)                                                                          |
 | `corePlatformModule`             | `//// Dispatchers` → `//// Managers` → `//// Other`                                                                                        |
@@ -98,7 +165,7 @@ Do **not** invent cryptic headers (`//// stuff`, `//// temp`). Name the concern.
 
 | Location                     | Contents                                                                                             |
 |------------------------------|------------------------------------------------------------------------------------------------------|
-| `app/di/`                    | App-level singles, **module aggregation** (`KoinModules`) only â€” not UseCases / repo interfaces    |
+| `app/di/`                    | App-level singles, **module aggregation** (`KoinModules`) only — not UseCases / repo interfaces    |
 | `domain/di/`                 | UseCase **factories** (`useCaseModule` / `domainModule`)                                             |
 | `data/di/`                   | DataSource + Repository **impl** bindings (`dataModule`)                                             |
 | `presentation/<feature>/di/` | Feature ViewModels (**xml**)                                                                              |
@@ -112,9 +179,9 @@ Do **not** invent cryptic headers (`//// stuff`, `//// temp`). Name the concern.
 |------------------------------|------------------------------------------|---------------------------|
 | Repository **interfaces**    | Repository **impls** (`*RepositoryImpl`) | UseCase classes           |
 | UseCase classes (`*UseCase`) | DataSources / managers                   | Repository **interfaces** |
-| `useCaseModule` factories    | `dataModule` bindings                    | â€”                       |
+| `useCaseModule` factories    | `dataModule` bindings                    | —                       |
 
-Presentation injects UseCases and repository **interfaces** â€” never `*RepositoryImpl` or DataSources from `:data`.
+Presentation injects UseCases and repository **interfaces** — never `*RepositoryImpl` or DataSources from `:data`.
 
 ## Binding types
 
@@ -126,10 +193,10 @@ Presentation injects UseCases and repository **interfaces** â€” never `*Rep
 
 ## Examples
 
-### `dataModule`
+### Eager — `dataModule` (`module`)
 
 ```kotlin
-val dataModule = lazyModule {
+val dataModule = module {
 
     //// DataSources
     single { LanguageDataSource() }
@@ -145,12 +212,12 @@ val dataModule = lazyModule {
 
 - DataSources before Repositories
 - Do **not** register UseCases here
-- If you split (e.g. `sharedPrefModule`), keep the same section order inside each `lazyModule`
+- Cold-start data stays in `module`; feature-only data splits can use `lazyModule`
 
-### `useCaseModule` (domain)
+### Eager — `useCaseModule` (domain)
 
 ```kotlin
-val useCaseModule = lazyModule {
+val useCaseModule = module {
 
     //// Entrance
     factory { GetEntranceDestinationUseCase(get()) }
@@ -168,10 +235,21 @@ val useCaseModule = lazyModule {
 }
 ```
 
-- Lives under `:domain` â€” **not** `:data`
+- Lives under `:domain` — **not** `:data`
 - Sort factories by area; keep related UseCases together
+- Entrance-related factories must stay on the **eager** module list
 
-### Presentation
+### Eager — Entrance presentation
+
+```kotlin
+val entrancePresentationModule = module {
+
+    //// ViewModels
+    viewModel { EntranceViewModel(get(), get(), get()) }
+}
+```
+
+### Deferred — secondary feature
 
 ```kotlin
 val homePresentationModule = lazyModule {
@@ -181,10 +259,10 @@ val homePresentationModule = lazyModule {
 }
 ```
 
-### `corePlatformModule`
+### Eager — `corePlatformModule`
 
 ```kotlin
-val corePlatformModule = lazyModule {
+val corePlatformModule = module {
 
     //// Dispatchers
     single { Dispatchers.IO }
@@ -195,7 +273,7 @@ val corePlatformModule = lazyModule {
 }
 ```
 
-### Ads (existing architecture — not MVI)
+### Deferred — Ads (existing architecture — not MVI)
 
 Keep this ads DI shape. Do not replace ad ViewModels with Intent/State/Effect unless the user **explicitly** asks (`21-ads-billing`).
 
@@ -217,44 +295,19 @@ val bannerAdModule = lazyModule {
 }
 ```
 
-### Composition root grouping
-
-```kotlin
-fun getKoinModules() = listOf(
-    //// Core
-    appModule,
-    coreModule,
-    corePlatformModule,
-
-    //// Data
-    dataModule,
-
-    //// Domain
-    useCaseModule,
-
-    //// Presentation
-    entrancePresentationModule,
-    homePresentationModule,
-
-    //// Ads
-    bannerAdModule,
-    nativeAdModule,
-)
-```
-
 ## Other rules
 
-- **Every new module must be registered** in the composition root list
+- **Every new module must be registered** in the composition root (eager or lazy list as appropriate)
 - Bind interfaces to implementations: `single<XRepository> { XRepositoryImpl(get()) }`
-- Dispatchers: `single { Dispatchers.IO }` and `single { Dispatchers.Default }` â€” **no** `named("io")` / `named("default")`; repos often use `ioDispatcher: CoroutineDispatcher = Dispatchers.IO`
+- Dispatchers: `single { Dispatchers.IO }` and `single { Dispatchers.Default }` — **no** `named("io")` / `named("default")`; repos often use `ioDispatcher: CoroutineDispatcher = Dispatchers.IO`
 - Use named qualifiers only for true parallel instances (e.g. multiple ad placements): `named("banner_home")`
 
 ### Cold-start / first screens (mandatory)
 
 Walk and verify before release (prevents `No definition found` / `Could not create instance` on Splash/Entrance):
 
-1. `App.startKoin` → `lazyModules(KoinModules().getKoinModules())`
-2. Composition root list includes every module the first UI needs
-3. **MainActivity** (if it uses `by inject` / `koinInject`) + start destination (**EntranceFragment** / **EntranceScreen** / legacy **Splash***) → ViewModel → **every** constructor parameter type has `viewModel` / `factory` / `single` in a loaded `lazyModule`
+1. `App.startKoin` → `modules(eager)` + `lazyModules(deferred)` from `KoinModules`
+2. Eager list includes every module the first UI needs (Entrance / Splash / MainActivity inject graph)
+3. **MainActivity** (if it uses `by inject` / `koinInject`) + start destination → ViewModel → **every** constructor parameter type has `viewModel` / `factory` / `single` in a **loaded eager** `module`
 
-**Forbidden:** adding a ctor dependency to Entrance/Splash/MainActivity without registering it and listing its module in `KoinModules`.
+**Forbidden:** adding a ctor dependency to Entrance/Splash/MainActivity without registering it on the **eager** list in `KoinModules`.

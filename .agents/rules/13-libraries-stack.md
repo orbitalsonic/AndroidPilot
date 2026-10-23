@@ -15,14 +15,14 @@ paths:
 | Lifecycle | viewmodel-ktx, runtime-ktx |
 | DI | Koin (default) |
 | Coroutines | kotlinx-coroutines-core, play-services integration |
-| Firebase (new projects) | BOM + analytics/crashlytics/`firebase-messaging` on `:core-platform`; `firebase-config` + `kotlinx-coroutines-play-services` on `:data` — via `hsg-setup-new-project` (FCM: dependency only, no service) |
+| Firebase (new projects) | BOM + analytics/crashlytics/`firebase-messaging` on `:core-platform`; `firebase-config` + `kotlinx-coroutines-play-services` on `:data` — via `sonicg-setup-new-project` (FCM: dependency only, no service) |
 | Images | **xml:** Glide via `ImageView.loadImage(...)`. **compose:** Coil 3 `AsyncImage` |
 | Splash | core-splashscreen |
 | Desugaring | desugar_jdk_libs (for java.time on older APIs) |
 
 ## Optional (add when feature requires — with approval)
 
-Lottie, CameraX, Play Services Location/Maps, other Firebase libs (Analytics, RC, Crashlytics, …), Play Billing / Hypersoft BillingManager, Google Mobile Ads + mediation (`:gmaAds`), Shimmer, App Update KTX.
+Lottie, CameraX, Play Services Location/Maps, other Firebase libs (Analytics, RC, Crashlytics, …), Play Billing / OrbitalSonic BillingManager ([SonicInApp](https://github.com/orbitalsonic/SonicInApp), `com.github.orbitalsonic:SonicInApp` via JitPack), Google Mobile Ads + mediation (`:gmaAds`, [orbitalsonic/Admob-Ads](https://github.com/orbitalsonic/Admob-Ads)), Shimmer, App Update KTX.
 
 ## Forbidden (unless project already uses or explicitly approved)
 

@@ -1,330 +1,78 @@
-# 🚀 Android Engineering Rules
+# OrbitalSonic AI Workflow
 
-> Production-ready AI coding rules for Android development.
->
-> A collection of reusable AI rules (Cursor `.mdc` and Claude `CLAUDE.md`) that help AI assistants generate clean, maintainable, and production-ready Android code.
+Company template for **Cursor**, **Claude Code**, and **Android Studio Gemini**. Single source of truth for Clean Architecture Android apps (XML + View Binding **or** Jetpack Compose via `uiFramework`, MVI, Koin `module` / `lazyModule`).
 
----
+Apps copy these folders into the project root — do not fork rules/skills inside an app.
 
-## 🎯 Purpose
+| Tool | Copy this folder |
+|------|------------------|
+| **Cursor** | [`.cursor/`](.cursor/) |
+| **Claude Code** | [`.claude/`](.claude/) |
+| **Android Studio Gemini** | [`.agents/`](.agents/) |
 
-These rules transform AI coding assistants into experienced Android engineers by enforcing:
+Keep `.cursor/`, `.claude/`, and `.agents/` in sync. If you change a rule or skill in one, update the twins. Skill names differ only by prefix: Cursor `/sonic-…`, Claude Code `/sonicc-…`, Gemini `@sonicg-…`. Android Studio loads skills from `.agents/skills` (not `.skills` or `.gemini`).
 
-- Modern Android development practices
-- MVVM (Baseline) + MVI (State-heavy)
-- AGP 9 / Gradle 9 Standards
-- Kotlin best practices
-- XML + ViewBinding
-- Material 3
-- Performance optimization
-- Lifecycle safety
-- Error handling
-- Production-ready implementations
+## What’s in this repo
 
-Instead of repeatedly explaining your project standards, simply include these rules in your project.
+| Path | Role |
+|------|------|
+| [`.cursor/rules/`](.cursor/rules/) | Company law (architecture, naming, invariants) |
+| [`.cursor/skills/`](.cursor/skills/) | Cursor playbooks (`/sonic-skill-name`) |
+| [`.claude/rules/`](.claude/rules/) | Same law, Claude Code format |
+| [`.claude/skills/`](.claude/skills/) | Claude Code playbooks (`/sonicc-skill-name`) |
+| [`.agents/rules/`](.agents/rules/) | Same law, Gemini format |
+| [`.agents/skills/`](.agents/skills/) | Gemini playbooks (`@sonicg-skill-name`) |
+| [`MUST_READ_BEFORE_SKILL_CHANGES.md`](MUST_READ_BEFORE_SKILL_CHANGES.md) | How to edit this template |
 
----
+Full skill map and rules index:
 
-# 📦 Tech Stack
+- Cursor: [`.cursor/README.md`](.cursor/README.md)
+- Claude Code: [`.claude/README.md`](.claude/README.md)
+- Gemini: [`.agents/README.md`](.agents/README.md)
 
-These rules are designed for projects using:
+## How teammates use this in an app
 
-- Kotlin only
-- XML Layouts only
-- ViewBinding only
-- MVVM / MVI Architecture
-- Koin
-- Kotlin Coroutines
-- StateFlow
-- Jetpack Navigation
-- AGP 9 / Gradle 9 Standards
-- sdp / ssp for dimensions
-- Glide for images
-- Firebase (Analytics, Crashlytics, Remote Config)
-- Splash Screen (androidx.core.splashscreen)
+1. Copy `.cursor/`, `.claude/`, and/or `.agents/` into the Android app root.
+2. Open the app in Cursor, run `claude` at the repo root, or open the app in Android Studio (Gemini Agent).
+3. **Cursor:** type `/sonic` (for example `/sonic-setup-new-project`). **Claude Code:** type `/sonicc` (for example `/sonicc-setup-new-project`). **Android Studio Gemini:** type `@sonicg` (for example `@sonicg-setup-new-project`). Cursor skills say **Sonic Cursor Skill:**; Claude skills say **OrbitalSonic Claude Skill:**; Gemini skills say **OrbitalSonic Gemini Skill:**. Do not pick Figma plugin skills (“Created by Figma”) for Android screens.
+4. After setup, obey `.cursor/project-settings.json` (or the twin under `.claude/` / `.agents/`) — especially `uiFramework`.
 
-Supported Android versions:
+### Gemini localization (`sonicg-localize`)
 
-- Minimum SDK: 24
-- Target SDK: 37
-- Compile SDK: 37
-- Java Compatibility: 17
+Use this from **Android Studio Gemini Agent** after `.agents/` is in the app root. Invoke **`@sonicg-localize`** (type `@sonicg`). Cursor and Claude twins are `/sonic-localize` and `/sonicc-localize`. Description starts with **OrbitalSonic Gemini Skill:**.
 
----
+1. Gemini finds `LanguageDataSource.kt` and lists language codes.
+2. You confirm languages, then complete vs missing-only localization.
+3. It snapshots source strings once, then translates each locale in **parallel** (one worker per language, disjoint `values-*` folders), preserves placeholders/XML, and reports files created/modified.
 
-# 📁 Project Structure
+### Typical feature flow
 
-```
-.cursor/
-└── rules/
-    ├── 01-tech-stack.mdc
-    ├── ...
-    └── 13-updating-project.mdc
-.claude/
-└── CLAUDE.md
-```
+Cursor: `/sonic-…` · Claude Code: `/sonicc-…` · Gemini: `@sonicg-…` (same steps)
 
----
+1. `/sonic-setup-new-project` or `/sonicc-setup-new-project` or `@sonicg-setup-new-project` (greenfield) · `/sonic-setup-old-project` or `/sonicc-setup-old-project` or `@sonicg-setup-old-project` (existing app)
+2. `/sonic-setup-design-system` or `/sonicc-setup-design-system` or `@sonicg-setup-design-system` — Figma tokens/themes in `:core-ui`
+3. `/sonic-figma-to-xml` or `/sonicc-figma-to-xml` or `@sonicg-figma-to-xml` if xml; `/sonic-figma-to-compose` or `/sonicc-figma-to-compose` or `@sonicg-figma-to-compose` if compose
+4. `/sonic-create-mvi` or `/sonicc-create-mvi` or `@sonicg-create-mvi` — Intent / State / Effect / ViewModel + Fragment **or** `*Screen`
+5. `/sonic-create-clean-architecture` or `/sonicc-create-clean-architecture` or `@sonicg-create-clean-architecture` — only when new domain / data is required
+6. `/sonic-review-complete` or `/sonicc-review-complete` or `@sonicg-review-complete` before PR
 
-# 📖 Rule Overview
+**Shortcut:** `/sonic-create-screen` / `/sonicc-create-screen` / `@sonicg-create-screen` runs steps 3–5 in one invoke.
 
-## 01 - Tech Stack
+## How to change this template
 
-Defines the project's technology stack and modern standards including:
+Read [`MUST_READ_BEFORE_SKILL_CHANGES.md`](MUST_READ_BEFORE_SKILL_CHANGES.md) **before** editing anything under `.cursor/`, `.claude/`, or `.agents/`.
 
-- Kotlin only (No Java)
-- XML + ViewBinding only (No Compose)
-- MVVM + MVI
-- Koin DI
-- AGP 9 / Gradle 9 standards (No Kotlin plugin, new optimization DSL)
-- SDK versions (24-37)
-- Dimens (sdp/ssp)
+Hard rules:
 
----
+- Do not invent local rules inside an app — update **this** repo, then copy into apps.
+- Do not delete rule meaning; prefer move / merge / link.
+- Update related skills/rules in the same change (Cursor `sonic-` ↔ Claude `sonicc-` ↔ Gemini `sonicg-`).
+- New product skills: learn from the reference apps, show a plan, wait for acceptance.
 
-## 02 - Architecture
+## Repo
 
-Enforces:
-
-- MVVM (Baseline) / MVI (State-heavy)
-- Repository Pattern
-- Separation of Concerns
-- Immutable UI State
-- SharedFlow/Channel for Effects
-
----
-
-## 03 - UI
-
-Defines UI standards:
-
-- XML only
-- ViewBinding only
-- Material 3
-- Edge-to-edge support
-- Accessibility & Dark Mode
-- Responsive layouts with sdp/ssp
-
----
-
-## 04 - Kotlin
-
-Encourages:
-
-- Idiomatic Kotlin
-- Coroutines
-- StateFlow
-- Extension Functions
-- Sealed Classes
-- Immutable data
-
----
-
-## 05 - Performance
-
-Optimizes:
-
-- RecyclerView
-- Memory usage
-- Rendering
-- Startup time
-- Background work
-- Object allocation
-
----
-
-## 06 - Error Handling
-
-Standardizes:
-
-- Result handling
-- Exception handling
-- User-friendly errors
-- Structured concurrency
-- Validation
-
----
-
-## 07 - Testing
-
-Promotes:
-
-- Testable architecture
-- Dependency Injection
-- Unit testing
-- Maintainable code
-
----
-
-## 08 - Project Structure
-
-Defines a consistent single-module (`:app`) package structure:
-
-- `common/` (App-wide features)
-- `helpers/` (Stateless Kotlin extensions)
-- `presentation/` (Activities, Fragments, ViewModels)
-- `storage/` (Preferences, Data Providers)
-
----
-
-## 09 - Android Best Practices
-
-Ensures:
-
-- Lifecycle safety
-- AGP 9 / Gradle 9 standards
-- R8 optimization (.keep files)
-- Permission handling
-- API compatibility (24-37)
-
----
-
-## 10 - Feature Development
-
-A senior-engineer workflow that guides AI to:
-
-- Analyze the project before coding
-- Reuse existing building blocks in `helpers/` and `presentation/base/`
-- Implement production-ready features with proper error handling
-- Handle Android lifecycle and permissions
-
----
-
-## 11 - Template Conventions
-
-Catalog of reusable building blocks:
-
-- Base classes (Activity/Fragment)
-- Helper catalog (Navigation, Theme, Permissions, etc.)
-- Common components (Firebase, Network, Observers)
-- Adapter & Dialog standards
-
----
-
-## 12 - New Project
-
-Workflow for starting a new app:
-
-- Identity & Branding updates
-- Firebase setup
-- Signing configuration
-- Template cleanup
-
----
-
-## 13 - Updating Project
-
-Workflow for maintaining an existing project:
-
-- Establishing baselines
-- Dependency & SDK upgrades
-- Safe migrations & deprecations
-- Resource management
-
----
-
-## CLAUDE.md
-
-A comprehensive, single-file rule set specifically optimized for **Claude Code**, **Roo Code**, and **Cline**. It consolidates all project standards, tech stack details, and engineering workflows into a format that Claude can easily consume.
-
-It also includes a set of specialized **Claude Skills** (in `.claude/skills/`) for:
-- Feature development
-- UI & Theming
-- Template helpers catalog
-- Build configuration & R8
-- New project setup
-- Project updates & migrations
-- Pre-flight verification
-
----
-
-# 💡 Why These Rules?
-
-Most AI assistants are excellent at generating code, but they don't automatically understand your project's architecture or engineering standards.
-
-These rules ensure generated code is:
-
-- Consistent
-- Maintainable
-- Scalable
-- Production-ready
-- Easy to review
-- Easy to test
-
----
-
-# 🚀 Installation
-
-Clone or copy the `.cursor/rules` and `.claude/CLAUDE.md` into your Android project.
-
-```
-Project
-│
-├── .cursor
-│   └── rules
-│       ├── 01-tech-stack.mdc
-│       ├── ...
-│       └── 13-updating-project.mdc
-└── .claude
-    └── CLAUDE.md
-```
-
-Cursor will automatically load these rules for your project.
-
----
-
-# 🤖 Compatible AI Assistants
-
-Although created for Cursor, these rules can be adapted for:
-
-- Cursor
-- Claude Code
-- GitHub Copilot
-- Gemini CLI
-- Windsurf
-- Roo Code
-- Continue.dev
-- Cline
-- OpenHands
-- Any AI coding assistant that supports project-level instructions
-
----
-
-# 🤝 Contributing
-
-Contributions are welcome!
-
-Feel free to:
-
-- Improve existing rules
-- Add new rule files
-- Share Android best practices
-- Suggest optimizations
-- Report issues
-
-Please open an issue or submit a pull request.
-
----
-
-# ⭐ If You Find This Helpful
-
-If this repository improves your AI-assisted Android development workflow, consider giving it a ⭐ to support the project.
-
----
+https://github.com/orbitalsonic/AndroidPilot
 
 ## License
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
-Copyright OrbitalSonic
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+Copyright OrbitalSonic. Licensed under the Apache License, Version 2.0 — see [LICENSE](LICENSE).

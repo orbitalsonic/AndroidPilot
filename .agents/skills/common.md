@@ -1,6 +1,6 @@
 # Build skills — shared steps
 
-Used by `hsg-build-debug-apk`, `hsg-build-release-apk`, and `hsg-build-release-bundle`. Follow `.agents/rules/14-security-secrets.md` and `.agents/rules/reference/gradle.md`.
+Used by `sonicg-build-debug-apk`, `sonicg-build-release-apk`, and `sonicg-build-release-bundle`. Follow `.agents/rules/14-security-secrets.md` and `.agents/rules/reference/gradle.md`.
 
 ## Gradle wrapper
 
@@ -11,7 +11,7 @@ Used by `hsg-build-debug-apk`, `hsg-build-release-apk`, and `hsg-build-release-b
 
 ## Device discovery (APK skills only)
 
-Required for `hsg-build-debug-apk` and `hsg-build-release-apk`. Skip for `hsg-build-release-bundle`.
+Required for `sonicg-build-debug-apk` and `sonicg-build-release-apk`. Skip for `sonicg-build-release-bundle`.
 
 1. Run `adb devices`. If `adb` is missing → stop; tell user to install platform-tools / add to `PATH`.
 2. Collect serials whose state is `device`. Ignore `unauthorized`, `offline`, and empty lines.
@@ -23,7 +23,7 @@ Do not claim install/launch succeeded without a usable device.
 
 ## Signing setup (release APK + bundle)
 
-Required for `hsg-build-release-apk` and `hsg-build-release-bundle`. Skip for debug.
+Required for `sonicg-build-release-apk` and `sonicg-build-release-bundle`. Skip for debug.
 
 ### 1. Ensure release signing is wired
 
@@ -112,4 +112,4 @@ Always report to the user:
 - Inventing keystore passwords, aliases, or store paths
 - Committing `local.properties`, `.jks`, or `.keystore`
 - Claiming device install without a `device`-state serial
-- Installing or launching for `hsg-build-release-bundle`
+- Installing or launching for `sonicg-build-release-bundle`

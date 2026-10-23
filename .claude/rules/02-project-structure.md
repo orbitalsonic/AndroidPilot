@@ -11,17 +11,17 @@ paths:
 | Module | Responsibility |
 |--------|----------------|
 | `:app` | Application class, DI aggregation, full manifest, composition root — **resources:** `mipmap`, `xml`, launcher-related `drawable` only — **no** `res/values/`, layouts, menus, or nav graphs |
-| `:domain` | Entities, repository **interfaces**, UseCases, `useCaseModule` (`lazyModule`) — no Android UI; **never** repo impls |
-| `:data` | Repository **impls**, DataSources, `dataModule` (`lazyModule` with `//// DataSources` then `//// Repositories`) — **never** UseCases or repo interfaces |
+| `:domain` | Entities, repository **interfaces**, UseCases, `useCaseModule` (`module` when cold-start UseCases; else `lazyModule`) — no Android UI; **never** repo impls |
+| `:data` | Repository **impls**, DataSources, `dataModule` (`module` for cold-start data; `//// DataSources` then `//// Repositories`) — **never** UseCases or repo interfaces |
 | `:presentation` | Screens, ViewModels, feature MVI — **xml only**. **Resources:** `layout` (+ `layout-land`), `menu`, `navigation` **only**. Compose apps use `:feature-*` instead (no `:presentation`) |
 | `:core-*` | Shared utilities — create as many core modules as needed |
 | `:core-common` | Pure Kotlin shared types / `Constants` (TAGs) — no Android UI or DI |
 | `:core-platform` | Connectivity (`InternetManager`), location, Firebase helpers, platform services, **`firebase-messaging` dep** (new projects). Manifest only when needed (`ACCESS_NETWORK_STATE`) |
 | `:core-ui` | Base UI (`Parent*` when xml), **all other resources** (themes, colors, strings, fonts, anim, drawable, raw, splash…), extensions. **compose:** also `core/ui/theme/` (`Color.kt`, `Type.kt`, `AppTheme`) |
-| `:core-database` | **When Room is added** — `AppDatabase`, `entity/`, DAOs, `lazyModule`. Not created empty on every greenfield setup |
+| `:core-database` | **When Room is added** — `AppDatabase`, `entity/`, DAOs, Koin module per `07`. Not created empty on every greenfield setup |
 | `:core-network` | **When Retrofit / API clients are added** — OkHttp/Retrofit wiring. Connectivity checks stay in `:core-platform`. Not created empty on every greenfield setup |
 | `:feature-*` | xml: optional self-contained feature libraries. **compose: required** — one module per screen cluster (`28-compose-ui`) |
-| `:gmaAds` | AdMob — **always place** from [hypersoftdev/Admob-Ads](https://github.com/hypersoftdev/Admob-Ads) on setup (package `{applicationId}.gmaAds` + host remaps). Screen wiring via `hsc-implement-admob-ads` when user says yes. Extensions API — **not** MVI unless the user explicitly asks. See `21-ads-billing` + `reference/ads-gma.md` |
+| `:gmaAds` | AdMob — **always place** from [orbitalsonic/Admob-Ads](https://github.com/orbitalsonic/Admob-Ads) on setup (package `{applicationId}.gmaAds` + host remaps). Screen wiring via `sonicc-implement-admob-ads` when user says yes. Extensions API — **not** MVI unless the user explicitly asks. See `21-ads-billing` + `reference/ads-gma.md` |
 
 - Use as many `:core-*` modules as the project needs; keep each focused
 - Gradle module names: kebab-case (`:core-ui`, `:feature-auth`, `:gmaAds`)
@@ -77,7 +77,7 @@ Feature folders: camelCase (`onBoarding`, `userProfile`). Ads (`:gmaAds`) do **n
 | `presentation` | `domain`, any `core-*`, optional `feature-*`, optional ads module |
 | `feature-*` (compose) | `domain`, `core-common`, `core-ui` — **never** `:data` or other `:feature-*` |
 | `data` | `domain`, any `core-*` (prefer **not** depending on `:core-ui`) |
-| `domain` | coroutines-core, Koin DSL (`lazyModule` for UseCases), optional pure feature libs |
+| `domain` | coroutines-core, Koin DSL (`module`/`lazyModule` for UseCases), optional pure feature libs |
 | ads module | `data` and/or `core-*` when gating on premium/prefs (if project uses that pattern) |
 | `app` | all modules (composition root) |
 

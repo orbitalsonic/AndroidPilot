@@ -1,6 +1,6 @@
 # Retrofit API (reference pattern)
 
-Follow `.agents/rules/08-gradle.mdc`, `13-libraries-stack.mdc`, `06-coroutines-flow.mdc`, `18-errors-result.mdc`, `22-platform-firebase.mdc`, `26-data-persistence.mdc`. **Add Retrofit/OkHttp/Moshi only with approval** — catalog first.
+Follow `.agents/rules/08-gradle.md`, `13-libraries-stack.md`, `06-coroutines-flow.md`, `18-errors-result.md`, `22-platform-firebase.md`, `26-data-persistence.md`. **Add Retrofit/OkHttp/Moshi only with approval** — catalog first.
 
 Prefer existing `InternetManager` (`:core-platform`) for connectivity checks before calls.
 
@@ -13,13 +13,13 @@ Prefer existing `InternetManager` (`:core-platform`) for connectivity checks bef
 | `:domain` | Domain models + repository interface — no Retrofit types |
 | `:core-platform` | Connectivity only (`InternetManager`) — not the full Retrofit stack |
 
-- Do **not** create an empty `:core-network` on every `hsg-setup-new-project` — add when networking API is approved
+- Do **not** create an empty `:core-network` on every `sonicg-setup-new-project` — add when networking API is approved
 - Prefer existing `InternetManager` (`:core-platform`) for connectivity checks before calls
 
 ## Setup
 
 1. `libs.versions.toml`: retrofit, okhttp, converter (moshi/gson)
-2. Create `:core-network`; `include` alphabetically; wire `lazyModule`
+2. Create `:core-network`; `include` alphabetically; wire Koin `module`/`lazyModule` per usage (`07`)
 3. `:data` depends on `:core-network`
 4. Base URL from build config / `local.properties` — not hardcoded secrets
 
@@ -41,10 +41,12 @@ interface UserApi {
 - All network on `IO` in **Repository** (`withContext`); DataSource stays thin
 - Repository returns domain models or typed failures
 
-## DI (`lazyModule` only)
+## DI (`module` if cold-start; else `lazyModule`)
+
+Network used at cold start → **`module`**. Feature-only APIs → **`lazyModule`**. See `07`.
 
 ```kotlin
-val dataModule = lazyModule {
+val dataModule = module {
 
     //// DataSources
     single { provideRetrofit(get()) }

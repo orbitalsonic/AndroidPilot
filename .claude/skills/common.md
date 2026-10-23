@@ -1,6 +1,6 @@
 # Build skills — shared steps
 
-Used by `hsc-build-debug-apk`, `hsc-build-release-apk`, and `hsc-build-release-bundle`. Follow `.claude/rules/14-security-secrets.md` and `.claude/rules/reference/gradle.md`.
+Used by `sonicc-build-debug-apk`, `sonicc-build-release-apk`, and `sonicc-build-release-bundle`. Follow `.claude/rules/14-security-secrets.md` and `.claude/rules/reference/gradle.md`.
 
 ## Gradle wrapper
 
@@ -11,7 +11,7 @@ Used by `hsc-build-debug-apk`, `hsc-build-release-apk`, and `hsc-build-release-b
 
 ## Device discovery (APK skills only)
 
-Required for `hsc-build-debug-apk` and `hsc-build-release-apk`. Skip for `hsc-build-release-bundle`.
+Required for `sonicc-build-debug-apk` and `sonicc-build-release-apk`. Skip for `sonicc-build-release-bundle`.
 
 1. Run `adb devices`. If `adb` is missing → stop; tell user to install platform-tools / add to `PATH`.
 2. Collect serials whose state is `device`. Ignore `unauthorized`, `offline`, and empty lines.
@@ -23,7 +23,7 @@ Do not claim install/launch succeeded without a usable device.
 
 ## Signing setup (release APK + bundle)
 
-Required for `hsc-build-release-apk` and `hsc-build-release-bundle`. Skip for debug.
+Required for `sonicc-build-release-apk` and `sonicc-build-release-bundle`. Skip for debug.
 
 ### 1. Ensure release signing is wired
 
@@ -112,4 +112,4 @@ Always report to the user:
 - Inventing keystore passwords, aliases, or store paths
 - Committing `local.properties`, `.jks`, or `.keystore`
 - Claiming device install without a `device`-state serial
-- Installing or launching for `hsc-build-release-bundle`
+- Installing or launching for `sonicc-build-release-bundle`

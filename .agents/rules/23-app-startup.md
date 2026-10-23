@@ -11,7 +11,7 @@ paths:
 ## Application class
 
 - Single `Application` in `:app` — **DI bootstrap first**, then work that needs Koin
-- Use **`lazyModule` / `lazyModules` only** — convert any leftover `module` / `modules` (see `07-dependency-injection`)
+- Use **`module` + `modules(...)`** for cold-start graph and **`lazyModule` + `lazyModules(...)`** for deferred features/ads (see `07-dependency-injection`)
 - Call `startKoin` **once** here — never from Activity; never guard with `GlobalContext.getOrNull()`
 - Prefer lazy / on-demand init for non-critical SDKs
 
@@ -27,21 +27,22 @@ override fun onCreate() {
 private fun startKoin() {
     startKoin {
         androidContext(this@App)
-        lazyModules(KoinModules().getKoinModules())
+        modules(KoinModules().getEagerModules())
+        lazyModules(KoinModules().getLazyModules())
     }
 }
 
 private fun onKoinStarted() {
     getKoin().runOnKoinStarted {
         applyAppTheme()
-        // billing connect, etc. — anything that needs lazyModule bindings
+        // billing connect, ads preload, etc. — anything that needs lazyModule bindings
     }
 }
 ```
 
-- **`runOnKoinStarted`** avoids `KoinNotStarted` when using `lazyModules`
-- Same wait-for-Koin pattern on **MainActivity** / **EntranceFragment** (or compose **EntranceScreen**) when resolving Koin deps at the start of the app
-- **Cold-start graph (mandatory):** before shipping, verify the first resolve path cannot hit `No definition found` — `App` loads all needed `lazyModule`s via `KoinModules` → start destination VM (Entrance / legacy Splash) and **every** ctor dependency is registered (`viewModel` / `factory` / `single`). Adding a dep to Entrance/Splash/MainActivity without registering it is a **Critical** crash (see `07`, `hsg-review-architecture`)
+- Eager bindings are ready when `startKoin` returns; **`runOnKoinStarted`** for work that needs `lazyModules`
+- Same wait-for-lazy pattern on **MainActivity** / **EntranceFragment** (or compose **EntranceScreen**) only when resolving **lazy** deps at start
+- **Cold-start graph (mandatory):** before shipping, verify the first resolve path cannot hit `No definition found` — `App` loads needed **eager** `module`s via `KoinModules` → start destination VM (Entrance / legacy Splash) and **every** ctor dependency is registered (`viewModel` / `factory` / `single`). Adding a dep to Entrance/Splash/MainActivity without registering it on the eager list is a **Critical** crash (see `07`, `sonicg-review-architecture`)
 
 ## Theme vs Koin
 
@@ -93,11 +94,11 @@ private fun onKoinStarted() {
 ## Forbidden
 
 - Fat Application classes that initialize every SDK eagerly **before** Koin is started
-- Calling `get()` / inject before `runOnKoinStarted` when using `lazyModules`
-- First-screen ViewModel / UseCase / repo / manager used at cold start but missing from a loaded `lazyModule` or omitted from `KoinModules`
+- Calling `get()` / inject on **lazyModule** bindings before `runOnKoinStarted`
+- First-screen ViewModel / UseCase / repo / manager used at cold start but registered only as `lazyModule` or omitted from the eager `KoinModules` list
 - Hardcoding API keys in Application or themes
 - Leaving Startup initializers that crash cold start
 - Defining splash theme only ad hoc in Kotlin — use `splash.xml`
 - Applying splash theme on the `<application>` tag (launcher Activity only)
-- `startKoin` in Activity; leftover `module { }` / `modules(...)` after lazyModule migration
+- `startKoin` in Activity; putting cold-start bindings only in `lazyModules`
 - `GlobalContext.getOrNull()` (or any GlobalContext probe) to gate theme / DI

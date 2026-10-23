@@ -1,8 +1,8 @@
 # :gmaAds — AdMob playbook
 
-Source of truth for module behavior: [hypersoftdev/Admob-Ads](https://github.com/hypersoftdev/Admob-Ads) `gmaAds/README.md`. Local learn path: `E:\SohaibAhmed\Github\Admob-Ads`.
+Source of truth for module behavior: [orbitalsonic/Admob-Ads](https://github.com/orbitalsonic/Admob-Ads) `gmaAds/README.md`. Local learn path: `E:\SohaibAhmed\Github\Admob-Ads`.
 
-Skills: `admob/hsc-implement-admob-ads`, `admob/add-admob-*`. Rule stub: `21-ads-billing`.
+Skills: `sonicc-implement-admob-ads`, `sonicc-add-admob-*`. Rule stub: `21-ads-billing`.
 
 ## Architecture
 
@@ -33,7 +33,7 @@ Unit IDs live in **`gmaAds/build.gradle.kts`**, not `src/main/res/values/ad_ids.
 
 ## Placing `:gmaAds` into an app
 
-1. Download the `gmaAds` module from GitHub (`hypersoftdev/Admob-Ads`) — do **not** invent a parallel module.
+1. Download the `gmaAds` module from GitHub (`orbitalsonic/Admob-Ads`) — do **not** invent a parallel module.
 2. Copy into the project exactly (engine + catalog as shipped).
 3. Rename package / namespace only: `{applicationId}.gmaAds`.
 4. Remap Gradle deps and **host-only** imports so it compiles against AndroidAI modules:
@@ -101,7 +101,7 @@ Files: `appOpen/AppOpenAdConfig.kt`, `AppOpenAdKey`
 - **true** — `AppOpenLoadingActivity` loads then shows `LIFECYCLE`. Do not preload or reload after dismiss.
 - **false** — load `LIFECYCLE` on Dashboard; `AppOpenLifecycle` shows it and reloads after dismiss.
 
-Entrance calls `blockAppOpen()`. Keep blocked through splash. Dashboard calls `unblockAppOpen()`. Skills: `hsc-add-admob-appOpen-Entrance`, `hsc-add-admob-appOpen-lifecycle`.
+Entrance calls `blockAppOpen()`. Keep blocked through splash. Dashboard calls `unblockAppOpen()`. Skills: `sonicc-add-admob-appOpen-Entrance`, `sonicc-add-admob-appOpen-lifecycle`.
 
 ---
 
@@ -127,7 +127,7 @@ binding.bannerAdViewYours.clearView() // onDestroyView
 destroyBannerAd(BannerAdKey.YOURS)    // onDestroy when leaving for good
 ```
 
-No Entrance preload. No split load then show. Skill: `hsc-add-admob-banner`.
+No Entrance preload. No split load then show. Skill: `sonicc-add-admob-banner`.
 
 ---
 
@@ -148,7 +148,7 @@ loadInterstitialAd(InterstitialAdKey.YOURS)
 showInterstitialAd(InterstitialAdKey.YOURS) { /* navigate */ }
 ```
 
-Skill: `hsc-add-admob-interstitial`.
+Skill: `sonicc-add-admob-interstitial`.
 
 ---
 
@@ -169,7 +169,7 @@ loadNativeAd(NativeAdKey.HOME, binding.nativeAdViewHome)
 destroyNativeAd(NativeAdKey.FEATURE_ONE) // cache = false, screen finished
 ```
 
-Skill: `hsc-add-admob-native`.
+Skill: `sonicc-add-admob-native`.
 
 ---
 
@@ -183,7 +183,7 @@ loadRewardedInterstitialAd(RewardedInterstitialAdKey.HOME)
 showRewardedInterstitialAd(RewardedInterstitialAdKey.HOME) { granted -> }
 ```
 
-Always check `granted`. Skills: `hsc-add-admob-rewarded`, `hsc-add-admob-rewarded-interstitial`.
+Always check `granted`. Skills: `sonicc-add-admob-rewarded`, `sonicc-add-admob-rewarded-interstitial`.
 
 ---
 

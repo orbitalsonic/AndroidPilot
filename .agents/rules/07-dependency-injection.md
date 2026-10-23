@@ -13,14 +13,24 @@ paths:
 ## Must follow
 
 - Default framework: **Koin** — constructor inject / `by inject()` / `by viewModel()`
-- **Every** module: `lazyModule { }` — never `module { }`; load via `lazyModules(...)` only
+- Choose **`module` vs `lazyModule` by usage** (see below) — mix both in one `startKoin`; load eager via `modules(...)`, deferred via `lazyModules(...)`
 - `startKoin` **only** in Application; theme / Dynamic Colors **after** `startKoin` — never `GlobalContext` probes; never start Koin in Activity
-- Every `lazyModule` uses `//// Section` headers (DataSources → Repositories; area UseCases; ViewModels; composition root Core → Data → Domain → Presentation or Feature → Ads)
+- Every `module` / `lazyModule` uses `//// Section` headers (DataSources → Repositories; area UseCases; ViewModels; composition root Core → Data → Domain → Presentation or Feature → Ads)
 - Domain owns UseCases + repository **interfaces** + `useCaseModule`; data owns impls + DataSources + `dataModule` — never UseCases or repo interfaces in `:data`
 - Bindings: `single` (repos/sources/managers/dispatchers), `factory` (UseCases), `viewModel` (VMs)
 - Ads DI keeps existing managers / ad ViewModels (not MVI Intent/State/Effect) unless the user explicitly asks (`21-ads-billing`)
-- Register every new module in the composition root; bind `single<XRepository> { XRepositoryImpl(get()) }`
+- Register every new module in the composition root (eager or lazy list); bind `single<XRepository> { XRepositoryImpl(get()) }`
 - Dispatchers: `single { Dispatchers.IO }` / `Dispatchers.Default` — no `named("io")` unless true parallel instances (e.g. ad placements)
-- **Cold-start / first screens:** `App` + `MainActivity` (if injects) + start destination (**Entrance** / legacy **Splash**) — every type in the ViewModel constructor chain must have a binding in a `lazyModule` that is listed in `KoinModules` / `lazyModules(...)`. Incomplete graph → release crash (`No definition found`)
+- **Cold-start / first screens:** `App` + `MainActivity` (if injects) + start destination (**Entrance** / legacy **Splash**) — every type in the ViewModel constructor chain must have a binding in an **eager** `module` listed in `KoinModules` / `modules(...)`. Incomplete graph → release crash (`No definition found`)
+
+## `module` vs `lazyModule`
+
+| | **`module` + `modules(...)`** | **`lazyModule` + `lazyModules(...)`** |
+|--|-------------------------------|----------------------------------------|
+| When | Cold-start / first frame | Deferred screens, ads, optional heavy graphs |
+| Typical | `appModule`, `core*`, `dataModule`, `useCaseModule`, Entrance | Secondary `*PresentationModule` / `*FeatureModule`, `gmaAds*`, paywall UI |
+| Ready | When `startKoin` returns | After lazy load — use `runOnKoinStarted` if resolving early |
+
+**Rule of thumb:** Entrance / Splash / MainActivity needs it on first open → `module`. Later screen / ads / optional → `lazyModule`.
 
 Read [reference/dependency-injection.md](reference/dependency-injection.md) when adding or changing DI.

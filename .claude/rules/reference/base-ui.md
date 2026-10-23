@@ -1,6 +1,6 @@
 # Base UI classes, ViewBinding lifecycle, and Flow collection
 
-Full detail for `19-base-ui.mdc`. Do not delete lines from this file — edit here and keep the rule stub in sync.
+Full detail for `19-base-ui.md`. Do not delete lines from this file — edit here and keep the rule stub in sync.
 
 When `uiFramework` is `compose`, do not scaffold `ParentFragment` / View Binding bases — use [compose-ui.md](compose-ui.md) (`*Screen` / `AppTheme` / `:app` `MainActivity`). This file stays the XML `Parent*` contract.
 
@@ -8,18 +8,18 @@ When `uiFramework` is `compose`, do not scaffold `ParentFragment` / View Binding
 
 ```
 :core-ui
-  ParentActivity / ParentFragment     â† ViewBinding + lifecycle hooks
-  ParentDialogDismissal â†’ ParentDialog
-  ParentSheetDismissal  â†’ ParentSheet   â† BottomSheetDialogFragment
+  ParentActivity / ParentFragment     ← ViewBinding + lifecycle hooks
+  ParentDialogDismissal → ParentDialog
+  ParentSheetDismissal  → ParentSheet   ← BottomSheetDialogFragment
 
 :presentation (optional product layer)
-  BasePermissionFragment â†’ BaseFragment â†’ Feature Fragment
+  BasePermissionFragment → BaseFragment → Feature Fragment
   BaseActivity / BaseDialog / BaseSheet
 ```
 
 **Templates (copy + replace `YOUR.PACKAGE`):**  
-`.cursor/skills/project/hsc-setup-new-project/templates/base/`  
-See that folderâ€™s `README.md`. Same shape as the company template; `ParentSheet` is null-safe (not `!!`).
+`.claude/skills/sonicc-setup-new-project/templates/base/`  
+See that folder’s `README.md`. Same shape as the company template; `ParentSheet` is null-safe (not `!!`).
 
 ### ParentFragment
 - `bindingFactory: (LayoutInflater) -> T`
@@ -28,8 +28,8 @@ See that folderâ€™s `README.md`. Same shape as the company template; `Paren
 
 ### ParentActivity
 - Edge-to-edge + insets padding flags (`includeTopPadding` / `includeBottomPadding` / `enableKeyboardInsets`)
-- `installSplashTheme()` â†’ SplashScreen API
-- `enableMaterialDynamicTheme()` â€” `DynamicColors.applyToActivityIfAvailable(this)`; no `GlobalContext` checks (Koin starts in Application before any Activity â€” see `07`, `23`)
+- `installSplashTheme()` → SplashScreen API
+- `enableMaterialDynamicTheme()` — `DynamicColors.applyToActivityIfAvailable(this)`; no `GlobalContext` checks (Koin starts in Application before any Activity — see `07`, `23`)
 - Abstract `onCreated()`; `onPreCreated()` before `super.onCreate`
 
 ### ParentDialog
@@ -38,30 +38,30 @@ See that folderâ€™s `README.md`. Same shape as the company template; `Paren
 
 ### ParentSheet
 - Dismissal base: `BottomSheetDialogFragment` + `dismissCallback` + `safeShow` / `safeDismiss`
-- Sheet: ViewBinding via factory; **null-safe** `_binding` (same as Fragment â€” never `!!`)
+- Sheet: ViewBinding via factory; **null-safe** `_binding` (same as Fragment — never `!!`)
 - `onSheetCreated()`, optional `initObservers()`
-- Prefer expanded/skip-collapsed helpers in `onStart` when needed â€” keep Binding lifecycle strict
+- Prefer expanded/skip-collapsed helpers in `onStart` when needed — keep Binding lifecycle strict
 
 ### Base* (presentation)
 - Thin wrappers over Parent* for shared product helpers
-- Put ads/billing injects on `BaseFragment` / `BaseActivity` only when the app has those modules â€” keep Parent* free of ads
+- Put ads/billing injects on `BaseFragment` / `BaseActivity` only when the app has those modules — keep Parent* free of ads
 - Permission helpers live on `BasePermissionFragment`; dialog copy must use `:core-ui` strings before release
 
 ## Flow collection (`:core-ui` extensions)
 
-- Fragment helpers: `templates/base/FragmentExtensions.kt` â†’ `â€¦core.ui.extensions.FragmentExtensions.kt`  
-  Uses **`viewLifecycleOwner`** for `collectWhen*` / `repeatWhen` / `launchWhen*` (survives only with the view â€” avoids duplicate collectors after navigate away / back)  
+- Fragment helpers: `templates/base/FragmentExtensions.kt` → `…core.ui.extensions.FragmentExtensions.kt`  
+  Uses **`viewLifecycleOwner`** for `collectWhen*` / `repeatWhen` / `launchWhen*` (survives only with the view — avoids duplicate collectors after navigate away / back)  
   Safe nav: `navigateTo` / `popFrom` / `navigateRootTo` — only when `isAdded` and current destination matches
   Collectors: `collectWhenStarted` / `collectWhenCreated` / `launchWhenResumed` on **viewLifecycleOwner**
-- Activity helpers: `templates/base/ActivityExtensions.kt` â†’ `â€¦core.ui.extensions.ActivityExtensions.kt`
-- Context helpers: `templates/base/ContextExtensions.kt` â†’ `â€¦core.ui.extensions.ContextExtensions.kt`  
-  `context?.showToast("â€¦")` / `context?.showToast(R.string.x)` â€” prefer `@StringRes` for user-facing copy
-- Image helpers: `templates/base/ImageViewExtensions.kt` â†’ `â€¦core.ui.extensions.ImageViewExtensions.kt`  
-  Always `siv.loadImage(source)` (Glide) for programmatic loads â€” never `setImageResource` / scattered `Glide.with` in UI
+- Activity helpers: `templates/base/ActivityExtensions.kt` → `…core.ui.extensions.ActivityExtensions.kt`
+- Context helpers: `templates/base/ContextExtensions.kt` → `…core.ui.extensions.ContextExtensions.kt`  
+  `context?.showToast("…")` / `context?.showToast(R.string.x)` — prefer `@StringRes` for user-facing copy
+- Image helpers: `templates/base/ImageViewExtensions.kt` → `…core.ui.extensions.ImageViewExtensions.kt`  
+  Always `siv.loadImage(source)` (Glide) for programmatic loads — never `setImageResource` / scattered `Glide.with` in UI
 - State: `collectWhenStarted` / `repeatOnLifecycle(STARTED)`
-- Effects: `collectWhenCreated` (or STARTED with SharedFlow that must not drop â€” follow project helper)
-- Reuse extensions â€” do not copy-paste collectors
-- Naming: `<Receiver>Extensions.kt` only â€” never a shared `FlowCollectionExtensions.kt` / `LifecycleFlowExtensions.kt`
+- Effects: `collectWhenCreated` (or STARTED with SharedFlow that must not drop — follow project helper)
+- Reuse extensions — do not copy-paste collectors
+- Naming: `<Receiver>Extensions.kt` only — never a shared `FlowCollectionExtensions.kt` / `LifecycleFlowExtensions.kt`
 - Prefer `navigateTo` / `popFrom` / `navigateRootTo` over raw `findNavController().navigate` / `popBackStack` in Fragments
 - `ParentActivity.includeTopPadding` defaults to **false**; MainActivity sets true except Entrance (`23-app-startup`)
 - Prefer `screenStarted() = launchWhenResumed { handleIntent(ScreenStarted) }` when start work must wait for resume (paywalls, etc.)
@@ -70,8 +70,8 @@ See that folderâ€™s `README.md`. Same shape as the company template; `Paren
 
 - Extend `BaseFragment` (or `ParentFragment` if no Base layer yet)
 - `initObservers()` / collect state + effects
-- Dispatch Intents only â€” no business logic
-- Permissions via Effects â†’ base helpers
+- Dispatch Intents only — no business logic
+- Permissions via Effects → base helpers
 - Navigate only in UI layer
 
 ## Feature Fragment member order (mandatory)
@@ -82,17 +82,17 @@ Keep class members in this order. Omit unused lifecycle overrides.
 class FeatureFragment : BaseFragment<FragmentFeatureBinding>(FragmentFeatureBinding::inflate) {
 
     private val viewModel: FeatureViewModel by viewModel()
-    // other properties / lazy adaptersâ€¦
+    // other properties / lazy adapters…
 
     override fun onViewCreated() {
         screenStarted()
 
-        // Click listeners inline here â€” do NOT extract a setupClicks() / setupListeners() helper
+        // Click listeners inline here — do NOT extract a setupClicks() / setupListeners() helper
         binding.mbAction.setOnClickListener { viewModel.handleIntent(FeatureIntent.ActionClicked) }
     }
 
-    // override fun onStart() { â€¦ }   // only if needed
-    // override fun onResume() { â€¦ }  // only if needed
+    // override fun onStart() { … }   // only if needed
+    // override fun onResume() { … }  // only if needed
 
     private fun screenStarted() {
         viewModel.handleIntent(FeatureIntent.ScreenStarted)
@@ -107,19 +107,19 @@ class FeatureFragment : BaseFragment<FragmentFeatureBinding>(FragmentFeatureBind
 
     private fun handleEffect(effect: FeatureEffect) { /* navigate / one-shots */ }
 
-    // override fun onPause() { â€¦ }        // only if needed
-    // override fun onStop() { â€¦ }         // only if needed
-    // override fun onDestroyView() { â€¦ }  // only if needed (unregister listeners, then super)
+    // override fun onPause() { … }        // only if needed
+    // override fun onStop() { … }         // only if needed
+    // override fun onDestroyView() { … }  // only if needed (unregister listeners, then super)
 }
 ```
 
 1. Properties / ViewModels / adapters
-2. `onViewCreated()` â€” `screenStarted()` (or other start intents) then **inline** `setOnClickListener` â†’ `handleIntent`; optional non-click UI helpers only when non-trivial
-3. `onStart` / `onResume` â€” only when required
-4. Private helper method implementations (`screenStarted`, camera/setup helpers, â€¦) â€” **never** a dedicated `setupClicks()` / `setupListeners()` that only wires clicks
-5. `initObservers()` â€” `collectWhenStarted` / `collectWhenCreated`
+2. `onViewCreated()` — `screenStarted()` (or other start intents) then **inline** `setOnClickListener` → `handleIntent`; optional non-click UI helpers only when non-trivial
+3. `onStart` / `onResume` — only when required
+4. Private helper method implementations (`screenStarted`, camera/setup helpers, …) — **never** a dedicated `setupClicks()` / `setupListeners()` that only wires clicks
+5. `initObservers()` — `collectWhenStarted` / `collectWhenCreated`
 6. `renderState` then `handleEffect`
-7. `onPause` / `onStop` / `onDestroyView` â€” only when required (`onDestroyView` last among them)
+7. `onPause` / `onStop` / `onDestroyView` — only when required (`onDestroyView` last among them)
 
 ## Forbidden
 
@@ -129,6 +129,6 @@ class FeatureFragment : BaseFragment<FragmentFeatureBinding>(FragmentFeatureBind
 - Accessing dialog/sheet binding after `onDestroyView`
 - Hardcoding ads SDK into Parent* classes
 - Collecting on Fragment `lifecycleScope` instead of `viewLifecycleOwner`
-- Shared `FlowCollectionExtensions.kt` â€” use `FragmentExtensions` + `ActivityExtensions`
-- `setImageResource` / raw `Glide.with` for dynamic/list/remote images â€” use `loadImage`
-- Extracting click wiring into `setupClicks()` / `setupListeners()` â€” keep `setOnClickListener` inline in `onViewCreated()`
+- Shared `FlowCollectionExtensions.kt` — use `FragmentExtensions` + `ActivityExtensions`
+- `setImageResource` / raw `Glide.with` for dynamic/list/remote images — use `loadImage`
+- Extracting click wiring into `setupClicks()` / `setupListeners()` — keep `setOnClickListener` inline in `onViewCreated()`

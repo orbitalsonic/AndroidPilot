@@ -84,7 +84,7 @@ Every forward `<action>` in `nav_graph` (and nested graphs) must set the referen
 | `popEnterAnim` | `@anim/slide_in_left` |
 | `popExitAnim` | `@anim/slide_out_right` |
 
-Required files in `:core-ui` (create during `hsg-setup-new-project` if missing):
+Required files in `:core-ui` (create during `sonicg-setup-new-project` if missing):
 
 ```
 res/anim/slide_in_right.xml

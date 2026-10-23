@@ -1,6 +1,6 @@
 # Fix selection (shared)
 
-Used by `hsc-review-architecture`, `hsc-review-performance`, `hsc-review-security`, `hsc-review-cleanup`, and `hsc-review-complete`.
+Used by `sonicc-review-architecture`, `sonicc-review-performance`, `sonicc-review-security`, `sonicc-review-cleanup`, and `sonicc-review-complete`.
 
 ## Numbering (mandatory)
 
@@ -8,12 +8,13 @@ Used by `hsc-review-architecture`, `hsc-review-performance`, `hsc-review-securit
 2. Order: **Critical → Warnings / High → Medium → Suggestions / optional**.
 3. Each numbered line must be one concrete fix (actionable), not a vague note.
 4. Skip pure informational “Pass” notes — only number items the agent could implement if asked.
-5. For `hsc-review-complete`, keep **one** number sequence across Architecture + Performance + Security + Cleanup (do not restart at 1 per section).
+5. For `sonicc-review-complete`, keep **one** number sequence across Architecture + Performance + Security + Cleanup (do not restart at 1 per section).
 
 Example shape:
 
 ```markdown
 ## Fix list
+
 1. [Critical] …
 2. [Critical] …
 3. [Warning] …
@@ -29,8 +30,8 @@ Example shape:
 
 3. Wait for the user’s reply.
 4. On reply:
-   - Parse selected numbers (and `fix all` / `none`).
-   - Implement **only** the selected items.
-   - Ignore unselected numbers.
-   - If a selected item needs missing secrets / user input, ask once — do not invent values.
+    - Parse selected numbers (and `fix all` / `none`).
+    - Implement **only** the selected items.
+    - Ignore unselected numbers.
+    - If a selected item needs missing secrets / user input, ask once — do not invent values.
 5. After applying selected fixes, briefly list what was done by number (e.g. `Fixed 1, 2, 4`).

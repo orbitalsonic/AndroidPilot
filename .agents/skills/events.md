@@ -1,6 +1,6 @@
 # Firebase Analytics events — shared
 
-Used by `hsg-implement-firebase-events` and `hsg-add-firebase-events`. Follow `.agents/rules/22-platform-firebase.md`, `12-naming-conventions.md`, `16-logging.md`.
+Used by `sonicg-implement-firebase-events` and `sonicg-add-firebase-events`. Follow `.agents/rules/22-platform-firebase.md`, `12-naming-conventions.md`, `16-logging.md`.
 
 Every app uses the same event names. Screens and buttons are parameter values, so GA4 paths, funnels, and retention match across apps.
 
@@ -11,7 +11,7 @@ Every app uses the same event names. Screens and buttons are parameter values, s
 | Multi-module + no events yet | `EventsProvider` in **`:core-common`**. `PlatformFirebase` poster in **`:core-platform`**. |
 | Already has `EventsProvider` / `FirebaseUtils` / other event constants | **Add into that structure.** Do **not** create a second provider. Do **not** move files without **explicit user approval**. |
 | Single-module, no events yet | One `EventsProvider` next to existing helpers. Ask before inventing a new module. |
-| Old per-screen or per-button event names (`postFirebaseEvent`, `"HOME_SCREEN"`) | **`hsg-implement-firebase-events` removes them first**, then posts only this catalog. Do not send both. |
+| Old per-screen or per-button event names (`postFirebaseEvent`, `"HOME_SCREEN"`) | **`sonicg-implement-firebase-events` removes them first**, then posts only this catalog. Do not send both. |
 
 ## Names
 
@@ -20,7 +20,7 @@ Kotlin constants are `SCREAMING_SNAKE`. The string value is lowercase `snake_cas
 - Start with a letter. Only `a-z`, `0-9`, `_`. Event names are at most 40 characters.
 - Never start a name with `firebase_`, `google_`, or `ga_`.
 - Never use reserved GA4 names: `ad_click`, `error`, `session_start`.
-- A name from this catalog, once released, is never renamed or reused. A removed screen keeps its name reserved. Old event names outside this catalog are deleted by `hsg-implement-firebase-events` and are not posted again.
+- A name from this catalog, once released, is never renamed or reused. A removed screen keeps its name reserved. Old event names outside this catalog are deleted by `sonicg-implement-firebase-events` and are not posted again.
 - No raw event strings in UI.
 
 ```kotlin
@@ -123,7 +123,7 @@ Turn off automatic screen reporting so Activities do not log a second `screen_vi
 
 ## Poster
 
-`PlatformFirebase` in `:core-platform` is an `object` with **no** `Context` field. Copy the poster from `hsg-setup-new-project` [templates/firebase/PlatformFirebase.kt](hsg-setup-new-project/templates/firebase/PlatformFirebase.kt) (`recordException`, `postScreenView`, `postUiClick`, `getDeviceToken`).
+`PlatformFirebase` in `:core-platform` is an `object` with **no** `Context` field. Copy the poster from `sonicg-setup-new-project` [templates/firebase/PlatformFirebase.kt](sonicg-setup-new-project/templates/firebase/PlatformFirebase.kt) (`recordException`, `postScreenView`, `postUiClick`, `getDeviceToken`).
 
 ```kotlin
 PlatformFirebase.setEntrySource(EventsProvider.ENTRY_ORGANIC)

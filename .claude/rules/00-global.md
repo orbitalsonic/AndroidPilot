@@ -9,10 +9,10 @@ You are working on a production Android application.
 - Kotlin only
 - UI from `.claude/project-settings.json` **`uiFramework`**: `"xml"` (default if missing) = XML + View Binding; `"compose"` = Jetpack Compose + `:feature-*` modules (AnimeHub). Never mix as the app UI stack. Never Data Binding
 - Clean Architecture (Presentation → Domain → Data)
-- MVVM + MVI (Intent / State / Effect) for **feature screens** — **not** ads (`:gmaAds`); ads use Fragment/Activity extensions + managers — never MVI unless the user explicitly asks (`21-ads-billing`, `reference/ads-gma.md`, `hsc-implement-admob-ads` / `add-admob-*`)
+- MVVM + MVI (Intent / State / Effect) for **feature screens** — **not** ads (`:gmaAds`); ads use Fragment/Activity extensions + managers — never MVI unless the user explicitly asks (`21-ads-billing`, `reference/ads-gma.md`, `sonicc-implement-admob-ads` / `sonicc-add-admob-*` skills)
 - Repository pattern
 - Multi-module architecture
-- DI via the project's existing framework (default: Koin) — **`lazyModule` only**
+- DI via the project's existing framework (default: Koin)
 - Gradle Kotlin DSL + Version Catalog (`libs.versions.toml`)
 
 ## Before writing code
@@ -55,7 +55,7 @@ core modules (shared utilities)
 
 1. Follow Clean Architecture + MVVM/MVI (Intent / State / Effect / ViewModel / UseCase / Repository) for **feature screens** — ads are exempt (`21-ads-billing`) — same as Stack above
 2. UI follows `uiFramework`: **xml** → View Binding, never Compose, never `findViewById`; **compose** → Compose screens in `:feature-*`, never XML `fragment_*` layouts, never `findViewById` — never Data Binding — same as Stack above
-3. Use the project's DI framework — **`lazyModule` everywhere**; register in composition root — same as Stack above
+3. Use the project's DI framework — **`module` (eager cold-start) or `lazyModule` (deferred features/ads)** per `07-dependency-injection`; register in composition root — same as Stack above
 4. Use Version Catalog — no hardcoded dependency versions
 5. Respect module boundaries — presentation must not depend on `:data`; UseCases + repo **interfaces** only in `:domain` (never in `:data`) — same as Golden dependency rule above
 6. Put **all** user-facing strings in the single shared strings file (e.g. `:core-ui`) — no hardcoded UI strings
@@ -81,9 +81,9 @@ core modules (shared utilities)
 9. Never invent ad-hoc log tags — use `Constants.TAG*` — same as Always #10 above
 10. Never lock the app to one orientation unless product explicitly requires it — same as Always #11 above
 11. Never set static `RecyclerView` `layoutManager` / list `orientation` / `spanCount` in Kotlin — declare them in XML unless dynamic (**xml** only)
-12. Never put UseCases or repository **interfaces** in `:data` — domain only; never use `module { }` — always `lazyModule { }` — same as Always #3 and #5 above
+12. Never put UseCases or repository **interfaces** in `:data` — domain only; never use — same as Always #3 and #5 above
 13. Never invent a parallel architecture (e.g. Redux, Orbit) for one screen — stay on project MVI
 14. Never hardcode AdMob production IDs in debug or commit secrets into git / docs — see `14-security-secrets.md`
-15. Never convert ads (`:gmaAds`, AdMob managers) to MVI (Intent / State / Effect) unless the user **explicitly** asks — place `:gmaAds` from GitHub; screens call extensions. See `21-ads-billing` + `reference/ads-gma.md`
+15. Never convert ads (`:gmaAds`, AdMob managers) to MVI (Intent / State / Effect) unless the user **explicitly** asks — place `:gmaAds` from [orbitalsonic/Admob-Ads](https://github.com/orbitalsonic/Admob-Ads); screens call extensions. See `21-ads-billing` + `reference/ads-gma.md`
 
 When scaffolding a new feature or screen, also follow `01-feature-checklist.md`.

@@ -23,7 +23,7 @@ Use SharedPref / domain UseCase (demo names):
 
 Typical destination choice (adjust for marketing):
 
-1. `isAppPurchased` and returning (`!isFirstTime`) → Dashboard now (skip Welcome Back and any other returning-user screen; cancel ads). Language and Onboarding still run for a first-time purchase (`hsc-implement-in-app-billing`)
+1. `isAppPurchased` and returning (`!isFirstTime`) → Dashboard now (skip Welcome Back and any other returning-user screen; cancel ads). Language and Onboarding still run for a first-time purchase (`sonicc-implement-in-app-billing`)
 2. Returning user (`!isFirstTime`) → WelcomeBack
 3. Else if language incomplete → Language (purchased or not)
 4. Else → OnBoarding (purchased or not)
@@ -34,11 +34,11 @@ Implement via `GetEntranceDestinationUseCase` (or equivalent) — heavy logic no
 
 - Helper: `screenStarted()` → `launchWhenResumed { handleIntent(ScreenStarted) }` when work must wait for resume
 - Wait for Koin if resolving deps at cold start (`23-app-startup`)
-- **DI (mandatory):** `EntranceViewModel` + `GetEntranceDestinationUseCase` (and every ctor dep — prefs/RC/consent/ads helpers used here) registered via `lazyModule` and included in composition root (`entrancePresentationModule` / `entranceFeatureModule` + domain `useCaseModule` / data bindings). Never add an Entrance dependency without a Koin definition (`07`, `hsc-review-architecture` cold-start check)
+- **DI (mandatory):** `EntranceViewModel` + `GetEntranceDestinationUseCase` (and every ctor dep — prefs/RC/consent/ads helpers used here) registered via **eager `module`** and included in the composition-root **eager** list (`entrancePresentationModule` / `entranceFeatureModule` + domain `useCaseModule` / data bindings). Never add an Entrance dependency without a Koin definition on the cold-start path (`07`, `sonicc-review-architecture` cold-start check)
 - MainActivity: Entrance uses `includeTopPadding = false`; back press blocked
 - Remote Config fetch starts here (domain/data, not live RC in UI)
-- **No Entrance ads:** navigate when Remote Config returns or after **5 seconds** (`hsc-setup-new-project`)
-- **Entrance ads wired:** ignore the Remote Config result. Then consent (8s) → AdMob init → ad calls (8s) → navigate. Do not navigate from Remote Config (`hsc-implement-admob-ads`)
+- **No Entrance ads:** navigate when Remote Config returns or after **5 seconds** (`sonicc-setup-new-project`)
+- **Entrance ads wired:** ignore the Remote Config result. Then consent (8s) → AdMob init → ad calls (8s) → navigate. Do not navigate from Remote Config (`sonicc-implement-admob-ads`)
 - **Purchased (`isAppPurchased`):** cancel ads. First-time users still go to Language / Onboarding. Returning users go to Dashboard and skip Welcome Back
 
 ## Forbidden

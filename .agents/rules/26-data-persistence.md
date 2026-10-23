@@ -27,7 +27,7 @@ Full step-by-step patterns (preserved from former data skills):
 - Map HTTP/IO/DB errors at data boundary to typed `DataError` / `Outcome` (`18-errors-result`)
 - Never leak status codes, raw JSON, Room types, or Retrofit types into UI State / domain
 - Log with `Constants.TAG*` — `ClassName: functionName: Failed: ${e.message}` — no tokens/PII
-- DI: `lazyModule` only; `dataModule` ordered `//// DataSources` then `//// Repositories`
+- DI: `module` for cold-start data (typical); `lazyModule` only for deferred splits; `dataModule` ordered `//// DataSources` then `//// Repositories`
 - Room `@Entity` / `@Dao` / `RoomDatabase` live in **`:core-database`** when Room is added (entities under `entity/`); `:data` depends on it for DataSources / repo impls — do **not** leave Room types in `:presentation` / `:domain`
 - Retrofit / OkHttp API stack lives in **`:core-network`** when added; connectivity (`InternetManager`) stays in `:core-platform`
 - SharedPreferences: sync `SharedPrefManager` in data; suspend API on domain `SharedPrefRepository`

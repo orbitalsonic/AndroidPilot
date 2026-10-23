@@ -1,6 +1,6 @@
-# Hypersoft AI Workflow — Gemini
+# OrbitalSonic AI Workflow — Gemini
 
-Production Android app. Kotlin, Clean Architecture, MVVM + MVI (Intent / State / Effect), Koin `lazyModule` only. UI from `.agents/project-settings.json` **`uiFramework`**: `xml` (View Binding + `:presentation`) or `compose` (Jetpack Compose + `:feature-*`). Never Data Binding. No Hilt unless the project already uses it.
+Production Android app. Kotlin, Clean Architecture, MVVM + MVI (Intent / State / Effect), Koin — `module` for the cold-start graph, `lazyModule` for deferred features / ads (`07-dependency-injection`). UI from `.agents/project-settings.json` **`uiFramework`**: `xml` (View Binding + `:presentation`) or `compose` (Jetpack Compose + `:feature-*`). Never Data Binding. No Hilt unless the project already uses it.
 
 ## Law
 
@@ -10,15 +10,17 @@ When [`.agents/project-settings.json`](project-settings.json) exists, obey `uiFr
 
 ## Typical feature flow
 
-**Shortcut:** `@hsg-create-screen` runs UI + optional domain/data + MVI in one invoke.
+**Shortcut:** `@sonicg-create-screen` runs UI + optional domain/data + MVI in one invoke.
 
-1. `@hsg-setup-new-project` (greenfield) or `@hsg-setup-old-project` (existing production app) — persist **`uiFramework`**
-2. `@hsg-setup-design-system` — Figma tokens/themes in `:core-ui` (Compose `AppTheme` in `core/ui/theme/` when compose)
-3. `@hsg-figma-to-xml` if xml; `@hsg-figma-to-compose` if compose (or `@hsg-create-dialog` / `@hsg-create-bottom-sheet`)
-4. `@hsg-create-mvi` — Intent / State / Effect / ViewModel + Fragment **or** `*Screen` in `:feature-*`
-5. `@hsg-create-clean-architecture` — only when new domain / data is required
-6. `@hsg-review-complete` before PR
+1. `@sonicg-setup-new-project` (greenfield) or `@sonicg-setup-old-project` (existing production app) — persist **`uiFramework`**
+2. `@sonicg-setup-design-system` — Figma tokens/themes in `:core-ui` (Compose `AppTheme` in `core/ui/theme/` when compose)
+3. `@sonicg-figma-to-xml` if xml; `@sonicg-figma-to-compose` if compose (or `@sonicg-create-dialog` / `@sonicg-create-bottom-sheet`)
+4. `@sonicg-create-mvi` — Intent / State / Effect / ViewModel + Fragment **or** `*Screen` in `:feature-*`
+5. `@sonicg-create-clean-architecture` — only when new domain / data is required
+6. `@sonicg-review-complete` before PR
 
 ## Skills
 
-Invoke with `@` using the skill folder name (`@hsg-create-screen`, `@hsg-create-mvi`, `@hsg-figma-to-xml`, `@hsg-figma-to-compose`, `@hsg-localize`, …). Full map and rules index: [README.md](README.md).
+Invoke with `@` using the skill folder name (`@sonicg-create-screen`, `@sonicg-create-mvi`, `@sonicg-figma-to-xml`, `@sonicg-figma-to-compose`, `@sonicg-localize`, …). Descriptions start with **OrbitalSonic Gemini Skill:** — do not pick Figma plugin skills ("Created by Figma") for Android screens. Full map and rules index: [README.md](README.md).
+
+Cursor twins: `/sonic-…` under `.cursor/`. Claude Code twins: `/sonicc-…` under `.claude/`. Keep all three in sync (`MUST_READ_BEFORE_SKILL_CHANGES.md`).

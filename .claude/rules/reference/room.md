@@ -1,17 +1,17 @@
 # Room Cache (reference pattern)
 
-Follow `.claude/rules/08-gradle.mdc`, `13-libraries-stack.mdc`, `06-coroutines-flow.mdc`, `03-android-architecture.mdc`, `26-data-persistence.mdc`. **Add Room only with human approval** — add to `libs.versions.toml` first.
+Follow `.claude/rules/08-gradle.md`, `13-libraries-stack.md`, `06-coroutines-flow.md`, `03-android-architecture.md`, `26-data-persistence.md`. **Add Room only with human approval** — add to `libs.versions.toml` first.
 
 ## Layers
 
 | Layer / module | Contents |
 |----------------|----------|
-| `:core-database` | `@Entity` (under `entity/`), `@Dao`, `AppDatabase`, `di` `lazyModule` — **create this module when adding Room** |
+| `:core-database` | `@Entity` (under `entity/`), `@Dao`, `AppDatabase`, `di` Koin module per `07` — **create this module when adding Room** |
 | `:data` | `*DataSource` wrapping DAOs, `*RepositoryImpl`, maps Entity ↔ domain |
 | `:domain` | Pure Kotlin entities + repository interface |
 
 - Room types stay in `:core-database` / data boundary — not in domain or presentation
-- Do **not** create an empty `:core-database` on every `hsc-setup-new-project` — add when Room is approved
+- Do **not** create an empty `:core-database` on every `sonicc-setup-new-project` — add when Room is approved
 
 ## Setup
 
@@ -50,10 +50,12 @@ abstract class AppDatabase : RoomDatabase() {
 - DTO → entity mapping in data layer
 - Expose `Flow<List<DomainEntity>>` or suspend APIs to domain
 
-## DI (`lazyModule` only)
+## DI (`module` if cold-start; else `lazyModule`)
+
+Room used by Entrance / first screen → **`module`**. Feature-only DB → **`lazyModule`**. See `07`.
 
 ```kotlin
-val dataModule = lazyModule {
+val dataModule = module {
 
     //// DataSources
     single { provideDatabase(get()) }
