@@ -1,6 +1,6 @@
 ---
 name: sonic-setup-new-project
-description: Sonic Cursor Skill: Bootstrap a new Android multi-module app (domain, data, core-*, xml `:presentation` or compose `:feature-*`) with MainActivity, Entrance start destination, Parent* or Compose NavGraph, PlatformFirebase, Remote Config → SharedPreferences cache, and mandatory firebase-messaging on core-platform. Use when starting a greenfield project. Do not use on an existing production app — use sonic-setup-old-project. Confirms and persists project settings first including uiFramework.
+description: Sonic Cursor Skill: Bootstrap a new Android multi-module app (domain, data, core-*, xml `:presentation` or compose `:feature-*`) with StartupActivity (funnel) + MainActivity (app), StartupFragment start destination, Parent* (InsetsMode edge-to-edge) or Compose StartupNavGraph / MainNavGraph, PlatformFirebase, Remote Config → SharedPreferences cache, and mandatory firebase-messaging on core-platform. Use when starting a greenfield project. Do not use on an existing production app — use sonic-setup-old-project. Confirms and persists project settings first including uiFramework.
 ---
 
 # Setup New Project
@@ -35,7 +35,7 @@ Confirm with the user before scaffolding. Write answers to **`.cursor/project-se
 
 Also ask:
 
-0. **`uiFramework`** — `xml` or `compose`. Show both options. Default is `xml`. Compose follows AnimeHub (`:feature-*`, `:app` `NavGraph.kt`) — see `28-compose-ui` + [templates/compose/](templates/compose/).
+0. **`uiFramework`** — `xml` or `compose`. Show both options. Default is `xml`. Compose follows AnimeHub (`:feature-*`, `:app` `StartupNavGraph.kt` + `MainNavGraph.kt`) — see `28-compose-ui` + [templates/compose/](templates/compose/).
 1. **Ads** — always place `:gmaAds` from GitHub (see **Step — Place `:gmaAds`**). Ask: **Implement ads on screens now?**
     - **yes** — after modules/DI exist, run **`sonic-implement-admob-ads`** (wire existing screens only; report changed Fragments/`*Screen`s)
     - **no** — keep `:gmaAds` in the project (builds) but do **not** wire screens
@@ -58,7 +58,7 @@ All later skills **must read** `.cursor/project-settings.json` and obey it.
 | `:domain`           | Must         | Entities, repository interfaces, use cases                                                                                                    |
 | `:data`             | Must         | Repository impls, DataSources, SharedPref + RC cache                                                                                          |
 | `:presentation`     | xml only     | Screens, MVI — **res:** `layout` (+ land), `menu`, `navigation` only. **Omit when compose**                                                   |
-| `:feature-entrance` | compose only | Entrance start destination (`ENTRANCE_ROUTE`)                                                                                                 |
+| `:feature-startup` | compose only | `StartupActivity` funnel: `StartupScreen` (`STARTUP_ROUTE` start) + later `StartupLanguage` / `StartupPremium` / `StartupIntro` / `StartupWelcomeBack` screens |
 | `:core-common`      | Required     | `Constants` (TAGs), `EventsProvider`                                                                                                          |
 | `:core-ui`          | Required     | **All other resources** (themes/strings/colors/fonts/anim/drawable/splash), Parent*, extensions                                               |
 | `:core-platform`    | Required     | `InternetManager`, `PlatformFirebase`, dispatchers DI, **Firebase BOM + analytics / crashlytics / messaging** — manifest `ACCESS_NETWORK_STATE` only when needed |
@@ -150,31 +150,44 @@ class App : Application() {
 }
 ```
 
-- **Eager `module`** (cold-start): `appModule`, `coreModule`, `corePlatformModule`, `dataModule`, `useCaseModule`, `entrancePresentationModule` (xml) or `entranceFeatureModule` (compose)
+- **Eager `module`** (cold-start): `appModule`, `coreModule`, `corePlatformModule`, `dataModule`, `useCaseModule`, `startupPresentationModule` (xml) or `startupFeatureModule` (compose)
 - **Deferred `lazyModule`**: secondary features, `gmaAdsModule` / placement modules, optional heavy graphs (`07-dependency-injection`)
 - Theme / billing that needs **lazy** bindings: inside **`runOnKoinStarted`** (`23-app-startup`); eager-only work can run right after `startKoin`
-- Manifest: `android:name=".App"`, **application** `android:theme="@style/Theme.App"` (product theme), **launcher Activity** `android:theme="@style/Theme.App.Starting"`; child order MainActivity → other activities → services → receivers → meta-data (`10-manifest`); `supportsRtl="true"`
+- Manifest: `android:name=".App"`, **application** `android:theme="@style/Theme.App"` (product theme), **`StartupActivity`** = launcher with `android:theme="@style/Theme.App.Starting"`, **`MainActivity`** `exported="false"` + `launchMode="singleTask"`; child order StartupActivity → MainActivity → services → receivers → meta-data (`10-manifest`); `supportsRtl="true"`
 - Orientation: follow `project-settings.json` — default portrait **and** landscape; do not lock unless `orientation` is single-mode and product requires lock
 - Theme modes: create `values` / `values-night` per `themeModes`
 - UseCases + repo interfaces → `:domain`; DataSources + repo impls → `:data` (`dataModule` with `//// DataSources` / `//// Repositories`)
 
-## Step 3 — MainActivity + host (xml)
+## Step 3 — Two Activities (xml)
 
-- `MainActivity` extends `ParentActivity` in `:presentation` (`includeTopPadding` default **false**)
-- Destination listener: Entrance → `includeTopPadding = false`; else `true`
-- Block back on funnel destinations (Entrance, Language, OnBoarding, WelcomeBack, …)
-- NavController: `lazy { (supportFragmentManager.findFragmentById(binding.fcvContainerMain.id) as NavHostFragment).navController }`
-- `activity_main.xml` with `fcvContainerMain` + `NavHostFragment` + `@navigation/nav_graph`
-- Call `installSplashTheme()` in `onPreCreated()` when using splash
-- Wait for Koin if resolving deps at start (`runOnKoinStarted` / equivalent)
+Copy [templates/startup/](templates/startup/README.md) (replace `YOUR.PACKAGE`). Rules: `23-app-startup`, `29-screen-startup`, `32-screen-dashboard`. Reference app: QiblaCompass.
 
-**compose:** skip this step. Copy [templates/compose/MainActivity.kt](templates/compose/MainActivity.kt) into `:app` `ui/`. `ComponentActivity` + `setContent { AppTheme { NavGraph() } }`. **Never** `GlobalContext.get()`.
+| | `StartupActivity` | `MainActivity` |
+|---|---|---|
+| File | `presentation/startup/ui/StartupActivity.kt` | `presentation/main/ui/MainActivity.kt` |
+| Base | `BaseActivity` → `ParentActivity` (`InsetsMode` default `TOP_BOTTOM`) | same |
+| Layout | `activity_startup.xml` — `fcvContainerStartup` + `@navigation/nav_graph_startup` | `activity_main.xml` — `fcvContainerMain` + `@navigation/nav_graph_main` (+ `bannerAdViewMain` slot + `bnvMain` when the product has tabs) |
+| Manifest | launcher, `exported="true"`, `@style/Theme.App.Starting` | `exported="false"`, `launchMode="singleTask"` |
+| Splash | `override fun initSplashScreen() { installSplashScreen() }` | none |
+| Back | `onBackPressedDispatcher { }` — blocked on every funnel destination | `handleBackPress()` (non-tab pop → Home tab → exit) |
+| Leaves via | `moveToMain()` → `startActivity(MainActivity)` + `finish()` | app exit |
 
-## Step 4 — Navigation (mandatory Entrance)
+- `updateStatusBar(darkIcons)` in `onCreated()`; per-destination host background via `addOnDestinationChangedListener` when designs differ (premium vs surface)
+- NavController: `lazy { (supportFragmentManager.findFragmentById(binding.fcvContainerX.id) as NavHostFragment).navController }`
+- Wait for Koin if resolving **lazy** deps at start (`runOnKoinStarted` / equivalent)
+- No `SettingsActivity` / `PremiumActivity` / `LanguageActivity` — in-app Settings / Language / Premium are Fragments in `nav_graph_main`
 
-**xml:** one `nav_graph.xml` **must** use `app:startDestination="@id/entranceFragment"`. Class: `EntranceFragment` under `presentation/entrance/ui/`. Layout: `fragment_entrance.xml`. No Home/Splash/Main as start destination. Copy anims from [templates/anim/](templates/anim/) + [templates/anim-ldrtl/](templates/anim-ldrtl/) into `:core-ui`. Every forward `<action>` must include the four slide anim attrs (`17-navigation`). When BottomNavigation is added later → also `nav_graph_dashboard` (`17`, `32-screen-dashboard`).
+**compose:** copy [templates/compose/StartupActivity.kt](templates/compose/StartupActivity.kt) + [templates/compose/MainActivity.kt](templates/compose/MainActivity.kt) into `:app` `ui/`. `ComponentActivity` + `setContent { AppTheme { StartupNavGraph(onFinished = …) } }` / `{ MainNavGraph() }`. **Never** `GlobalContext.get()`.
 
-**compose:** copy [templates/compose/NavGraph.kt](templates/compose/NavGraph.kt) to `:app` `navigation/NavGraph.kt`. `startDestination = ENTRANCE_ROUTE`. Slide `enterTransition` / `exitTransition` on the `NavHost`. No XML `nav_*.xml`. Feature screens do not receive `NavController`.
+## Step 4 — Navigation (two graphs)
+
+**xml:** two graphs in `:presentation` `res/navigation/` (templates in [templates/startup/](templates/startup/)):
+
+- `nav_graph_startup.xml` — `app:startDestination="@id/startupFragment"`. Class `StartupFragment` under `presentation/startup/ui/`, layout `fragment_startup.xml`. Actions out of `startupFragment` use `popUpTo="@id/startupFragment"` + `popUpToInclusive="true"`. Later destinations (added by `sonic-create-screen` / `sonic-create-mvi`): `startupLanguageFragment`, `startupPremiumFragment` (`isFirstTime` arg), `startupIntroFragment`, `startupWelcomeBackFragment` — nothing else
+- `nav_graph_main.xml` — `startDestination` = Home (first tab). Scaffold a minimal `HomeFragment` + `fragment_home.xml` placeholder so the app launches; `sonic-create-screen` replaces it. In-app `languageFragment` / `premiumFragment` / `settingsFragment` / `exitFragment` and details join this graph later (`30`, `33`)
+- No Home / Splash as the startup start destination; no startup screens in `nav_graph_main`. Copy anims from [templates/anim/](templates/anim/) + [templates/anim-ldrtl/](templates/anim-ldrtl/) into `:core-ui`. Every forward `<action>` must include the four slide anim attrs (`17-navigation`). Nested `nav_graph_dashboard` only for the optional `DashboardFragment` variant (`32-screen-dashboard`)
+
+**compose:** copy [templates/compose/StartupNavGraph.kt](templates/compose/StartupNavGraph.kt) + [templates/compose/MainNavGraph.kt](templates/compose/MainNavGraph.kt) to `:app` `navigation/`. `StartupNavGraph` starts at `STARTUP_ROUTE` and takes `onFinished`; `MainNavGraph` starts at `HOME_ROUTE`. Slide `enterTransition` / `exitTransition` on both `NavHost`s. No XML `nav_*.xml`. Feature screens do not receive `NavController`.
 
 ### Nav transition anims (xml — mandatory)
 
@@ -193,11 +206,11 @@ app:enterAnim="@anim/slide_in_right"app:exitAnim="@anim/slide_out_left"app:popEn
 
 See `17-navigation.mdc`.
 
-## Step 5 — Entrance MVI
+## Step 5 — Startup MVI
 
-**xml:** scaffold `presentation/entrance/{di,intent,state,effect,viewModel,ui}` via **`sonic-create-mvi`**. `EntranceFragment` extends `ParentFragment`. Register `entrancePresentationModule`.
+**xml:** scaffold `presentation/startup/{di,intent,state,effect,viewModel,ui}` via **`sonic-create-mvi`**. `StartupFragment` extends `BaseFragment` (`ParentFragment` if no Base layer). Register `startupPresentationModule` on the **eager** list — it also holds `StartupLanguageViewModel` / `StartupPremiumViewModel` / `StartupIntroViewModel` / `StartupWelcomeBackViewModel` as those screens are added (`29-screen-startup`, `30`, `31`, `33`). `StartupFragment` routes per [reference/app-flow.md](../../../rules/reference/app-flow.md) and leaves with `(activity as? StartupActivity)?.moveToMain()`.
 
-**compose:** module `:feature-entrance`. Copy [templates/compose/EntranceScreen.kt](templates/compose/EntranceScreen.kt) + [templates/compose/feature-module.gradle.kts](templates/compose/feature-module.gradle.kts). Then **`sonic-create-mvi`** Compose path (Intent/State/Effect/ViewModel/`entranceFeatureModule`). Wire `navigateToNext` in `NavGraph` when the first real destination exists.
+**compose:** module `:feature-startup`. Copy [templates/compose/StartupScreen.kt](templates/compose/StartupScreen.kt) + [templates/compose/feature-module.gradle.kts](templates/compose/feature-module.gradle.kts). Then **`sonic-create-mvi`** Compose path (Intent/State/Effect/ViewModel/`startupFeatureModule`). Wire `navigateToNext` in `StartupNavGraph` when the first funnel destination exists; `navigateToMain` = `onFinished`.
 
 - Strings only in `:core-ui`
 - Tests: only if `writeTestsWithFeatures` is `true`
@@ -210,13 +223,14 @@ See `17-navigation.mdc`.
 
 ```
 core/ui/base/
+  enums/InsetsMode.kt     # EDGE_TO_EDGE / TOP / BOTTOM / TOP_BOTTOM
   activity/ParentActivity.kt
   fragment/ParentFragment.kt
   dialog/ParentDialogDismissal.kt + ParentDialog.kt
   sheet/ParentSheetDismissal.kt + ParentSheet.kt
 core-ui …/extensions/
   FragmentExtensions.kt   # viewLifecycleOwner collectWhen* / launchWhen* + navigateTo / popFrom / navigateRootTo
-  ActivityExtensions.kt   # Activity collectWhen* / launchWhen*
+  ActivityExtensions.kt   # Activity collectWhen* / launchWhen* + onBackPressedDispatcher + updateStatusBar(darkIcons)
   ContextExtensions.kt    # showToast(String) / showToast(@StringRes)
   ImageViewExtensions.kt  # loadImage via Glide (ShapeableImageView / ImageView)
 
@@ -224,6 +238,8 @@ presentation …/base/
   activity/BaseActivity.kt
   fragment/BasePermissionFragment.kt + BaseFragment.kt
   sheets/BaseDialog.kt + BaseSheet.kt
+presentation …/startup/ui/StartupActivity.kt   # Step 3 (templates/startup/)
+presentation …/main/ui/MainActivity.kt         # Step 3 (templates/startup/)
 ```
 
 See [templates/base/README.md](templates/base/README.md) for hierarchy and notes.
@@ -232,13 +248,14 @@ See [templates/base/README.md](templates/base/README.md) for hierarchy and notes
 
 - Generic `ViewBinding` + `bindingFactory`
 - Clear `_binding` in `onDestroyView`
-- Hooks: `initObservers()`, `onViewCreated()`, abstract `onViewCreated()`
+- Hooks: `onViewInflated()` (after inflate), `initObservers()`, `onViewCreated(Bundle?)`, abstract `onViewCreated()`
 
-### ParentActivity
+### ParentActivity (+ `InsetsMode`)
 
-- Generic `ViewBinding` + edge-to-edge + window insets padding flags
-- `installSplashTheme()` → `installSplashScreen()`
-- Abstract `onCreated()`; optional `onPreCreated()` / `initObservers()`
+- Generic `ViewBinding` + edge-to-edge via the **`InsetsMode`** enum (`EDGE_TO_EDGE` / `TOP` / `BOTTOM` / `TOP_BOTTOM` default; IME-aware bottom inset) — reference QiblaCompass `BaseActivity`
+- `onCreate` order: `initSplashScreen()` → `super.onCreate` → `setupInsets(getInsetsMode())` (`enableEdgeToEdge` + `setContentView` + insets listener) → `onCreated()` → `initObservers()`
+- `open fun initSplashScreen()` — only `StartupActivity` overrides with `installSplashScreen()`; `open fun getInsetsMode()` overridden per Activity (no per-destination padding flags)
+- Abstract `onCreated()`; optional `initObservers()`
 
 ### ParentDialog (+ Dismissal)
 
@@ -406,7 +423,7 @@ val useCaseModule = module {
 - Interfaces + `FetchRemoteConfigUseCase` in **`:domain`**
 - Register both on the **eager** list in `KoinModules` (`07`)
 
-Wire `FetchRemoteConfigUseCase` from Entrance. **Navigate when that call returns** (success or failure) **or after 5 seconds**, whichever comes first. Do not block the main thread. Do not leave the splash on the Firebase fetch timeout (~60s).
+Wire `FetchRemoteConfigUseCase` from Startup. **Navigate when that call returns** (success or failure) **or after 5 seconds**, whichever comes first. Do not block the main thread. Do not leave the splash on the Firebase fetch timeout (~60s).
 
 ```kotlin
 viewModelScope.launch {
@@ -415,7 +432,7 @@ viewModelScope.launch {
 }
 ```
 
-This 5-second gate is only for Entrance **without** an ad startup sequence. When `sonic-implement-admob-ads` wires Entrance ads, that skill replaces it: Remote Config still starts, its result is ignored, and navigation follows consent (8s) → AdMob init → ad calls (8s).
+This 5-second gate is only for Startup **without** an ad startup sequence. When `sonic-implement-admob-ads` wires Startup ads, that skill replaces it: Remote Config still starts, its result is ignored, and navigation follows consent (8s) → AdMob init → ad calls (8s).
 
 ## Step 9 — Verify
 
@@ -423,10 +440,10 @@ This 5-second gate is only for Entrance **without** an ad startup sequence. When
 - [ ] Every module has `.gitignore` (`/build`; `:app` also `/release`)
 - [ ] No `:app/src/main/res/values/` (themes/strings/colors live in `:core-ui`); `:app` res = mipmap/xml/launcher drawable only; `:presentation` = layout/menu/navigation only
 - [ ] **xml** modules: app, domain, data, presentation, core-common, core-ui, core-platform, **gmaAds** (`include` alphabetical)
-- [ ] **compose** modules: app, domain, data, feature-entrance, core-common, core-ui, core-platform, **gmaAds** — **no** `:presentation`, **no** `:core-design`
+- [ ] **compose** modules: app, domain, data, feature-startup, core-common, core-ui, core-platform, **gmaAds** — **no** `:presentation`, **no** `:core-design`
 - [ ] `:gmaAds` placed from GitHub; package `{applicationId}.gmaAds`; host imports remapped; `gmaAdsModule` registered
 - [ ] Ads screens wired only if user said **yes** (`sonic-implement-admob-ads`); otherwise module-only
-- [ ] Manifests only as needed (`:app`, `:gmaAds`, `:core-platform`); application theme = `Theme.App`; launcher = `Theme.App.Starting`; MainActivity first in `<application>`
+- [ ] Manifests only as needed (`:app`, `:gmaAds`, `:core-platform`); application theme = `Theme.App`; `StartupActivity` = launcher with `Theme.App.Starting` and first in `<application>`; `MainActivity` `exported="false"` + `singleTask`; no Settings / Premium / Language Activities
 - [ ] `:app` `android` section order: defaultConfig → signingConfigs → buildTypes → buildFeatures → compileOptions → bundle
 - [ ] `:app` has `signingConfigs` (`.jks` path if found, else empty strings) + `bundle.language.enableSplit = false` + `base.archivesName`
 - [ ] `:app` release `optimization { enable = true }`; `src/main/keepRules/rules.keep` on `:app` and on `:domain` / UI modules; no `proguard-rules.pro`
@@ -434,11 +451,12 @@ This 5-second gate is only for Entrance **without** an ad startup sequence. When
 - [ ] Library modules omit `signingConfigs` / `bundle` / `base`
 - [ ] UseCases + repo interfaces only in `:domain`; `dataModule` has `//// DataSources` then `//// Repositories`
 - [ ] DI: cold-start graph uses `module` / `modules(...)`; deferred features/ads use `lazyModule` / `lazyModules(...)`; `App` uses `startKoin` then `runOnKoinStarted` for lazy work (no `GlobalContext` probes)
-- [ ] Cold-start: Entrance (and MainActivity injects if any) ViewModel + full ctor chain registered on the **eager** `KoinModules` list (`07`, `23`, `29`)
-- [ ] **xml:** `nav_graph` startDestination = `entranceFragment`; **compose:** `NavGraph.kt` `startDestination = ENTRANCE_ROUTE`
+- [ ] Cold-start: Startup (and MainActivity injects if any) ViewModel + full ctor chain registered on the **eager** `KoinModules` list (`07`, `23`, `29`)
+- [ ] **xml:** `nav_graph_startup` startDestination = `startupFragment` (actions out of it `popUpToInclusive`) and `nav_graph_main` startDestination = Home placeholder; **compose:** `StartupNavGraph` `STARTUP_ROUTE` + `MainNavGraph` `HOME_ROUTE`
+- [ ] `StartupActivity.moveToMain()` starts `MainActivity` and finishes; back blocked in `StartupActivity`; no startup destination inside `nav_graph_main`
 - [ ] **xml:** `:core-ui` has `anim/` + `anim-ldrtl/` slide_* set; nav actions use the four anim attrs. **compose:** slide `enterTransition` / `exitTransition` on `NavHost`
-- [ ] **xml:** ParentActivity (`includeTopPadding` default false) / ParentFragment / ParentDialog / ParentSheet (+ Dismissal) exist
-- [ ] **xml:** `FragmentExtensions.kt` + `ActivityExtensions.kt` + `ContextExtensions.kt` + `ImageViewExtensions.kt` (`showToast` / `loadImage`; Fragment collectors on `viewLifecycleOwner`; `navigateTo` / `popFrom` / `navigateRootTo`)
+- [ ] **xml:** `InsetsMode` enum + ParentActivity (`getInsetsMode()` default `TOP_BOTTOM`, `initSplashScreen()` hook) / ParentFragment (`onViewInflated()`) / ParentDialog / ParentSheet (+ Dismissal) exist
+- [ ] **xml:** `FragmentExtensions.kt` + `ActivityExtensions.kt` (`updateStatusBar`, `onBackPressedDispatcher`) + `ContextExtensions.kt` + `ImageViewExtensions.kt` (`showToast` / `loadImage`; Fragment collectors on `viewLifecycleOwner`; `navigateTo` / `popFrom` / `navigateRootTo`)
 - [ ] Themes: `includeFontPadding=false`, IconButton `8dp` + `colorIcon`, no status/nav bar attrs until asked; BNV via `bottomNavigationStyle` when design system sets colors
 - [ ] **xml:** Glide on `:core-ui` (+ presentation if needed); all programmatic image binds use `loadImage`. **compose:** Coil 3; no Glide in feature modules
 - [ ] **compose:** `:core-ui` `AppTheme` in `core/ui/theme/`; `:app` `MainActivity` uses `koinInject()` — never `GlobalContext.get()`
@@ -449,7 +467,7 @@ This 5-second gate is only for Entrance **without** an ad startup sequence. When
 - [ ] Dispatchers registered **without** `named("io")` / `named("default")`
 - [ ] RC DataSource: Mutex, lazy instance, `await()`, `addConfigUpdateListener`, getters with defaults
 - [ ] RC `minimumFetchIntervalInSeconds(0)` + cache write to `SharedPrefManager` only when activate succeeds
-- [ ] Entrance navigates when Remote Config returns or after **5 seconds** (no ad startup sequence yet)
+- [ ] Startup navigates when Remote Config returns or after **5 seconds** (no ad startup sequence yet)
 - [ ] UI modules (`:presentation` or `:feature-*`) ↛ `:data`
 - [ ] `assembleDebug` succeeds; orientation / theme modes match `project-settings.json`
 - [ ] Design system: option **a** ran `sonic-setup-design-system` (theme `windowBackground`, no default layout `colorSurface`); or **b** left default Material3 theme
@@ -472,4 +490,4 @@ This 5-second gate is only for Entrance **without** an ad startup sequence. When
 
 ## After setup
 
-Next: if design system was skipped, optional `/sonic-setup-design-system`; then language / onboarding / home via **`sonic-figma-to-xml`** (xml) or **`sonic-figma-to-compose`** (compose) → `sonic-create-mvi`; new domain/data via `sonic-create-clean-architecture`; wire Entrance Effects in `nav_graph.xml` (xml) or `NavGraph.kt` (compose). Existing apps missing RC or Analytics: `sonic-implement-firebase-remote-config`, `sonic-implement-firebase-events`; later screens: `sonic-add-firebase-events`; extra RC keys: `sonic-add-firebase-remote-config`.
+Next: if design system was skipped, optional `/sonic-setup-design-system`; then startup language / startup premium / onboarding / startup welcome back (`StartupActivity`, `29`–`33`) and home + in-app language / premium twins (`MainActivity`) via **`sonic-figma-to-xml`** (xml) or **`sonic-figma-to-compose`** (compose) → `sonic-create-mvi` (or `sonic-create-screen`); new domain/data via `sonic-create-clean-architecture`; wire Startup Effects in `nav_graph_startup.xml` (xml) or `StartupNavGraph.kt` (compose). Existing apps missing RC or Analytics: `sonic-implement-firebase-remote-config`, `sonic-implement-firebase-events`; later screens: `sonic-add-firebase-events`; extra RC keys: `sonic-add-firebase-remote-config`.

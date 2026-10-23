@@ -22,12 +22,12 @@ Use **both** when appropriate. Do **not** force one style for the whole app.
 
 ### Use `module` (eager)
 
-Cold-start graph — bindings resolved by `App`, `MainActivity` (if it injects), or the start destination (**Entrance** / legacy **Splash**) without waiting:
+Cold-start graph — bindings resolved by `App`, `StartupActivity` / `MainActivity` (if they inject), the `StartupActivity` funnel (`StartupFragment`, `StartupLanguageFragment`, `StartupPremiumFragment`, `StartupIntroFragment`, `StartupWelcomeBackFragment` — legacy **Splash**) or the Home start tab without waiting:
 
 - `appModule`, `coreModule`, `corePlatformModule`
-- `dataModule` (SharedPref, RC cache, repos used at Entrance)
-- `useCaseModule` factories used by Entrance / Splash / MainActivity
-- `entrancePresentationModule` (xml) / `entranceFeatureModule` (compose)
+- `dataModule` (SharedPref, RC cache, repos used at Startup)
+- `useCaseModule` factories used by the Startup funnel / MainActivity / Home tab
+- `startupPresentationModule` (xml) / `startupFeatureModule` (compose) — **every** `Startup*ViewModel`, plus `mainPresentationModule` / Home-tab module when `MainActivity` or the first tab injects
 - Dispatchers, InternetManager, and any other ctor deps on the first-screen ViewModel chain
 
 Eager modules are ready when `startKoin { modules(...) }` returns — no `runOnKoinStarted` required for those bindings.
@@ -36,7 +36,7 @@ Eager modules are ready when `startKoin { modules(...) }` returns — no `runOnK
 
 Not required to paint the first screen:
 
-- Secondary feature modules (`homePresentationModule` / `homeFeatureModule`, settings, premium paywall UI, …)
+- Secondary feature modules (`settingsPresentationModule`, in-app `languagePresentationModule` / `premiumPresentationModule`, non-start tabs, …)
 - Ads modules (`gmaAdsModule`, banner/interstitial/native/… placement modules)
 - Heavy optional feature graphs loaded after launch
 - Billing UI modules that are not on the cold-start path (BillingDataSource itself may still be eager if started from `Application`)
@@ -45,7 +45,7 @@ Resolve lazy bindings after they are ready (`runOnKoinStarted` / wait APIs) — 
 
 ### Rule of thumb
 
-> If Entrance / Splash / MainActivity needs it on first open → **`module`**.  
+> If `StartupActivity` (any `Startup*` screen), `MainActivity`, or the Home start tab needs it on first open → **`module`**.  
 > If it is a later screen, ads, or optional heavy wiring → **`lazyModule`**.
 
 Mixing `modules(...)` + `lazyModules(...)` in the same `startKoin` block is **expected**.
@@ -102,12 +102,14 @@ fun getEagerModules() = listOf(
     useCaseModule,
 
     //// Presentation (cold-start only)
-    entrancePresentationModule, // or entranceFeatureModule when compose
+    startupPresentationModule, // or startupFeatureModule when compose — all Startup* ViewModels
+    homePresentationModule,    // MainActivity start tab
 )
 
 fun getLazyModules() = listOf(
     //// Presentation / Feature (deferred)
-    homePresentationModule,
+    languagePresentationModule,
+    premiumPresentationModule,
     settingsPresentationModule,
 
     //// Ads
@@ -117,7 +119,7 @@ fun getLazyModules() = listOf(
 )
 ```
 
-(Compose: put secondary `*FeatureModule`s in the lazy list; keep Entrance in the eager list.)
+(Compose: put secondary `*FeatureModule`s in the lazy list; keep Startup in the eager list.)
 
 ### Theme apply — after Koin start (mandatory)
 
@@ -150,7 +152,7 @@ Every `module` / `lazyModule` body must use **clear section headers** so binding
 | Module                           | Section order (use only what applies)                                                                                                          |
 |----------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------|
 | `dataModule` / data area modules | `//// DataSources` → `//// Repositories` (optional `//// Managers` / SDK wrappers **before** DataSources if needed)                          |
-| `useCaseModule`                  | Group by domain area: `//// Entrance`, `//// Location`, `//// Prayer`, … — never dump all factories in one unsorted list when areas differ |
+| `useCaseModule`                  | Group by domain area: `//// Startup`, `//// Location`, `//// Prayer`, … — never dump all factories in one unsorted list when areas differ |
 | `*PresentationModule`            | `//// ViewModels` (optional `//// Helpers` if feature-scoped singles) — **xml** |
 | `*FeatureModule`                 | `//// ViewModels` — **compose** (`homeFeatureModule`, AnimeHub)                                                                          |
 | `corePlatformModule`             | `//// Dispatchers` → `//// Managers` → `//// Other`                                                                                        |
@@ -219,8 +221,8 @@ val dataModule = module {
 ```kotlin
 val useCaseModule = module {
 
-    //// Entrance
-    factory { GetEntranceDestinationUseCase(get()) }
+    //// Startup
+    factory { GetStartupDestinationUseCase(get()) }
 
     //// Location
     factory { GetLocationAndAddressUseCase(get()) }
@@ -237,25 +239,29 @@ val useCaseModule = module {
 
 - Lives under `:domain` — **not** `:data`
 - Sort factories by area; keep related UseCases together
-- Entrance-related factories must stay on the **eager** module list
+- Startup-related factories must stay on the **eager** module list
 
-### Eager — Entrance presentation
+### Eager — Startup presentation (whole `StartupActivity` funnel)
 
 ```kotlin
-val entrancePresentationModule = module {
+val startupPresentationModule = module {
 
     //// ViewModels
-    viewModel { EntranceViewModel(get(), get(), get()) }
+    viewModel { StartupViewModel(get(), get(), get()) }
+    viewModel { StartupLanguageViewModel(get(), get()) }
+    viewModel { StartupPremiumViewModel(get(), get()) }
+    viewModel { StartupIntroViewModel(get()) }
+    viewModel { StartupWelcomeBackViewModel(get()) }
 }
 ```
 
-### Deferred — secondary feature
+### Deferred — secondary feature (in-app Language / Premium / Settings / non-start tabs)
 
 ```kotlin
-val homePresentationModule = lazyModule {
+val languagePresentationModule = lazyModule {
 
     //// ViewModels
-    viewModel { HomeViewModel(get(), get(), get(), get(), get()) }
+    viewModel { LanguageViewModel(get(), get()) }
 }
 ```
 
@@ -304,10 +310,10 @@ val bannerAdModule = lazyModule {
 
 ### Cold-start / first screens (mandatory)
 
-Walk and verify before release (prevents `No definition found` / `Could not create instance` on Splash/Entrance):
+Walk and verify before release (prevents `No definition found` / `Could not create instance` on Splash/Startup):
 
 1. `App.startKoin` → `modules(eager)` + `lazyModules(deferred)` from `KoinModules`
-2. Eager list includes every module the first UI needs (Entrance / Splash / MainActivity inject graph)
-3. **MainActivity** (if it uses `by inject` / `koinInject`) + start destination → ViewModel → **every** constructor parameter type has `viewModel` / `factory` / `single` in a **loaded eager** `module`
+2. Eager list includes every module the first UI needs (`Startup*` funnel / MainActivity / Home-tab inject graph)
+3. **StartupActivity** / **MainActivity** (if they use `by inject` / `koinInject`) + `StartupFragment` → ViewModel → **every** constructor parameter type has `viewModel` / `factory` / `single` in a **loaded eager** `module`
 
-**Forbidden:** adding a ctor dependency to Entrance/Splash/MainActivity without registering it on the **eager** list in `KoinModules`.
+**Forbidden:** adding a ctor dependency to a `Startup*` screen / MainActivity / Home tab without registering it on the **eager** list in `KoinModules`.

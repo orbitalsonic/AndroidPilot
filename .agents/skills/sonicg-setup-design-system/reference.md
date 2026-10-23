@@ -13,7 +13,7 @@ Do this in the **same turn**. Match existing `:app` AGP / `compileSdk` style.
 5. `core-ui/src/main/AndroidManifest.xml` — **omit** unless a permission/component is required (prefer no empty library manifest — `10-manifest`)
 6. `:app` `implementation(project(":core-ui"))`.
 7. If `:app` still has `res/values/` themes / strings / colors, **move** them into `:core-ui` (app keeps mipmap / xml backup only). Point the app manifest **application** theme at `:core-ui` `Theme.*`; launcher Activity uses `Theme.App.Starting`.
-8. Do **not** add `:presentation`, `:domain`, `:data`, `:core-common`, `:core-platform`, Entrance, or `Parent*` from this skill.
+8. Do **not** add `:presentation`, `:domain`, `:data`, `:core-common`, `:core-platform`, Startup, or `Parent*` from this skill.
 
 Then write Figma tokens into that module.
 

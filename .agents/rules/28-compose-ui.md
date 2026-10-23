@@ -12,7 +12,7 @@ paths:
 
 Applies when `.agents/project-settings.json` `uiFramework` is `"compose"`. If `uiFramework` is `"xml"`, ignore this rule and follow `09-resources-xml` / `19-base-ui`.
 
-Canonical structure: AnimeHub-style (`:feature-*`, `:core-ui` theme + resources, `:app` `NavGraph.kt`). **No `:core-design`** — Compose theme lives in `:core-ui`.
+Canonical structure: AnimeHub-style (`:feature-*`, `:core-ui` theme + resources, `:app` `StartupNavGraph.kt` + `MainNavGraph.kt` — one per Activity). **No `:core-design`** — Compose theme lives in `:core-ui`.
 
 ## Must follow
 

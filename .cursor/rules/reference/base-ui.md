@@ -23,14 +23,28 @@ See that folder’s `README.md`. Same shape as the company template; `ParentShee
 
 ### ParentFragment
 - `bindingFactory: (LayoutInflater) -> T`
+- `onCreateView`: inflate `_binding`, call **`onViewInflated()`** (open, optional — early view setup before `onViewCreated`), return root
+- `onViewCreated(view, bundle)` → `initObservers()` → `onViewCreated(Bundle?)` → abstract `onViewCreated()`
 - Clear `_binding` in `onDestroyView`; throw if accessed outside view lifecycle
-- `initObservers()`, `onViewCreated(Bundle?)`, abstract `onViewCreated()`
 
-### ParentActivity
-- Edge-to-edge + insets padding flags (`includeTopPadding` / `includeBottomPadding` / `enableKeyboardInsets`)
-- `installSplashTheme()` → SplashScreen API
+### ParentActivity (edge-to-edge via `InsetsMode`)
+
+```kotlin
+enum class InsetsMode {
+    EDGE_TO_EDGE,  // no padding — content under both bars
+    TOP,           // status bar only
+    BOTTOM,        // nav bar / IME only
+    TOP_BOTTOM,    // both (default)
+}
+```
+
+- `onCreate` order (fixed): `initSplashScreen()` → `super.onCreate()` → `setupInsets(getInsetsMode())` (= `enableEdgeToEdge()` + `setContentView(binding.root)` + `ViewCompat.setOnApplyWindowInsetsListener`) → `onCreated()` → `initObservers()`
+- Insets listener: `systemBars` left/right always; `top` only for `TOP` / `TOP_BOTTOM`; `bottom` = IME bottom when keyboard visible else system-bar bottom, only for `BOTTOM` / `TOP_BOTTOM`; returns `WindowInsetsCompat.CONSUMED`
+- `open fun getInsetsMode(): InsetsMode = InsetsMode.TOP_BOTTOM` — override per Activity (`StartupActivity` / `MainActivity`) when the design needs `EDGE_TO_EDGE`; never toggle padding per destination
+- `open fun initSplashScreen() {}` — `StartupActivity` overrides with `installSplashScreen()`; `MainActivity` does not
 - `enableMaterialDynamicTheme()` — `DynamicColors.applyToActivityIfAvailable(this)`; no `GlobalContext` checks (Koin starts in Application before any Activity — see `07`, `23`)
-- Abstract `onCreated()`; `onPreCreated()` before `super.onCreate`
+- Abstract `onCreated()`; optional `initObservers()`
+- Status-bar icon tint: `updateStatusBar(darkIcons = true/false)` from `ActivityExtensions` in `onCreated()` — do not set `statusBarColor` / `navigationBarColor` unless asked (`09`)
 
 ### ParentDialog
 - Dismissal base: `onDismissCallback` + `safeShow` / `safeDismiss`
@@ -63,7 +77,8 @@ See that folder’s `README.md`. Same shape as the company template; `ParentShee
 - Reuse extensions — do not copy-paste collectors
 - Naming: `<Receiver>Extensions.kt` only — never a shared `FlowCollectionExtensions.kt` / `LifecycleFlowExtensions.kt`
 - Prefer `navigateTo` / `popFrom` / `navigateRootTo` over raw `findNavController().navigate` / `popBackStack` in Fragments
-- `ParentActivity.includeTopPadding` defaults to **false**; MainActivity sets true except Entrance (`23-app-startup`)
+- `ParentActivity.getInsetsMode()` defaults to **`TOP_BOTTOM`**; override per Activity, not per destination (`23-app-startup`)
+- `ActivityExtensions.updateStatusBar(darkIcons)` toggles light/dark status-bar icons (`WindowInsetsControllerCompat`); `onBackPressedDispatcher { }` registers back handling (`StartupActivity` passes an empty block)
 - Prefer `screenStarted() = launchWhenResumed { handleIntent(ScreenStarted) }` when start work must wait for resume (paywalls, etc.)
 
 ## Feature Fragment responsibilities

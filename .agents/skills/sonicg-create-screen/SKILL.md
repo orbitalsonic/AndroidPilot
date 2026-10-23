@@ -44,7 +44,8 @@ Execute **in this order**. For each step: **read that skill’s `SKILL.md` and f
 | `xml` (default) | **`sonicg-figma-to-xml`** (`.agents/skills/sonicg-figma-to-xml/SKILL.md`)         |
 | `compose`       | **`sonicg-figma-to-compose`** (`.agents/skills/sonicg-figma-to-compose/SKILL.md`) |
 
-- Dashboard + BottomNavigation → produce menu + `nav_graph_dashboard` as that skill requires
+- Decide the host first: startup funnel screen (`StartupActivity`, `Startup*` naming, `fragment_startup_*.xml`) vs app screen (`MainActivity`, plain naming) — `sonicg-create-mvi` “Which host?”. Startup Language / Premium and in-app Language / Premium are **separate** screens (`30`, `33`)
+- Bottom navigation → `menu_bottom_nav_main` + tabs in `nav_graph_main` (MainActivity-hosted, default) or nested `nav_graph_dashboard` (optional variant) as that skill requires
 - Dialog-only / sheet-only requests → stop and redirect to `sonicg-create-dialog` / `sonicg-create-bottom-sheet` (do not continue MVI here unless the user also asked for a host screen)
 
 ### 2 — Domain + data (conditional)

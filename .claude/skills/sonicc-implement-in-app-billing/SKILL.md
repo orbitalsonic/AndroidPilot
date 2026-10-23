@@ -254,18 +254,18 @@ Portrait **and** landscape unless `project-settings.json` locks orientation. All
 
 | RC flag (`0` = off)     | Use                               |
 |-------------------------|-----------------------------------|
-| `showPremiumFirstTime`  | First-time users after onboarding |
-| `showPremiumSecondTime` | Returning users at entrance       |
+| `showPremiumFirstTime`  | First-time users after Startup Language (`StartupPremiumFragment(isFirstTime = true)`) |
+| `showPremiumSecondTime` | Returning users at startup (`StartupPremiumFragment(isFirstTime = false)`) |
 
 Both require `!isAppPurchased`. Hide premium entry when purchased.
 
-### Entrance navigation is not owned by billing
+### Startup navigation is not owned by billing
 
 Application `connect()` / `start(applicationScope)` stays once at process start.
 
 A billing refresh does not replace the normal leave-splash gate, and it does not navigate from Remote Config when ads are wired.
 
-| Entrance ads | Who decides when to leave |
+| Startup ads | Who decides when to leave |
 |--------------|---------------------------|
 | Not wired | `sonicc-setup-new-project`: Remote Config returns, or **5 seconds** |
 | Wired (`sonicc-implement-admob-ads`) | Consent (8s) → AdMob init → ad calls (8s), then navigate. Remote Config result is ignored |
@@ -276,29 +276,29 @@ A billing refresh does not replace the normal leave-splash gate, and it does not
 
 `isAppPurchased` in `SharedPrefManager` is the no-ads flag (written when the billing response syncs `purchasesState`, and on `PurchaseOutcome.Success` / `AlreadyOwned`). Subs and non-consumable lifetime only. A consumable must not take this path.
 
-In `EntranceViewModel`, as soon as that flag is **true** (already true at start, or it flips true when the billing response writes the pref):
+In `StartupViewModel`, as soon as that flag is **true** (already true at start, or it flips true when the billing response writes the pref):
 
-1. Cancel the in-flight Entrance work: Remote Config wait, consent, AdMob init, ad load/show, and the 5s / 16s timers.
+1. Cancel the in-flight Startup work: Remote Config wait, consent, AdMob init, ad load/show, and the 5s / 16s timers.
 2. Do not show ads or splash premium.
 3. Then navigate with the normal first-time funnel. `isAppPurchased` does **not** skip Language or Onboarding.
 
 | User | `isFirstTime` | Destination |
 |------|---------------|-------------|
 | Purchased, first time | `true` | Language, then Onboarding, same as an unpaid first-time user |
-| Purchased, returning | `false` | **Dashboard**. Skip Welcome Back and any other returning-user screen |
-| Not purchased, returning | `false` | Welcome Back |
+| Purchased, returning | `false` | **`MainActivity`** (`moveToMain()`). Skip Startup Welcome Back, Startup Premium and any other returning-user screen |
+| Not purchased, returning | `false` | Startup Welcome Back |
 
 The Fragment still performs navigation from that effect. Do not call `NavController` inside the ViewModel.
 
 ```kotlin
 fun onPurchased() {
-    entranceJob?.cancel()
+    startupJob?.cancel()
     val destination = if (sharedPrefManager.isFirstTime) {
-        entranceDestination() // Language or Onboarding
+        startupDestination() // Language or Onboarding
     } else {
-        Dashboard
+        MainActivity
     }
-    _effect.emit(EntranceEffect.Navigate(destination))
+    _effect.emit(StartupEffect.Navigate(destination))
 }
 ```
 
@@ -318,8 +318,8 @@ When `writeTestsWithFeatures: true` (`sonicc-test-unit`):
 - [ ] JitPack + catalog + deps + `TAG_BILLING`
 - [ ] Console products match `BillingProductIds`
 - [ ] Singleton `BillingManager` + Application connect
-- [ ] Billing does not own Entrance navigation (5s Remote Config gate without ads; consent + ads 16s gate when ads are wired)
-- [ ] `isAppPurchased == true` cancels Entrance ads. First-time users still open Language / Onboarding. Returning users open Dashboard and skip Welcome Back
+- [ ] Billing does not own Startup navigation (5s Remote Config gate without ads; consent + ads 16s gate when ads are wired)
+- [ ] `isAppPurchased == true` cancels Startup ads. First-time users still open Language / Onboarding. Returning users open `MainActivity` and skip Startup Welcome Back
 - [ ] Prefer-trial mapper; `offerId` in `purchaseSubs`
 - [ ] In-app in correct `setNonConsumables` / `setConsumables`
 - [ ] `isAppPurchased` synced; ads gated
@@ -337,6 +337,6 @@ When `writeTestsWithFeatures: true` (`sonicc-test-unit`):
 - Ship fake purchase in release
 - Log purchase tokens or PII
 - Using a billing refresh as the normal leave-splash gate
-- Keeping a purchased user on Entrance, Welcome Back, or an ad once `isAppPurchased` is true
+- Keeping a purchased user on Startup, Startup Welcome Back, or an ad once `isAppPurchased` is true
 - Skipping Language or Onboarding because `isAppPurchased` is true
 - Replacing the ads leave-splash sequence (consent 8s → AdMob init → ad calls 8s) with a Remote Config wait when ads are wired and the user is not purchased

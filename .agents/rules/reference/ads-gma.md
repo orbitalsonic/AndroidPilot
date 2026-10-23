@@ -18,7 +18,7 @@ Each format is a pipeline: **config → validation → (interstitial counter) �
 | `AdsManager`              | Facade: `appOpen` / `banner` / `interstitial` / `native` / `rewarded` / `rewardedInterstitial` |
 | Extensions                | What `:app` / presentation / feature screens call                                              |
 
-Consent runs on Entrance (`ConsentManager`). SDK init is inside each `load`. Fullscreen formats share `FullscreenAdGate`.
+Consent runs on `StartupFragment` (`ConsentManager`; `:gmaAds` key name stays `ENTRANCE`). SDK init is inside each `load`. Fullscreen formats share `FullscreenAdGate`.
 
 Catalog / extensions / `gmaAds/build.gradle.kts` `resValue` units / Koin order: **App Open → Banner → Interstitial → Native → Rewarded → Rewarded Interstitial**.
 
@@ -93,15 +93,15 @@ Files: `appOpen/AppOpenAdConfig.kt`, `AppOpenAdKey`
 
 | Key         | When                                                                        |
 |-------------|-----------------------------------------------------------------------------|
-| `ENTRANCE`  | Load on Entrance with interstitial. Show via `showAppOpenOrInterstitialAd`. |
+| `ENTRANCE`  | Load on `StartupFragment` with interstitial. Show via `showAppOpenOrInterstitialAd`. |
 | `LIFECYCLE` | Process foreground.                                                         |
 
 `AppOpenAdConfig.LOAD_LIFECYCLE_WITH_LOADING_SCREEN`:
 
 - **true** — `AppOpenLoadingActivity` loads then shows `LIFECYCLE`. Do not preload or reload after dismiss.
-- **false** — load `LIFECYCLE` on Dashboard; `AppOpenLifecycle` shows it and reloads after dismiss.
+- **false** — load `LIFECYCLE` in `MainActivity` (home shell); `AppOpenLifecycle` shows it and reloads after dismiss.
 
-Entrance calls `blockAppOpen()`. Keep blocked through splash. Dashboard calls `unblockAppOpen()`. Skills: `sonicg-add-admob-appOpen-Entrance`, `sonicg-add-admob-appOpen-lifecycle`.
+`StartupFragment` calls `blockAppOpen()`. Keep blocked through the whole `StartupActivity` funnel. `MainActivity` calls `unblockAppOpen()`. Skills: `sonicg-add-admob-appOpen-Entrance`, `sonicg-add-admob-appOpen-lifecycle`.
 
 ---
 
@@ -127,7 +127,7 @@ binding.bannerAdViewYours.clearView() // onDestroyView
 destroyBannerAd(BannerAdKey.YOURS)    // onDestroy when leaving for good
 ```
 
-No Entrance preload. No split load then show. Skill: `sonicg-add-admob-banner`.
+No Startup preload. No split load then show. Skill: `sonicg-add-admob-banner`.
 
 ---
 
@@ -205,7 +205,7 @@ Always check `granted`. Skills: `sonicg-add-admob-rewarded`, `sonicg-add-admob-r
 
 RC is fetched into `SharedPrefManager`. Placements read prefs at load time, not Firebase live.
 
-Without Entrance ads, navigation waits for that fetch or **5 seconds**. With Entrance ads, start the fetch and ignore its result. Leave only after consent (8s) → AdMob init → ad calls (8s), including `showAppOpenOrInterstitialAd` inside the ads window. The first two confirmed placements in funnel order use SharedPref default `1`; later placements stay `0`.
+Without Startup ads, navigation waits for that fetch or **5 seconds**. With Startup ads, start the fetch and ignore its result. Leave only after consent (8s) → AdMob init → ad calls (8s), including `showAppOpenOrInterstitialAd` inside the ads window. The first two confirmed placements in funnel order use SharedPref default `1`; later placements stay `0`.
 
 ## Ref app screen map (implement strategy)
 
@@ -213,13 +213,13 @@ Wire **only screens that already exist** in the target app. Skip missing ones; d
 
 | Screen              | Typical ads                                                                                                      |
 |---------------------|------------------------------------------------------------------------------------------------------------------|
-| Entrance            | Consent → load AO `ENTRANCE` + inter `ENTRANCE` + preload natives; `showAppOpenOrInterstitialAd`; `blockAppOpen` |
-| Language            | Banner `LANGUAGE`; show native `LANGUAGE`                                                                        |
-| Onboarding          | Banner + native + inter `ON_BOARDING`                                                                            |
-| Menu                | Native `MENU`                                                                                                    |
-| Dashboard           | Banner `DASHBOARD`; `unblockAppOpen` + load AO `LIFECYCLE`; inter `BOTTOM_NAVIGATION` / `EXIT`                   |
+| Startup (`StartupFragment`) | Consent → load AO `ENTRANCE` + inter `ENTRANCE` + preload natives; `showAppOpenOrInterstitialAd`; `blockAppOpen` |
+| Startup Language (`StartupLanguageFragment`) | Show native `LANGUAGE` (preloaded); in-app `LanguageFragment`: banner `LANGUAGE` |
+| Onboarding (`StartupIntroFragment`) | Native (reuse language native) + inter `ON_BOARDING` on finish |
+| Startup Welcome Back (`StartupWelcomeBackFragment`) | Native `MENU` (preloaded on `StartupFragment` for returning users) |
+| MainActivity shell  | Banner `DASHBOARD` (`bannerAdViewMain` above BNV); `unblockAppOpen` + load AO `LIFECYCLE`; inter `BOTTOM_NAVIGATION` / `EXIT` |
 | Home                | Native + inter + rewarded + rewarded inter `HOME`                                                                |
-| Trending / Settings | Native `TRENDING` / `SETTING`                                                                                    |
+| Trending / Settings | Native `TRENDING` / `SETTING`; in-app `PremiumFragment`: inter on close                                        |
 | Feature One / Two   | Banner + native + inter `BACK_PRESS`                                                                             |
 
 End every implement pass with a list of changed Fragments / `*Screen`s (and skipped with reason).

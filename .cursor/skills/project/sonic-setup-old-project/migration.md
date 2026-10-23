@@ -15,12 +15,12 @@ Companion to [SKILL.md](SKILL.md). Target architecture: [sonic-setup-new-project
 | MVC / logic in Activity or Fragment                      | Extract data to DataSource/Repository/UseCase; UI to MVI Fragment. Keep XML.                                             |
 | MVVM (ViewModel, no Intent/State/Effect)                 | Wrap existing VM work in `handleIntent` / State / Effect. Do not rewrite use cases.                                      |
 | Already MVI (Intent/State/Effect)                        | **xml:** move packages to `presentation/<feature>/…`. **compose:** move to `:feature-<kebab>`. Fix DI to `module`/`lazyModule` per `07`. |
-| Activity-per-screen                                      | **xml:** one `MainActivity` + `nav_graph`; one Fragment per old Activity. **compose:** one `:feature-*` + `NavGraph.kt` destination. Preserve back stack. |
-| Navigation Component already                             | **xml:** keep graphs; set start to `entranceFragment`. **compose:** root `NavGraph.kt` with `ENTRANCE_ROUTE`. Entrance routes to the old start destination. |
+| Activity-per-screen                                      | **xml:** `StartupActivity` (`nav_graph_startup`, pre-app screens) + `MainActivity` (`nav_graph_main`); one Fragment per old Activity. **compose:** one `:feature-*` + `StartupNavGraph.kt` / `MainNavGraph.kt` destination. Preserve back stack. |
+| Navigation Component already                             | **xml:** split into `nav_graph_startup` (start `startupFragment`) + `nav_graph_main`; keep destination ids/actions. **compose:** `StartupNavGraph.kt` with `STARTUP_ROUTE` + `MainNavGraph.kt`. Startup routes to the old start destination. |
 | Hilt / Dagger / mixed Koin                               | Same graph as **Koin `module` (cold-start) + `lazyModule` (deferred)** per `07`.                                         |
 | No DI                                                    | Introduce Koin (`module`/`lazyModule` by usage) while extracting.                                                        |
 | Data Binding / `findViewById`                            | **xml:** View Binding; same view ids and layout behavior. **compose:** leave Compose UI; do not convert to XML.          |
-| Jetpack Compose                                          | Set `uiFramework` `compose`. Extract into `:feature-*` + `:core-ui` (theme + resources) + `:app` `NavGraph.kt`. Do **not** convert to XML unless asked. |
+| Jetpack Compose                                          | Set `uiFramework` `compose`. Extract into `:feature-*` + `:core-ui` (theme + resources) + `:app` `StartupNavGraph.kt` / `MainNavGraph.kt` (two Activities). Do **not** convert to XML unless asked. |
 | Java sources                                             | Convert to Kotlin when touching a file / moving into a new layer; keep control flow.                                     |
 | API in Activity/Presenter                                | DataSource (network) + Repository impl (`:data`) + interface/UseCase (`:domain`). Same URL, method, headers, parse.      |
 | OkHttp / Volley / Retrofit already                       | Keep the client. Place Retrofit/OkHttp API stack in **`:core-network`** when extracting; DataSources/repo impls in `:data`. Add Retrofit only with approval (`00-global`). |
@@ -65,14 +65,14 @@ Same idea for: prefs read/write in an Activity, Room queries in an Activity, fil
 
 Ads screens/managers: skip this conversion (`21-ads-billing`).
 
-## Entrance (preserve first screen)
+## Startup (preserve first screen)
 
 Old start (examples): `SplashActivity`, `MainActivity`, `LanguageActivity`, `HomeFragment`.
 
-1. Add `EntranceFragment` as `nav_graph` `startDestination`.
-2. Put the **existing** startup routing (first-open language, session, RC fetch, go-home) into Entrance MVI / existing use cases.
-3. Navigate to the previous start destination without adding a new branded splash unless one already existed.
-4. Fetch Remote Config from Entrance / App startup if that matches `sonic-setup-new-project` Step 8 — **non-blocking**; do not delay the old first screen behind a new gate unless the app already waited on RC.
+1. Add `StartupActivity` (launcher, old splash theme) hosting `nav_graph_startup` with `StartupFragment` as `startDestination`; `MainActivity` hosts `nav_graph_main` (old home). Old `SplashActivity` code moves into `StartupFragment` / `StartupViewModel`.
+2. Put the **existing** startup routing (first-open language, session, RC fetch, go-home) into Startup MVI / existing use cases.
+3. Navigate to the previous start destination (first-time language / intro stay inside `StartupActivity` as `Startup*` twins; home = `moveToMain()`) without adding a new branded splash unless one already existed.
+4. Fetch Remote Config from Startup / App startup if that matches `sonic-setup-new-project` Step 8 — **non-blocking**; do not delay the old first screen behind a new gate unless the app already waited on RC.
 
 ## Resources and locales
 
@@ -90,6 +90,6 @@ Old start (examples): `SplashActivity`, `MainActivity`, `LanguageActivity`, `Hom
 ## Verification extras
 
 - Diff network/prefs/DB/analytics call sites: same keys, URLs, event names.
-- Launch: first screen after Entrance matches the old first user-visible screen.
+- Launch: first screen after Startup matches the old first user-visible screen.
 - Ads placements still load/show on the same screens (premium/RC gates unchanged).
 - `assembleDebug` (and existing flavors if any) succeeds.

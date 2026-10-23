@@ -4,7 +4,7 @@ Production Android app. Kotlin, Clean Architecture, MVVM + MVI (Intent / State /
 
 ## Law
 
-Follow [`.claude/rules/`](rules/) (especially `00-global`, `14-security-secrets`, `16-logging`). Path-scoped rules load when matching files are touched. Full patterns: [`.claude/rules/reference/`](rules/reference/). Compose packaging: `28-compose-ui` + [reference/compose-ui.md](rules/reference/compose-ui.md).
+Follow [`.claude/rules/`](rules/) (especially `00-global`, `14-security-secrets`, `16-logging`). Path-scoped rules load when matching files are touched. App shape (reference QiblaCompass): **two Activities** — `StartupActivity` (launcher, splash, `nav_graph_startup`: `StartupFragment` → `StartupLanguageFragment` → `StartupPremiumFragment` → `StartupIntroFragment` / `StartupWelcomeBackFragment`) hands off to `MainActivity` (`nav_graph_main`: home tabs + in-app `LanguageFragment` / `PremiumFragment` / settings). Base classes use `InsetsMode` edge-to-edge (`19`, `23`, `29`–`33`). Full patterns: [`.claude/rules/reference/`](rules/reference/). Compose packaging: `28-compose-ui` + [reference/compose-ui.md](rules/reference/compose-ui.md).
 
 When [`.claude/project-settings.json`](project-settings.json) exists, obey `uiFramework`, `writeTestsWithFeatures`, `orientation`, `themeModes`, `applicationId`, `appName`, optional `figmaDesignSystemUrl`.
 

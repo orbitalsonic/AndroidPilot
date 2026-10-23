@@ -3,93 +3,79 @@ package YOUR.PACKAGE.core.ui.base.activity
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.ViewCompat
-import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
-import androidx.core.view.updatePadding
 import androidx.viewbinding.ViewBinding
 import com.google.android.material.color.DynamicColors
 import YOUR.PACKAGE.core.common.constants.Constants.TAG
+import YOUR.PACKAGE.core.ui.base.enums.InsetsMode
 
 /**
  * Template — copy to `:core-ui` …/base/activity/
  * Replace YOUR.PACKAGE with applicationId root.
+ *
+ * Edge-to-edge via [InsetsMode] (reference: QiblaCompass BaseActivity).
+ * onCreate order is fixed: initSplashScreen() → super.onCreate → setupInsets(getInsetsMode()) → onCreated() → initObservers()
  */
 abstract class ParentActivity<T : ViewBinding>(
     private val bindingFactory: (LayoutInflater) -> T,
 ) : AppCompatActivity() {
 
-    protected val binding by lazy { bindingFactory(layoutInflater) }
-
-    protected var includeTopPadding = false
-    protected var includeBottomPadding = true
-    protected var enableKeyboardInsets = false
-    protected var isLightStatusBars = false
-
-    var statusBarHeight = 0
-    var navigationBarHeight = 0
+    protected val binding: T by lazy { bindingFactory(layoutInflater) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        onPreCreated()
+        initSplashScreen()
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContentView(binding.root)
-        setPadding()
+
+        setupInsets(getInsetsMode())
         onCreated()
         initObservers()
     }
 
-    open fun onPreCreated() {}
-    open fun initObservers() {}
+    private fun setupInsets(mode: InsetsMode) {
+        enableEdgeToEdge()
+        setContentView(binding.root)
 
-    private fun setPadding() {
-        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
-            WindowCompat.getInsetsController(window, window.decorView)
-            when (enableKeyboardInsets) {
-                true -> setPaddingKeyboard(v, insets)
-                false -> setPaddingNormal(v, insets)
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            val imeInsets = insets.getInsets(WindowInsetsCompat.Type.ime())
+            val isKeyboardVisible = insets.isVisible(WindowInsetsCompat.Type.ime())
+
+            val bottomInset = if (isKeyboardVisible) imeInsets.bottom else systemBars.bottom
+
+            val top = when (mode) {
+                InsetsMode.TOP, InsetsMode.TOP_BOTTOM -> systemBars.top
+                else -> 0
             }
+
+            val bottom = when (mode) {
+                InsetsMode.BOTTOM, InsetsMode.TOP_BOTTOM -> bottomInset
+                else -> 0
+            }
+
+            view.setPadding(systemBars.left, top, systemBars.right, bottom)
+
             WindowInsetsCompat.CONSUMED
         }
     }
 
-    private fun setPaddingNormal(v: View, insets: WindowInsetsCompat) {
-        val bars = insets.getInsets(
-            WindowInsetsCompat.Type.systemBars() or WindowInsetsCompat.Type.displayCutout(),
-        )
-        if (bars.top != 0) statusBarHeight = bars.top
-        if (bars.bottom != 0) navigationBarHeight = bars.bottom
-        val topPadding = if (includeTopPadding) bars.top else 0
-        val bottomPadding = if (includeBottomPadding) bars.bottom else 0
-        v.updatePadding(left = bars.left, top = topPadding, right = bars.right, bottom = bottomPadding)
-    }
+    /**
+     * Override per Activity:
+     * `override fun getInsetsMode() = InsetsMode.EDGE_TO_EDGE`
+     */
+    open fun getInsetsMode(): InsetsMode = InsetsMode.TOP_BOTTOM
 
-    private fun setPaddingKeyboard(v: View, insets: WindowInsetsCompat) {
-        val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-        val imeInsets = insets.getInsets(WindowInsetsCompat.Type.ime())
-        val cutout = insets.getInsets(WindowInsetsCompat.Type.displayCutout())
-        if (systemBars.top != 0) statusBarHeight = systemBars.top
-        if (systemBars.bottom != 0) navigationBarHeight = systemBars.bottom
-        val topPadding = if (includeTopPadding) maxOf(systemBars.top, cutout.top, statusBarHeight) else 0
-        val bottomPadding =
-            if (includeBottomPadding) maxOf(systemBars.bottom, imeInsets.bottom, navigationBarHeight) else 0
-        v.updatePadding(
-            left = systemBars.left,
-            top = topPadding,
-            right = systemBars.right,
-            bottom = bottomPadding,
-        )
-    }
+    /**
+     * Runs before `super.onCreate`. Only StartupActivity overrides this with `installSplashScreen()`.
+     */
+    open fun initSplashScreen() {}
 
-    protected open fun installSplashTheme() {
-        Log.d(TAG, "ParentActivity: installSplashTheme: Success")
-        installSplashScreen()
-    }
+    open fun initObservers() {}
+
+    abstract fun onCreated()
 
     protected open fun enableMaterialDynamicTheme() {
         Log.d(TAG, "ParentActivity: enableMaterialDynamicTheme: Started")
@@ -112,6 +98,4 @@ abstract class ParentActivity<T : ViewBinding>(
             }
         }
     }
-
-    abstract fun onCreated()
 }

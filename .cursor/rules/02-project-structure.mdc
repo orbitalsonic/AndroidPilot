@@ -43,6 +43,19 @@ presentation/<featureName>/
   mapper/      # optional domain → UI mappers
 ```
 
+Fixed top-level packages (`23-app-startup`, `29-screen-startup`):
+
+```
+presentation/startup/      # StartupActivity + StartupFragment, StartupLanguageFragment, StartupPremiumFragment, StartupWelcomeBackFragment (same di/intent/state/effect/viewModel/ui split)
+presentation/startup/onboarding/   # StartupIntroFragment + pager adapter + page fragments
+presentation/main/         # MainActivity (+ bottom nav helpers)
+presentation/language/     # in-app LanguageFragment (Apply + search)
+presentation/premium/      # in-app PremiumFragment
+presentation/settings/, home/, <feature>/ …
+```
+
+Startup twins and in-app twins are **separate** Fragments / layouts (`30`, `33`); shared adapters / UI items live in the in-app package or `:core-ui`.
+
 **compose** (`uiFramework` `compose`) — Gradle module `:feature-<kebab>` (AnimeHub):
 
 ```

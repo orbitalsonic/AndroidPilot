@@ -69,11 +69,22 @@ Layouts go in **`:presentation`** only; drawables/strings used by the screen sta
     - Colors → `:core-ui` `colors.xml`; skip the shape XML file entirely when Material attrs cover it
     - Only create `bg_shape_*` for non-button surfaces, gradients, or selectors Material cannot express (gradients → angle ×45)
 
-## Dashboard + BottomNavigation (when Figma has a bottom bar)
+## Screen naming by host (mandatory)
 
-Produce **XML resources only** (Kotlin/`setupWithNavController` → `sonic-create-mvi` + `32-screen-dashboard`). Follow `17-navigation`.
+| Figma screen | Host | Layout name |
+|--------------|------|-------------|
+| Splash / init, first-time language (Next only, no search), startup paywall, onboarding, returning-user menu | `StartupActivity` | `fragment_startup.xml`, `fragment_startup_language.xml`, `fragment_startup_premium.xml`, `fragment_startup_intro.xml`, `fragment_startup_welcome_back.xml` |
+| In-app language (back + Apply + search), in-app premium, settings, home, details | `MainActivity` | `fragment_language.xml`, `fragment_premium.xml`, `fragment_settings.xml`, `fragment_home.xml`, … |
 
-### Always create together
+Startup and in-app Language / Premium are **two layouts each** — never one layout with hidden views (`29`–`33`). Activity layouts: only `activity_startup.xml` / `activity_main.xml` (`23`).
+
+## Bottom navigation (when Figma has a bottom bar)
+
+**Default (reference QiblaCompass):** the bar lives in **`activity_main.xml`** (`fcvContainerMain` + banner slot `bannerAdViewMain` + `bnvMain`), tabs are **top-level destinations in `nav_graph_main.xml`**, menu is `menu_bottom_nav_main.xml` (item ids = tab fragment ids). Produce the tab `fragment_*.xml` layouts + menu and add the tab destinations to `nav_graph_main` — no `fragment_dashboard.xml`. Kotlin (`setupBottomNavigation`, backpress) → `sonic-create-mvi` + `32-screen-dashboard`.
+
+**Optional nested variant** (only when the product needs a `DashboardFragment` shell inside a deeper flow): produce **XML resources only** as below. Follow `17-navigation`.
+
+### Always create together (nested variant)
 
 | File | Module | Role |
 |------|--------|------|
@@ -82,7 +93,7 @@ Produce **XML resources only** (Kotlin/`setupWithNavController` → `sonic-creat
 | `nav_graph_dashboard.xml` | `:presentation` `navigation/` | **Only** bottom-tab fragments; `startDestination` = Home (or first tab); **no** Premium / detail destinations |
 | Tab `fragment_*.xml` | `:presentation` `layout/` | One layout per tab screen from Figma |
 
-Also ensure root `nav_graph.xml` has a `dashboardFragment` destination (add destination stub if missing — do not invent full funnel). Child → root navigations are **not** actions inside `nav_graph_dashboard` — those use `navigateRootTo` later in Kotlin.
+Also ensure root `nav_graph_main.xml` has a `dashboardFragment` destination (add destination stub if missing — do not invent full funnel). Child → root navigations are **not** actions inside `nav_graph_dashboard` — those use `navigateRootTo` later in Kotlin.
 
 ### `fragment_dashboard.xml` shape
 
@@ -111,9 +122,9 @@ Also ensure root `nav_graph.xml` has a `dashboardFragment` destination (add dest
 
 ### After BNV layouts
 
-Tell the user to run **`sonic-create-mvi`** for Dashboard (and each tab if needed) and wire:
+Tell the user to run **`sonic-create-mvi`** for each tab (and for `DashboardFragment` in the nested variant) and wire:
 
-- `setupBottomNavigation()` + nested `navController` lazy from `childFragmentManager` + `fcvContainerDashboard`
+- `setupBottomNavigation()` in `MainActivity` (default) or nested `navController` lazy from `childFragmentManager` + `fcvContainerDashboard` (nested variant)
 - Backpress: non-tab pop → Home tab → Exit / double-back (`32-screen-dashboard`)
 
 ## Do not create

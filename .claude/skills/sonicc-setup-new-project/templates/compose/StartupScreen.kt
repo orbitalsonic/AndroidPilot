@@ -1,5 +1,6 @@
-package YOUR.PACKAGE.feature.entrance
+package YOUR.PACKAGE.feature.startup
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.CircularProgressIndicator
@@ -9,18 +10,25 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import YOUR.PACKAGE.core.ui.theme.AppTheme
 
-const val ENTRANCE_ROUTE = "entrance"
+const val STARTUP_ROUTE = "startup"
 
+/**
+ * Start destination of StartupNavGraph (StartupActivity). Init + routing only — see 29-screen-startup.
+ * Sibling routes added by sonicc-create-mvi: STARTUP_LANGUAGE_ROUTE, STARTUP_PREMIUM_ROUTE ("startup_premium/{isFirstTime}"),
+ * STARTUP_INTRO_ROUTE, STARTUP_WELCOME_BACK_ROUTE.
+ */
 @Composable
-fun EntranceScreen(
+fun StartupScreen(
     modifier: Modifier = Modifier,
     navigateToNext: () -> Unit,
+    navigateToMain: () -> Unit,
 ) {
-    EntranceScreenContent(modifier = modifier)
+    BackHandler { /* startup funnel: back blocked */ }
+    StartupScreenContent(modifier = modifier)
 }
 
 @Composable
-private fun EntranceScreenContent(
+private fun StartupScreenContent(
     modifier: Modifier = Modifier,
 ) {
     Box(
@@ -33,8 +41,8 @@ private fun EntranceScreenContent(
 
 @Preview(showBackground = true)
 @Composable
-private fun EntranceScreenPreview() {
+private fun StartupScreenPreview() {
     AppTheme {
-        EntranceScreenContent()
+        StartupScreenContent()
     }
 }

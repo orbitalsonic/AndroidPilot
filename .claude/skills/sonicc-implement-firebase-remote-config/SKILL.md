@@ -1,6 +1,6 @@
 ---
 name: sonicc-implement-firebase-remote-config
-description: OrbitalSonic Claude Skill: First-time Firebase Remote Config with SharedPreferences cache, FetchRemoteConfigUseCase, and EntranceFragment / EntranceScreen fetch. Use when adding the RC stack for the first time, fetchAndActivate, or /sonicc-implement-firebase-remote-config — not for extra keys on an existing cache (use sonicc-add-firebase-remote-config) and not for analytics events.
+description: OrbitalSonic Claude Skill: First-time Firebase Remote Config with SharedPreferences cache, FetchRemoteConfigUseCase, and StartupFragment / StartupScreen fetch. Use when adding the RC stack for the first time, fetchAndActivate, or /sonicc-implement-firebase-remote-config — not for extra keys on an existing cache (use sonicc-add-firebase-remote-config) and not for analytics events.
 ---
 
 # Implement Firebase Remote Config (first time)
@@ -19,16 +19,16 @@ Complete RC stack (Speak-Translate DataSource + cache-to-prefs):
 1. Fetch/activate (`minimumFetchIntervalInSeconds(0)`)
 2. Cache every needed key into `SharedPrefManager`
 3. Runtime reads from **prefs cache**, never RC SDK in Fragments / Screens
-4. Invoke from **EntranceFragment** (xml) or **EntranceScreen** (compose) (non-blocking)
+4. Invoke from **StartupFragment** (xml) or **StartupScreen** (compose) (non-blocking)
 
 ## Entry
 
 | App state                                                            | Action                                                                                                             |
 |----------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------|
-| DataSource + Repository + prefs cache + Entrance fetch already wired | Stop. Report what exists. New keys → **`sonicc-add-firebase-remote-config`**.                                             |
+| DataSource + Repository + prefs cache + Startup fetch already wired | Stop. Report what exists. New keys → **`sonicc-add-firebase-remote-config`**.                                             |
 | Stubs from `sonicc-setup-new-project`                                       | Complete missing pieces only.                                                                                      |
 | No RC                                                                | Continue.                                                                                                          |
-| Legacy helper (`RemoteConfiguration` in Application)                 | Do **not** rewrite unless the user approves. Offer to add cache + Entrance fetch into the existing helper instead. |
+| Legacy helper (`RemoteConfiguration` in Application)                 | Do **not** rewrite unless the user approves. Offer to add cache + Startup fetch into the existing helper instead. |
 
 Single-module: same class names, existing packages. Do **not** create `:data` / `:domain` modules without approval.
 
@@ -113,7 +113,7 @@ Logs: `TAG_REMOTE_CONFIG`, `ClassName: functionName: State: details`.
 
 ## Step 4 — DI (cold-start → eager `module`)
 
-RC + SharedPref are fetched from Entrance — use **`module`** on the eager list (`07`).
+RC + SharedPref are fetched from Startup — use **`module`** on the eager list (`07`).
 
 ```kotlin
 val dataModule = module {
@@ -135,25 +135,25 @@ Register on the **eager** composition-root list. Presentation must not depend on
 
 ---
 
-## Step 5 — EntranceFragment / EntranceScreen
+## Step 5 — StartupFragment / StartupScreen
 
 After Koin is ready (same place as billing init if present):
 
 ```kotlin
-viewModel.handleIntent(EntranceIntent.FetchRemoteConfig)
+viewModel.handleIntent(StartupIntent.FetchRemoteConfig)
 ```
 
 ViewModel:
 
 ```kotlin
-is EntranceIntent.FetchRemoteConfig -> fetchRemoteConfigUseCase()
+is StartupIntent.FetchRemoteConfig -> fetchRemoteConfigUseCase()
 ```
 
 No `FetchRemoteConfig` start/success ViewModel logs (repository already logs).
 
-Without Entrance ads, navigate when this use case returns or after **5 seconds** (`sonicc-setup-new-project`). When `sonicc-implement-admob-ads` wires Entrance ads, still start this use case, ignore its result, and navigate only after consent (8s) → AdMob init → ad calls (8s).
+Without Startup ads, navigate when this use case returns or after **5 seconds** (`sonicc-setup-new-project`). When `sonicc-implement-admob-ads` wires Startup ads, still start this use case, ignore its result, and navigate only after consent (8s) → AdMob init → ad calls (8s).
 
-If there is no `EntranceFragment` / `EntranceScreen`: **AskUserQuestion** for the host (prefer `nav_graph` / `NavGraph` startDestination). Do not fetch only from `Application` unless the user says so.
+If there is no `StartupFragment` / `StartupScreen`: **AskUserQuestion** for the host (prefer the `StartupActivity` start destination — `nav_graph_startup` / `StartupNavGraph`). Do not fetch only from `Application` unless the user says so.
 
 ---
 
@@ -166,7 +166,7 @@ If there is no `EntranceFragment` / `EntranceScreen`: **AskUserQuestion** for th
 - [ ] `saveValues()` writes every confirmed key to `SharedPrefManager` when activate succeeds
 - [ ] Features read cache via `SharedPrefRepository` / manager — not RC SDK in UI
 - [ ] `FetchRemoteConfigUseCase` in `:domain`; repository interface in `:domain`
-- [ ] Entrance (or agreed host) calls the UseCase
+- [ ] Startup (or agreed host) calls the UseCase
 - [ ] `InternetManager` check before fetch
 - [ ] Eager `module` for RC/prefs (cold-start); not deferred-only `lazyModule`
 - [ ] Unit test `FetchRemoteConfigUseCase` with fake repo if `writeTestsWithFeatures: true`

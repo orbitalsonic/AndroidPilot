@@ -63,7 +63,7 @@ core-* (only if required)
 ## DI (`module` if cold-start; else `lazyModule`)
 
 ```kotlin
-// Used at Entrance / MainActivity → module { } on eager list
+// Used at Startup / MainActivity → module { } on eager list
 // Feature-only → lazyModule { } on lazy list
 val useCaseModule = module {
 
@@ -81,7 +81,7 @@ val dataModule = module {
 }
 ```
 
-Register **all** new modules/vals in app composition root (`KoinModules` — eager or lazy list per `07`). Use `//// Section` headers. If anything is used from **Entrance / Splash / MainActivity** cold start, the full ctor chain must be on the **eager** list (`23`, `sonicg-review-architecture`).
+Register **all** new modules/vals in app composition root (`KoinModules` — eager or lazy list per `07`). Use `//// Section` headers. If anything is used from **Startup / Splash / MainActivity** cold start, the full ctor chain must be on the **eager** list (`23`, `sonicg-review-architecture`).
 
 ## Errors & logging
 

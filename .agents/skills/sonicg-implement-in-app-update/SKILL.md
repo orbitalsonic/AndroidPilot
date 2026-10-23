@@ -13,7 +13,7 @@ Follow `.agents/rules/08-gradle.md`, `09-resources-xml.md`, `13-libraries-stack.
 Wire Play In-App Updates:
 
 - Manager in **`:core-ui`**
-- Host in **`:presentation`** (Dashboard or post-Entrance main screen)
+- Host in **`:presentation`** (`MainActivity.onCreated()` or the Home tab — never inside `StartupActivity`)
 - Optional type from **RC → SharedPref cache**
 - No hardcoded snackbar copy; logs use `Constants.TAG` format
 
@@ -77,7 +77,7 @@ No hardcoded English in the manager.
 
 ## Step 4 — Host wiring (presentation)
 
-Prefer: **Dashboard** `onViewCreated`, or after **Entrance → main**. Once per session (`isChecked` inside manager).
+Prefer: **`MainActivity.onCreated()`** (after `StartupActivity.moveToMain()`), or the Home tab `onViewCreated`. Once per session (`isChecked` inside manager).
 
 ### MVI-friendly (preferred)
 

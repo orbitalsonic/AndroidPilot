@@ -53,6 +53,6 @@ Pass / Pass with notes / Fail
 (reference remaining Fix list numbers)
 ```
 
-**Fail** if any skill reports a **Critical** finding (module boundary break, Main-thread ANR risk, leaked secret, unsafe exported component, missing `:app` release `optimization { enable = true }`, library wrongly enabling minify/shrink, clear size-critical asset issues, **cold-start missing Koin definition** for App/MainActivity/Entrance/Splash inject graph).
+**Fail** if any skill reports a **Critical** finding (module boundary break, Main-thread ANR risk, leaked secret, unsafe exported component, missing `:app` release `optimization { enable = true }`, library wrongly enabling minify/shrink, clear size-critical asset issues, **cold-start missing Koin definition** for App/MainActivity/Startup/Splash inject graph).
 
 After the report: **do not fix yet** — ask which numbers to fix per `fix-selection.md` (e.g. user replies `fix 1, 2, 4, 7`).

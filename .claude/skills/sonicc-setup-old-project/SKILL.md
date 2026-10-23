@@ -57,7 +57,8 @@ Make the minimum necessary changes to achieve the architecture defined by `sonic
 | Versions       | Latest stable catalog                                    | Keep existing library versions unless a bump is required for the architecture                                           |
 | Firebase / FCM | Add deps; no MessagingService                            | Relocate existing Firebase; **keep** an existing `FirebaseMessagingService` / push UI if present                        |
 | Ads            | Always place `:gmaAds` from GitHub; ask implement yes/no | Keep existing ads if present (no blind overwrite); if none, place `:gmaAds` like new; **not** MVI unless user asks      |
-| Entrance       | New start destination                                    | Insert `EntranceFragment` as start, then route to the **previous** start screen so the user-visible flow stays the same |
+| Startup       | New `StartupActivity` + `StartupFragment`               | Old `SplashActivity` becomes `StartupActivity` (launcher) with `StartupFragment` as start; it routes to the **previous** first screen and hands off to `MainActivity` so the user-visible flow stays the same |
+| Activities     | Exactly `StartupActivity` + `MainActivity`               | Old `SettingsActivity` / `PremiumActivity` / `LanguageActivity` become Fragments in `nav_graph_main`; old startup-only Language / Premium screens become `Startup*` twins in `nav_graph_startup` (`30`, `33`) |
 
 Execute every `sonicc-setup-new-project` step as **migration**: if the slot already exists (prefs helper, API client, Room DB, analytics wrapper), move it into the target module/layer. Create a template file only when that piece is missing.
 
@@ -175,18 +176,18 @@ Preserve layouts / composables, click behavior, copy, and back-stack meaning.
 
 **xml:**
 
-1. `MainActivity` in `:presentation` extends `ParentActivity`; host `fcvContainerMain` + `NavHostFragment` + `@navigation/nav_graph`.
+1. Two Activities from `sonicc-setup-new-project` [templates/startup/](../sonicc-setup-new-project/templates/startup/README.md): `StartupActivity` (launcher, splash, `fcvContainerStartup` + `nav_graph_startup`, back blocked, `moveToMain()`) and `MainActivity` (`fcvContainerMain` + `nav_graph_main`, BNV + banner slot when the app has tabs). Both extend `ParentActivity` (`InsetsMode`). Old `SplashActivity` → `StartupActivity`; old per-feature Activities (Settings / Premium / Language) → Fragments in `nav_graph_main` (`23-app-startup`).
 2. Map each feature Activity (or MVC screen) to a Fragment + MVI via **`sonicc-create-mvi`** patterns: move existing UI logic into Intent / State / Effect / ViewModel **without changing what the user sees**. Reuse the same XML (View Binding). See [migration.md](migration.md).
-3. Activity-per-screen → single-activity `nav_graph`. Same destinations and back behavior.
-4. **`app:startDestination="@id/entranceFragment"`** is mandatory. Implement `EntranceFragment` so it routes to whatever was the previous first screen (splash / language / onboarding / home). Do not insert a new user-facing splash unless the app already had one.
+3. Activity-per-screen → Fragments in `nav_graph_main` (same destinations and back behavior). Screens the user saw **before** the app proper (splash, first-time language, intro, startup paywall, returning-user menu) → `Startup*` Fragments in `nav_graph_startup`; their in-app counterparts (Settings → Language with Apply + search, in-app Premium) stay in `nav_graph_main` as separate `LanguageFragment` / `PremiumFragment` (`29`–`33`).
+4. **`nav_graph_startup` `app:startDestination="@id/startupFragment"`** is mandatory. Implement `StartupFragment` so it routes to whatever was the previous first screen (language / onboarding / `moveToMain()`). Do not insert a new user-facing splash unless the app already had one. Actions out of `startupFragment` are `popUpToInclusive`.
 5. Copy `anim/` + `anim-ldrtl/` slide_* into `:core-ui` if missing; every forward `<action>` gets the four anim attrs (`17-navigation`).
 6. Images: programmatic binds use `loadImage` (Glide / `ImageViewExtensions`).
 
 **compose:**
 
-1. `MainActivity` in `:app` `setContent { AppTheme { NavGraph() } }` — **never** `GlobalContext.get()`.
+1. `StartupActivity` (`installSplashScreen()`, `StartupNavGraph(onFinished)`) + `MainActivity` (`MainNavGraph()`) in `:app` from [templates/compose/](../sonicc-setup-new-project/templates/compose/README.md) — **never** `GlobalContext.get()`.
 2. One `:feature-<kebab>` per screen (`sonicc-create-mvi` Compose path). Keep existing composables; wrap in `*Screen` / `*ScreenContent`.
-3. Root `NavGraph.kt` in `:app`; `startDestination = ENTRANCE_ROUTE`. Entrance routes to the previous first screen.
+3. `StartupNavGraph.kt` (`STARTUP_ROUTE` start, funnel only) + `MainNavGraph.kt` (`HOME_ROUTE` start) in `:app` `navigation/`. Startup routes to the previous first screen, then `onFinished` → `MainActivity`.
 4. Slide transitions on the `NavHost`. Features never take `NavController`.
 5. Images: Coil `AsyncImage`.
 
@@ -218,9 +219,10 @@ Dispatchers: register **without** `named("io")` / `named("default")`.
 - [ ] No product behavior rewrite: same APIs, prefs keys, DB schema, analytics event names, ad unit IDs, locales
 - [ ] Ads: existing stack preserved **or** `:gmaAds` placed from GitHub; screens wired only if user said yes; not MVI unless explicitly requested
 - [ ] Existing FCM service / billing / third-party flows still present
-- [ ] Previous start screen still reachable from Entrance
+- [ ] Previous start screen still reachable from `StartupFragment`; `StartupActivity` → `MainActivity` hand-off works; only those two Activities host product screens
+- [ ] Startup twins (`StartupLanguageFragment` / `StartupPremiumFragment`) and in-app `LanguageFragment` / `PremiumFragment` are separate classes + layouts (`30`, `33`)
 - [ ] UI modules (`:presentation` or `:feature-*`) ↛ `:data`; DI uses `module`/`lazyModule` per `07`
-- [ ] Cold-start: Entrance (+ MainActivity injects if any) ViewModel ctor chain fully registered on the **eager** `KoinModules` list (`07`, `23`, `29`)
+- [ ] Cold-start: Startup (+ MainActivity injects if any) ViewModel ctor chain fully registered on the **eager** `KoinModules` list (`07`, `23`, `29`)
 - [ ] `assembleDebug` succeeds
 
 ## Do not

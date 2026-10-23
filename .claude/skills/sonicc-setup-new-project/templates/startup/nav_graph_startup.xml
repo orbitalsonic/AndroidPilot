@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph_startup"
+    app:startDestination="@id/startupFragment">
+
+    <!-- Every action leaving startupFragment pops it (never return to the splash). Add destinations as the product needs:
+         startupLanguageFragment / startupPremiumFragment (isFirstTime arg) / startupIntroFragment / startupWelcomeBackFragment -->
+    <fragment
+        android:id="@+id/startupFragment"
+        android:name="YOUR.PACKAGE.presentation.startup.ui.StartupFragment"
+        android:label="@string/app_name"
+        tools:layout="@layout/fragment_startup">
+        <!--
+        <action
+            android:id="@+id/action_startupFragment_to_startupLanguageFragment"
+            app:destination="@id/startupLanguageFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:popUpTo="@id/startupFragment"
+            app:popUpToInclusive="true" />
+        -->
+    </fragment>
+
+</navigation>

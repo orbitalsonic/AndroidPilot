@@ -41,7 +41,7 @@ On Windows PowerShell, use `.\gradlew.bat` equivalents.
 
 On an emulator (or device) matching minSdk / target as practical:
 
-- [ ] Cold start → Entrance (or start destination) loads
+- [ ] Cold start → Startup (or start destination) loads
 - [ ] Primary nav path(s) reachable without crash
 - [ ] Orientation: rotate if `orientation` is `both` or `landscape`
 - [ ] Theme: day/night if `themeModes` includes both

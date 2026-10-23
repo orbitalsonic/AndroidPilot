@@ -25,17 +25,19 @@ paths:
 
 Inside `<application>`, declare in this order:
 
-1. Launcher `MainActivity` first
-2. Other activities (if any)
+1. Launcher `StartupActivity` first (splash theme)
+2. `MainActivity`, then other activities (if any — product screens are Fragments, not Activities)
 3. Services
 4. Broadcast receivers
 5. `meta-data`
 
 ## Activities
 
-- Prefer single-Activity architecture with Navigation Component
-- Launcher Activity: `exported="true"` + MAIN/LAUNCHER intent-filter; theme `@style/Theme.App.Starting` (splash)
-- All other Activities: `exported="false"`
+- **Two Activities** with Navigation Component (`23-app-startup`): `StartupActivity` (funnel) + `MainActivity` (app)
+- `StartupActivity`: `exported="true"` + MAIN/LAUNCHER intent-filter; theme `@style/Theme.App.Starting` (splash)
+- `MainActivity`: `exported="false"`, `android:launchMode="singleTask"`, product theme (or inherit from `<application>`)
+- All other Activities (library `AdActivity`, loading activities): `exported="false"` unless the library requires otherwise
+- Do **not** add `SettingsActivity` / `PremiumActivity` / `LanguageActivity` — those are Fragments in `nav_graph_main`
 - **Never leave `exported` unspecified** when intent-filters exist
 - Support **portrait and landscape** — do not set `android:screenOrientation="portrait"` (or landscape-only) unless product explicitly requires it
 
@@ -63,7 +65,7 @@ Inside `<application>`, declare in this order:
 ## Themes
 
 - Splash: create `:core-ui` `res/values/splash.xml` with `Theme.App.Starting` (`Theme.SplashScreen`)
-- Apply `@style/Theme.App.Starting` on the **launcher Activity only**
+- Apply `@style/Theme.App.Starting` on **`StartupActivity` only** (launcher)
 - Application tag uses main product theme (`Theme.App` / product name)
 - `postSplashScreenTheme` → main Material3 DayNight theme (defined in `themes.xml`)
 - See `23-app-startup` for full splash wiring
@@ -80,6 +82,6 @@ Inside `<application>`, declare in this order:
 
 ## Intent filters (extra)
 
-- Launcher: `MAIN` + `LAUNCHER` only on MainActivity.
+- Launcher: `MAIN` + `LAUNCHER` only on `StartupActivity`.
 - Receivers: whitelist only needed system actions.
 - Custom actions must be namespaced with applicationId / package.

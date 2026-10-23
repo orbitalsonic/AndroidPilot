@@ -79,7 +79,7 @@ sonicg-build-release-bundle       Release signing + AAB (no device)
 sonicg-implement-in-app-update    Play In-App Updates
 sonicg-implement-in-app-review    Play In-App Review
 sonicg-implement-firebase-messaging      firebase-messaging dep (:core-platform) only
-sonicg-implement-firebase-remote-config  First-time RC + SharedPref cache + Entrance fetch
+sonicg-implement-firebase-remote-config  First-time RC + SharedPref cache + StartupFragment fetch
 sonicg-add-firebase-remote-config        Add RC keys to existing SharedPref + Remote Config classes
 sonicg-implement-firebase-events         First-time full-app Analytics (screen_view + ui_click)
 sonicg-add-firebase-events               Add Analytics events for selected screens
@@ -120,12 +120,12 @@ Data patterns (Retrofit, Room, SharedPreferences) live in **rules** + [`.agents/
 | `08`–`10`              | Gradle (`08` → `reference/gradle.md`: section order, signingConfigs, bundle, `base`, R8 `optimization` / `keepRules`), resources/XML, manifest (`09` → `reference/`) |
 | `11`–`13`              | Testing, naming, libraries                                                                                                                                           |
 | `14`–`16`              | Security (always), compatibility, logging (always)                                                                                                                   |
-| `17`–`20`              | Nav (dual graphs / `navigateRootTo`), errors, base UI (`19` → `reference/`), permissions                                                                             |
+| `17`–`20`              | Nav (`nav_graph_startup` + `nav_graph_main`, optional nested dashboard / `navigateRootTo`), errors, base UI (`19` → `reference/`: `InsetsMode` edge-to-edge), permissions |
 | `21`–`25`              | Ads/billing (**ads are not MVI** — `:gmaAds` from GitHub; see `sonicg-implement-admob-ads` / `sonicg-add-admob-*` + `reference/ads-gma.md`), Firebase, startup, Figma assets, in-app update |
 | `26-data-persistence`  | Retrofit / Room / SharedPreferences (`:core-network` / `:core-database` when added)                                                                                  |
 | `27-in-app-review`     | Play In-App Review placement (`InAppReviewManager`)                                                                                                                  |
 | `28-compose-ui`        | Compose feature modules / Screen-Content / NavGraph (`uiFramework` compose) — [reference/compose-ui.md](rules/reference/compose-ui.md)                               |
-| `29`–`33`              | Screen rules: Entrance, Language, Onboarding, Dashboard, Premium (paywall sticky footer + 3s close)                                                                  |
+| `29`–`33`              | Screen rules: Startup funnel (`StartupActivity`, `Startup*` screens), Language (startup vs in-app), Onboarding (`StartupIntroFragment`), MainActivity shell / bottom nav, Premium (startup vs in-app, sticky footer + 3s close) |
 
 ### `rules/reference/` (full detail)
 

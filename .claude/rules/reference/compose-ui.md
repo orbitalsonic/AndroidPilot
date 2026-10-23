@@ -9,13 +9,15 @@ MVI ViewModel law is unchanged — see `04-mvi-presentation` + [mvi-presentation
 ## Modules
 
 ```
-app                 Application, KoinModules, MainActivity, navigation/NavGraph.kt
+app                 Application, KoinModules, StartupActivity + MainActivity, navigation/StartupNavGraph.kt + MainNavGraph.kt
 domain              Entities, repository interfaces, UseCases
 data                Repository impls, DataSources
 core-common         Constants, EventsProvider
 core-ui             strings.xml, colors/themes (XML), drawables, fonts, splash; compose: core/ui/theme/ Color.kt, Type.kt, AppTheme
 core-platform       Firebase, InternetManager, dispatchers
-feature-entrance    Start destination (template invariant — not Splash)
+feature-startup     StartupActivity funnel: StartupScreen (start), StartupLanguageScreen, StartupPremiumScreen, StartupIntroScreen, StartupWelcomeBackScreen (`29`)
+feature-language    In-app LanguageScreen (Apply + search) — separate from StartupLanguageScreen (`30`)
+feature-premium     In-app PremiumScreen — separate from StartupPremiumScreen (`33`)
 feature-<name>      One screen cluster per module
 ```
 
@@ -30,7 +32,7 @@ feature-<name>      One screen cluster per module
 ```
 feature-home/src/main/java/…/feature/home/
   HomeScreen.kt                 # HOME_ROUTE + HomeScreen + HomeScreenContent + items/previews
-  di/HomeFeatureModule.kt       # lazyModule { … } for secondary features; module { … } if Entrance/cold-start
+  di/HomeFeatureModule.kt       # lazyModule { … } for secondary features; module { … } if Startup/cold-start
   intent/HomeIntent.kt
   state/HomeState.kt
   effect/HomeEffect.kt
@@ -38,7 +40,7 @@ feature-home/src/main/java/…/feature/home/
   components/                   # optional shared items / dialogs / sheets
 ```
 
-DI val name: `homeFeatureModule` (feature + `FeatureModule`). Register in `:app` `KoinModules` — Entrance on **eager** list; other features on **lazy** list (`07`).
+DI val name: `homeFeatureModule` (feature + `FeatureModule`). Register in `:app` `KoinModules` — Startup on **eager** list; other features on **lazy** list (`07`).
 
 ## Naming
 
@@ -97,30 +99,78 @@ private fun HomeScreenContent(
 - No `NavController` / `LocalContext` navigation in the feature — callbacks only
 - ViewModel stays project MVI: `handleIntent` + `suspend onX()` + `handleError` last (`04`)
 
-## Root NavGraph (`:app`)
+## Two NavGraphs (`:app`) — one per Activity
+
+Same two-Activity split as XML (`23-app-startup`, `29-screen-startup`): `StartupActivity` hosts `StartupNavGraph` (funnel, `STARTUP_ROUTE` start), `MainActivity` hosts `MainNavGraph` (`HOME_ROUTE` start). Leaving the funnel is `onFinished` → `startActivity(MainActivity)` + `finish()` in `StartupActivity`, never a route into Home.
 
 ```kotlin
 @Composable
-fun NavGraph(modifier: Modifier = Modifier) {
+fun StartupNavGraph(
+    modifier: Modifier = Modifier,
+    onFinished: () -> Unit,
+) {
     val navController = rememberNavController()
     NavHost(
         navController = navController,
-        startDestination = ENTRANCE_ROUTE,
+        startDestination = STARTUP_ROUTE,
         modifier = modifier.fillMaxSize(),
         enterTransition = { slideInHorizontally { it } },
         exitTransition = { slideOutHorizontally { -it } },
         popEnterTransition = { slideInHorizontally { -it } },
         popExitTransition = { slideOutHorizontally { it } },
     ) {
-        composable(ENTRANCE_ROUTE) {
-            EntranceScreen(
-                navigateToHome = {
-                    navController.navigate(HOME_ROUTE) {
-                        popUpTo(ENTRANCE_ROUTE) { inclusive = true }
+        composable(STARTUP_ROUTE) {
+            StartupScreen(
+                navigateToLanguage = {
+                    navController.navigate(STARTUP_LANGUAGE_ROUTE) {
+                        popUpTo(STARTUP_ROUTE) { inclusive = true }
                     }
                 },
+                navigateToWelcomeBack = {
+                    navController.navigate(STARTUP_WELCOME_BACK_ROUTE) {
+                        popUpTo(STARTUP_ROUTE) { inclusive = true }
+                    }
+                },
+                navigateToMain = onFinished,
             )
         }
+        composable(STARTUP_LANGUAGE_ROUTE) {
+            StartupLanguageScreen(
+                navigateToPremium = { navController.navigate(createRouteStartupPremium(isFirstTime = true)) },
+                navigateToIntro = { navController.navigate(STARTUP_INTRO_ROUTE) },
+            )
+        }
+        composable(
+            route = STARTUP_PREMIUM_ROUTE,
+            arguments = listOf(navArgument("isFirstTime") { type = NavType.BoolType }),
+        ) {
+            StartupPremiumScreen(
+                navigateToIntro = { navController.navigate(STARTUP_INTRO_ROUTE) },
+                navigateToMain = onFinished,
+            )
+        }
+        composable(STARTUP_INTRO_ROUTE) { StartupIntroScreen(navigateToMain = onFinished) }
+        composable(STARTUP_WELCOME_BACK_ROUTE) {
+            StartupWelcomeBackScreen(
+                navigateToPremium = { navController.navigate(createRouteStartupPremium(isFirstTime = false)) },
+                navigateToMain = onFinished,
+            )
+        }
+    }
+}
+
+@Composable
+fun MainNavGraph(modifier: Modifier = Modifier) {
+    val navController = rememberNavController()
+    NavHost(
+        navController = navController,
+        startDestination = HOME_ROUTE,
+        modifier = modifier.fillMaxSize(),
+        enterTransition = { slideInHorizontally { it } },
+        exitTransition = { slideOutHorizontally { -it } },
+        popEnterTransition = { slideInHorizontally { -it } },
+        popExitTransition = { slideOutHorizontally { it } },
+    ) {
         composable(HOME_ROUTE) {
             HomeScreen(onNavigateToDetail = { navController.navigate(createRouteDetail(it)) })
         }
@@ -137,25 +187,45 @@ fun NavGraph(modifier: Modifier = Modifier) {
 }
 ```
 
-- Start destination is **Entrance** (`ENTRANCE_ROUTE`) — same product invariant as XML `entranceFragment`
+- `StartupNavGraph` start is `STARTUP_ROUTE` (same invariant as XML `startupFragment`); `MainNavGraph` start is `HOME_ROUTE`. In-app `LANGUAGE_ROUTE` / `PREMIUM_ROUTE` / settings / details live in `MainNavGraph`; `BackHandler {}` on startup screens blocks back
 - Slide transitions match XML `slide_in_right` / `slide_out_left` semantics
 - Nested `NavHost` for bottom tabs (AnimeHub dashboard): `popUpTo(start) { saveState = true }`, `launchSingleTop`, `restoreState`
 
-## MainActivity (`:app`)
+## StartupActivity + MainActivity (`:app`)
 
 ```kotlin
+class StartupActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        installSplashScreen()
+        super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
+        setContent {
+            AppTheme {
+                StartupNavGraph(
+                    onFinished = {
+                        startActivity(Intent(this, MainActivity::class.java))
+                        finish()
+                    },
+                )
+            }
+        }
+    }
+}
+
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             AppTheme {
-                NavGraph()
+                MainNavGraph()
             }
         }
     }
 }
 ```
+
+- `StartupActivity` is the launcher (`Theme.App.Starting`); `MainActivity` is `exported="false"`, `singleTask` (`10-manifest`)
 
 - **Never** `GlobalContext.get()` for theme/prefs — `koinInject()` inside a composable, or a small wrapper that collects a Flow
 - Theme / DynamicColors still applied after `startKoin` in `Application` (`07`, `23`)

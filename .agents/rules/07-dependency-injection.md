@@ -21,16 +21,16 @@ paths:
 - Ads DI keeps existing managers / ad ViewModels (not MVI Intent/State/Effect) unless the user explicitly asks (`21-ads-billing`)
 - Register every new module in the composition root (eager or lazy list); bind `single<XRepository> { XRepositoryImpl(get()) }`
 - Dispatchers: `single { Dispatchers.IO }` / `Dispatchers.Default` — no `named("io")` unless true parallel instances (e.g. ad placements)
-- **Cold-start / first screens:** `App` + `MainActivity` (if injects) + start destination (**Entrance** / legacy **Splash**) — every type in the ViewModel constructor chain must have a binding in an **eager** `module` listed in `KoinModules` / `modules(...)`. Incomplete graph → release crash (`No definition found`)
+- **Cold-start / first screens:** `App` + `StartupActivity` / `MainActivity` (if they inject) + `StartupFragment` (legacy **Splash**) — every type in the ViewModel constructor chain must have a binding in an **eager** `module` listed in `KoinModules` / `modules(...)`. Incomplete graph → release crash (`No definition found`)
 
 ## `module` vs `lazyModule`
 
 | | **`module` + `modules(...)`** | **`lazyModule` + `lazyModules(...)`** |
 |--|-------------------------------|----------------------------------------|
 | When | Cold-start / first frame | Deferred screens, ads, optional heavy graphs |
-| Typical | `appModule`, `core*`, `dataModule`, `useCaseModule`, Entrance | Secondary `*PresentationModule` / `*FeatureModule`, `gmaAds*`, paywall UI |
+| Typical | `appModule`, `core*`, `dataModule`, `useCaseModule`, `startupPresentationModule` (all `Startup*` VMs), Home-tab VM chain | Secondary `*PresentationModule` / `*FeatureModule`, `gmaAds*`, paywall UI |
 | Ready | When `startKoin` returns | After lazy load — use `runOnKoinStarted` if resolving early |
 
-**Rule of thumb:** Entrance / Splash / MainActivity needs it on first open → `module`. Later screen / ads / optional → `lazyModule`.
+**Rule of thumb:** `StartupActivity` funnel (`Startup*`), `MainActivity` injects, or the Home start tab needs it on first open → `module`. In-app Language / Premium / Settings, other tabs, ads, optional → `lazyModule`.
 
 Read [reference/dependency-injection.md](reference/dependency-injection.md) when adding or changing DI.

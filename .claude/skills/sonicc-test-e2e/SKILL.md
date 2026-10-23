@@ -19,7 +19,7 @@ Obey `.claude/project-settings.json` (`orientation`, `writeTestsWithFeatures`, `
 
 ## Workflow (mandatory)
 
-1. **Discover gaps** — missing critical user-visible flows (entrance → primary feature, paywall, permission UX)
+1. **Discover gaps** — missing critical user-visible flows (startup → primary feature, paywall, permission UX)
 2. **Write missing tests** — follow Scope/Rules below
 3. **Execute** (device required; Windows: `.\gradlew.bat`):
 
@@ -34,7 +34,7 @@ Obey `.claude/project-settings.json` (`orientation`, `writeTestsWithFeatures`, `
 
 ## Scope
 
-- Critical user-visible flows only (entrance → primary feature, paywall, permission deny/grant UX)
+- Critical user-visible flows only (startup → primary feature, paywall, permission deny/grant UX)
 - Prefer existing project `androidTest` stack — **do not** add Espresso/Compose/UI libs without approval. When `uiFramework` is `compose`, use Compose UI test artifacts already on the feature module (`11-testing`, `28-compose-ui`)
 
 ## Rules

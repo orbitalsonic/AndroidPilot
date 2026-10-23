@@ -8,26 +8,34 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import YOUR.PACKAGE.feature.entrance.ENTRANCE_ROUTE
-import YOUR.PACKAGE.feature.entrance.EntranceScreen
+import YOUR.PACKAGE.feature.startup.STARTUP_ROUTE
+import YOUR.PACKAGE.feature.startup.StartupScreen
 
+/**
+ * Hosted by StartupActivity. Funnel only: Startup → StartupLanguage → [StartupPremium] → StartupIntro,
+ * or Startup → [StartupWelcomeBack] → [StartupPremium] for returning users. `onFinished` moves to MainActivity.
+ */
 @Composable
-fun NavGraph(modifier: Modifier = Modifier) {
+fun StartupNavGraph(
+    modifier: Modifier = Modifier,
+    onFinished: () -> Unit,
+) {
     val navController = rememberNavController()
     NavHost(
         navController = navController,
-        startDestination = ENTRANCE_ROUTE,
+        startDestination = STARTUP_ROUTE,
         modifier = modifier.fillMaxSize(),
         enterTransition = { slideInHorizontally { it } },
         exitTransition = { slideOutHorizontally { -it } },
         popEnterTransition = { slideInHorizontally { -it } },
         popExitTransition = { slideOutHorizontally { it } },
     ) {
-        composable(route = ENTRANCE_ROUTE) {
-            EntranceScreen(
+        composable(route = STARTUP_ROUTE) {
+            StartupScreen(
                 navigateToNext = {
-                    // Wire first real destination in sonic-create-mvi; keep popUpTo Entrance inclusive.
+                    // sonicg-create-mvi wires STARTUP_LANGUAGE_ROUTE / STARTUP_WELCOME_BACK_ROUTE with popUpTo(STARTUP_ROUTE) { inclusive = true }
                 },
+                navigateToMain = onFinished,
             )
         }
     }

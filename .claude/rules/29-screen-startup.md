@@ -1,0 +1,81 @@
+---
+description: StartupActivity funnel — StartupFragment init/routing, Startup* screens, hand-off to MainActivity
+paths:
+  - "**/startup/**"
+  - "**/Startup*"
+  - "**/GetStartupDestination*"
+  - "**/nav_graph_startup.xml"
+---
+
+# Startup funnel (`StartupActivity`)
+
+The app is split into **two Activities** (reference: QiblaCompass):
+
+| Activity | Hosts | Role |
+|----------|-------|------|
+| `StartupActivity` | `fcvContainerStartup` + `nav_graph_startup.xml` | Launcher + splash theme. Everything the user sees **before** the app proper: init, first-time funnel, returning-user screens. Finishes itself after `moveToMain()` |
+| `MainActivity` | `fcvContainerMain` + `nav_graph_main.xml` | Home / features / bottom nav + in-app Language, Premium, Settings, Exit (`32-screen-dashboard`) |
+
+Every screen inside `StartupActivity` is prefixed **`Startup`** (class, layout, nav id, ViewModel, MVI types):
+
+| Screen | Class | Layout | Role |
+|--------|-------|--------|------|
+| Startup | `StartupFragment` | `fragment_startup.xml` | **Start destination.** Lottie/logo + progress. Remote Config fetch, consent, billing restore, ad preload, then routing |
+| Language (first-time) | `StartupLanguageFragment` | `fragment_startup_language.xml` | List + **Next / Continue** in the toolbar. **No back, no search** (`30-screen-language`) |
+| Premium (startup) | `StartupPremiumFragment` | `fragment_startup_premium.xml` | Paywall with `isFirstTime` nav arg (`33-screen-premium`) |
+| Onboarding | `StartupIntroFragment` | `fragment_startup_intro.xml` | ViewPager2 + dots; last page → `MainActivity` (`31-screen-onboarding`) |
+| Returning user | `StartupWelcomeBackFragment` | `fragment_startup_welcome_back.xml` | Native ad + **Home** button — shown only on the second launch and later, never on the first run (replaces the old “Welcome Back” naming) |
+
+Package: `presentation/startup/{di,intent,state,effect,viewModel,ui}` (+ `startup/onboarding/` for the intro pager pieces). Compose: `:feature-startup` with `StartupScreen`, `StartupLanguageScreen`, `StartupPremiumScreen`, `StartupIntroScreen`, `StartupWelcomeBackScreen` and a `StartupNavGraph` inside `StartupActivity` (`28-compose-ui`).
+
+Ads stay on `:gmaAds` extensions — **not** MVI (`21-ads-billing`). The `:gmaAds` catalog key for this screen is still `ENTRANCE` (library naming) — the screen is `StartupFragment`.
+
+## Flow (prefs)
+
+Use SharedPref / domain UseCase (demo names):
+
+| Pref | Meaning |
+|------|---------|
+| `isFirstTime` | Cleared when onboarding (`StartupIntroFragment`) completes |
+| `isLanguageCompleted` | First-time language done |
+| `isOnBoardingCompleted` | Onboarding done |
+
+Routing from `StartupFragment` (adjust for marketing — see [reference/app-flow.md](reference/app-flow.md)):
+
+1. `isAppPurchased` and returning (`!isFirstTime`) → **`MainActivity`** now (skip Startup Welcome Back and Startup Premium; cancel ads)
+2. Returning user (`!isFirstTime`) → `StartupWelcomeBackFragment` when its native is loaded, else → `StartupPremiumFragment(isFirstTime = false)` when `showPremiumSecondTime` RC allows and offers exist, else → `MainActivity`
+3. Else if language incomplete → `StartupLanguageFragment`
+4. Else → `StartupIntroFragment`
+
+`StartupLanguageFragment` Continue → `StartupPremiumFragment(isFirstTime = true)` when `showPremiumFirstTime` RC allows and offers exist, else → `StartupIntroFragment`.  
+`StartupPremiumFragment` close → `isFirstTime ? StartupIntroFragment : MainActivity`.  
+`StartupWelcomeBackFragment` Home → Startup Premium (second-time RC) or `MainActivity`.
+
+Implement via `GetStartupDestinationUseCase` (or equivalent) — heavy logic not in the Fragment.
+
+## Nav graph rules (`nav_graph_startup.xml`)
+
+- `app:startDestination="@id/startupFragment"`
+- Actions **out of** `startupFragment` use `popUpTo="@id/startupFragment"` + `popUpToInclusive="true"` (never return to the splash)
+- Leaving the funnel = `(activity as? StartupActivity)?.moveToMain()` → `startActivity(MainActivity)` + `finish()`. Never navigate to Home destinations from the startup graph
+- Back press is **blocked** on every startup destination (`StartupActivity` registers an empty `onBackPressedDispatcher { }`)
+- Per-destination host background (premium vs surface) via `addOnDestinationChangedListener` in `StartupActivity` when designs differ
+
+## UI / VM
+
+- Helper: `screenStarted()` → `launchWhenResumed { handleIntent(ScreenStarted) }` when work must wait for resume
+- Wait for Koin if resolving deps at cold start (`23-app-startup`)
+- **DI (mandatory):** every `Startup*ViewModel` + `GetStartupDestinationUseCase` (and every ctor dep — prefs/RC/consent/ads/billing helpers used here) registered via **eager `module`** (`startupPresentationModule` / `startupFeatureModule` + domain `useCaseModule` / data bindings) and included in the composition-root **eager** list. Never add a Startup dependency without a Koin definition on the cold-start path (`07`, `sonicc-review-architecture` cold-start check)
+- `StartupActivity`: `initSplashScreen()` → `installSplashScreen()`; insets default `InsetsMode.TOP_BOTTOM` (`19-base-ui`) — override `getInsetsMode()` only when the design needs `EDGE_TO_EDGE`
+- Remote Config fetch starts here (domain/data, not live RC in UI)
+- **No Startup ads:** navigate when Remote Config returns or after **5 seconds** (`sonicc-setup-new-project`)
+- **Startup ads wired:** ignore the Remote Config result. Then consent (8s) → AdMob init → ad calls (8s) → navigate. Do not navigate from Remote Config (`sonicc-implement-admob-ads`)
+- **Purchased (`isAppPurchased`):** cancel ads. First-time users still go to Startup Language / Startup Intro. Returning users go straight to `MainActivity` and skip Startup Welcome Back / Startup Premium
+
+## Forbidden
+
+- Creating missing Startup Language / Startup Intro screens only for ads
+- Navigating from ViewModel
+- Putting Home / feature destinations into `nav_graph_startup` (hand off to `MainActivity` instead)
+- Reusing the in-app `LanguageFragment` / `PremiumFragment` inside `StartupActivity` — the startup twins are separate classes + layouts (`30`, `33`)
+- Allowing back navigation to `startupFragment`

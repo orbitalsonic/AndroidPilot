@@ -4,6 +4,7 @@ Copy into the new app and replace `YOUR.PACKAGE` with the real applicationId roo
 
 | File                                           | Target module   | Target package                |
 |------------------------------------------------|-----------------|-------------------------------|
+| `InsetsMode.kt`                                | `:core-ui`      | `…core.ui.base.enums`         |
 | `ParentActivity.kt`                            | `:core-ui`      | `…core.ui.base.activity`      |
 | `ParentFragment.kt`                            | `:core-ui`      | `…core.ui.base.fragment`      |
 | `ParentDialogDismissal.kt` + `ParentDialog.kt` | `:core-ui`      | `…core.ui.base.dialog`        |
@@ -17,19 +18,26 @@ Copy into the new app and replace `YOUR.PACKAGE` with the real applicationId roo
 | `BasePermissionFragment.kt`                    | `:presentation` | `…presentation.base.fragment` |
 | `BaseDialog.kt` / `BaseSheet.kt`               | `:presentation` | `…presentation.base.sheets`   |
 
+Activities + nav graphs (`StartupActivity`, `MainActivity`, `activity_*.xml`, `nav_graph_*.xml`): [`../startup/`](../startup/README.md).
+
 Hierarchy (company template):
 
 ```
-core-ui:    ParentActivity / ParentFragment / ParentDialog* / ParentSheet*
+core-ui:    ParentActivity (InsetsMode) / ParentFragment / ParentDialog* / ParentSheet*
 presentation: BasePermissionFragment → BaseFragment → Feature
-              BaseActivity / BaseDialog / BaseSheet
+              BaseActivity → StartupActivity / MainActivity
+              BaseDialog / BaseSheet
 ```
 
 Notes:
+- `ParentActivity` edge-to-edge is driven by **`InsetsMode`** (`EDGE_TO_EDGE` / `TOP` / `BOTTOM` / `TOP_BOTTOM`, default `TOP_BOTTOM`) — override `getInsetsMode()` per Activity; no per-destination padding flags (reference: QiblaCompass)
+- `onCreate` order: `initSplashScreen()` → `super.onCreate` → `enableEdgeToEdge()` + `setContentView` + insets listener → `onCreated()` → `initObservers()`. Only `StartupActivity` overrides `initSplashScreen()` with `installSplashScreen()`
+- `ParentFragment` hooks: `onViewInflated()` (after inflate) → `initObservers()` → `onViewCreated(Bundle?)` → `onViewCreated()`
 - `ParentSheet` uses **null-safe** binding (avoid `!!` on binding)
 - Theme: apply after `startKoin` in Application; no `GlobalContext` probes (`07`, `23`)
 - `FragmentExtensions` collectors use **`viewLifecycleOwner`** (avoids duplicate collectors after navigate away / back)
 - Prefer `navigateTo` / `popFrom` / `navigateRootTo` over raw `findNavController()` calls
+- `ActivityExtensions.updateStatusBar(darkIcons)` — light/dark status-bar icons only (no `statusBarColor`); `onBackPressedDispatcher { }` for back handling
 - `ContextExtensions.showToast(String)` / `showToast(@StringRes)` — call as `context?.showToast(...)`
 - `ImageViewExtensions.loadImage(...)` — Glide for all programmatic image loads (`siv.loadImage(...)`)
 - Naming: `<Receiver>Extensions.kt` only — never a shared `FlowCollectionExtensions.kt` / `LifecycleFlowExtensions.kt`

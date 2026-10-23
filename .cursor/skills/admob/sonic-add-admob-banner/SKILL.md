@@ -37,7 +37,7 @@ bannerAdView.clearView()                      // onDestroyView — detach; keep 
 destroyBannerAd(BannerAdKey.YOURS)            // onDestroy when leaving for good
 ```
 
-8. No Entrance preload pattern. No `AdsManager` injection.
+8. No Startup preload pattern. No `AdsManager` injection.
 
 ## Remove
 

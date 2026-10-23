@@ -15,7 +15,7 @@ paths:
 
 | Kind | Rule | Example |
 |------|------|---------|
-| Classes | PascalCase + role suffix | `HomeFragment` (xml), `HomeScreen` (compose), `UserRepositoryImpl` |
+| Classes | PascalCase + role suffix | `HomeFragment` (xml), `HomeScreen` (compose), `UserRepositoryImpl`; startup funnel classes carry the `Startup` prefix (`StartupLanguageFragment`) |
 | Interfaces | No `I` prefix | `UserRepository` |
 | Implementations | `Impl` suffix | `UserRepositoryImpl` |
 | ViewModels | `*ViewModel` | `HomeViewModel` |
@@ -78,5 +78,9 @@ Feature folders: camelCase (`userProfile`, `onBoarding`). Compose Gradle modules
 | Entity (domain) | `User`, `GeoLocation` |
 | UI model | `UserUiItem` |
 | Mapper | `UserUiMapper.toUi(...)` — call from ViewModel; heavy data mapping in Repo/UseCase |
-| Base UI | xml: `ParentFragment`, `BaseFragment`, `ParentActivity`, `ParentDialog`, `ParentSheet`. compose: `*Screen` / `*ScreenContent` / `AppTheme` |
+| Base UI | xml: `ParentFragment`, `BaseFragment`, `ParentActivity` (+ `InsetsMode`), `ParentDialog`, `ParentSheet`. compose: `*Screen` / `*ScreenContent` / `AppTheme` |
+| Activities | Exactly `StartupActivity` (launcher, funnel) + `MainActivity` (app) — `23` |
+| Startup funnel screens | `Startup` prefix everywhere: `StartupFragment`, `StartupLanguageFragment`, `StartupPremiumFragment`, `StartupIntroFragment`, `StartupWelcomeBackFragment`; layouts `fragment_startup*.xml`; ids `startup*Fragment`; VMs `Startup*ViewModel` — `29` |
+| In-app twins | `LanguageFragment` / `PremiumFragment` (`fragment_language.xml` / `fragment_premium.xml`) in `MainActivity` — `30`, `33` |
+| Nav graphs | `nav_graph_startup.xml`, `nav_graph_main.xml` (+ optional `nav_graph_dashboard.xml`) — `17` |
 | DI modules | `dataModule` / `useCaseModule` / `*PresentationModule` (xml) / `*FeatureModule` (compose) — `module` (cold-start) or `lazyModule` (deferred) per `07` |

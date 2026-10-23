@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph_main"
+    app:startDestination="@id/homeFragment">
+
+    <!-- Global action used by MainActivity backpress when an Exit screen exists
+    <action
+        android:id="@+id/action_main_to_exitFragment"
+        app:destination="@id/exitFragment" />
+    -->
+
+    <!-- Tab destinations are top-level here; ids must match menu_bottom_nav_main item ids.
+         In-app languageFragment / premiumFragment / settingsFragment / details also live in this graph. -->
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="YOUR.PACKAGE.presentation.home.ui.HomeFragment"
+        android:label="@string/home"
+        tools:layout="@layout/fragment_home" />
+
+</navigation>

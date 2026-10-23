@@ -6,8 +6,8 @@ Full detail for `09-resources-xml.mdc`. Do not delete lines from this file — e
 
 | Prefix | Usage |
 |--------|-------|
-| `fragment_` | Screen layouts |
-| `activity_` | Activities |
+| `fragment_` | Screen layouts — startup funnel screens are `fragment_startup*.xml` (`fragment_startup_language.xml`), in-app twins plain (`fragment_language.xml`) |
+| `activity_` | `activity_startup.xml` + `activity_main.xml` only (`23`) |
 | `item_` | RecyclerView rows |
 | `dialog_` | Dialogs |
 | `bottom_sheet_` | Bottom sheets |
@@ -38,9 +38,12 @@ Do not put themes/strings/colors in `:app` or layouts in `:core-ui`.
 | `fcv` | FragmentContainerView |
 | `bnv` | BottomNavigationView |
 | `cpi` | CircularProgressIndicator |
+| `til` | TextInputLayout |
+| `tiet` | TextInputEditText |
+| `bav` | BannerAdView / ad containers (`bannerAdViewMain`) |
 | `lpi` | LinearProgressIndicator |
 
-Pattern: `{prefix}{Role}{Context}` → `mtvHeadingHome`, `sivLogoEntrance`, `mbContinueLogin`
+Pattern: `{prefix}{Role}{Context}` → `mtvHeadingHome`, `sivLogoStartup`, `mbContinueStartupLanguage`, `tietSearchLanguage`
 
 ## Drawable naming
 
@@ -142,7 +145,7 @@ When adding a string/color/style: put it in the correct section — do not appen
 | 1 | App | `app_name` |
 | 2 | General — Ads / Toast / Actions / Dialogs / Bottom sheets | `toast_*`, `action_*` |
 | 3 | **Content Descriptions** (dedicated) | `cd_*` |
-| 4 | Screen-wise UI | `<!-- Entrance -->`, `<!-- Home -->`, … |
+| 4 | Screen-wise UI | `<!-- Startup -->`, `<!-- Home -->`, … |
 
 Naming: `app_name`; `toast_*` / `action_*`; `cd_{what}`; `{screen}_title` / `{feature}_*`
 

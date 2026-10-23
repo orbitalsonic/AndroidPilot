@@ -47,7 +47,7 @@ If place does not compile because shipped catalog `isEnabled` lambdas reference 
 
 Scan the project (`uiFramework` from settings):
 
-- **xml:** Fragments / Activities that match ref roles (Entrance, Language, Onboarding, Menu, Dashboard, Home, Trending, Settings, Feature*, …)
+- **xml:** Fragments / Activities that match ref roles (`StartupFragment`, `StartupLanguageFragment`, `StartupIntroFragment`, `StartupWelcomeBackFragment`, `MainActivity` shell, Home, in-app `LanguageFragment` / `PremiumFragment`, Settings, Feature*, …)
 - **compose:** `*Screen` / nav destinations with the same roles
 
 For each found screen, detect **already-wired** formats (calls to `loadBannerAd` / `loadNativeAd` / `loadInterstitialAd` / `loadAppOpenAd` / rewarded*, `ConsentManager`, `blockAppOpen`, etc.).
@@ -56,7 +56,7 @@ Build a capability table from the ref strategy. Mark each candidate:
 
 | Screen | In project? | Already wired | Ref-recommended formats (still available) |
 |--------|-------------|---------------|-------------------------------------------|
-| Entrance | yes | none / partial | App Open, Interstitial (+ consent / `blockAppOpen`) |
+| Startup | yes | none / partial | App Open, Interstitial (+ consent / `blockAppOpen`) |
 | Language | yes | banner only | Native (banner already wired) |
 | … | | | |
 
@@ -64,11 +64,11 @@ Build a capability table from the ref strategy. Mark each candidate:
 
 | Screen (or Compose equivalent) | Ref-recommended formats |
 |--------------------------------|-------------------------|
-| Entrance | App Open, Interstitial (+ consent / `blockAppOpen`); optional native preload for next screens |
-| Language | Banner, Native |
-| Onboarding | Banner, Native, Interstitial (on continue) |
-| Menu | Native |
-| Dashboard | Banner; Lifecycle App Open (`unblockAppOpen` + load when not loading-screen mode); Inter `BOTTOM_NAVIGATION` / `EXIT` |
+| Startup (`StartupFragment`) | App Open, Interstitial (+ consent / `blockAppOpen`); native preload for Startup Language / Menu |
+| Startup Language (`StartupLanguageFragment`) | Native (Continue waits for it or 4s) · In-app `LanguageFragment`: Banner |
+| Onboarding (`StartupIntroFragment`) | Native (reuse language native), Interstitial (on finish) |
+| Startup Welcome Back (`StartupWelcomeBackFragment`) | Native (preloaded on StartupFragment) |
+| MainActivity shell (Dashboard role) | Banner (`bannerAdViewMain` above BNV); Lifecycle App Open (`unblockAppOpen` + load when not loading-screen mode); Inter `BOTTOM_NAVIGATION` / `EXIT` |
 | Home | Native, Interstitial, Rewarded, Rewarded Interstitial |
 | Trending / Settings | Native |
 | Feature One / Two | Banner, Native, Interstitial (`BACK_PRESS`) |
@@ -89,9 +89,9 @@ Example shape:
 ```
 I scanned the project. Mappable screens with unwired ref formats:
 
-1. EntranceFragment — App Open, Interstitial
-2. LanguageFragment — Banner, Native
-3. OnboardingFragment — Banner, Native, Interstitial
+1. StartupFragment — App Open, Interstitial
+2. StartupLanguageFragment — Native (in-app LanguageFragment — Banner)
+3. StartupIntroFragment — Native, Interstitial
 …
 
 Which screens should we wire now? Reply with numbers (e.g. 1, 2) or "all recommended".
@@ -105,7 +105,7 @@ Which screens should we wire now? Reply with numbers (e.g. 1, 2) or "all recomme
 
 For each selected screen, offer choices based on what’s still unwired and what the ref supports. Prefer short lettered/numbered options.
 
-### Entrance (App Open + Interstitial)
+### Startup (App Open + Interstitial)
 
 - `A` — Interstitial only
 - `B` — App Open only
@@ -121,7 +121,7 @@ Any choice also adds consent + `blockAppOpen`.
 
 **Onboarding only:** also ask Interstitial on continue — yes / no (when that format is still unwired).
 
-### Dashboard
+### MainActivity shell (Dashboard role)
 
 Ask as **separate toggles** (only for still-unwired formats):
 
@@ -150,23 +150,23 @@ For each confirmed `(screen, format)` pair, follow the matching `add-admob-*` sk
 1. Ensure catalog key + matching `resValue` unit IDs in `gmaAds/build.gradle.kts` (debug + release) + Remote Config exist **for that placement only**.
 2. Wire load / show / lifecycle on that screen only.
 3. Cross-screen rules:
-   - Entrance: `blockAppOpen` when any Entrance fullscreen was chosen
-   - Dashboard: `unblockAppOpen` (+ lifecycle load per mode) **only if** lifecycle App Open was chosen
+   - Startup: `blockAppOpen` when any Startup fullscreen was chosen
+   - `MainActivity`: `unblockAppOpen` (+ lifecycle load per mode) **only if** lifecycle App Open was chosen
    - Never inject `AdsManager`; never MVI Intent/State/Effect for ads load/show
 4. **xml:** Fragment extensions + View Binding containers (`BannerAdView`, `Native*View`).
 5. **compose:** same keys and timing; host extensions (or thin wrappers); no raw AdMob SDK in composables; `AndroidView` for banner/native when needed.
 
-### Entrance startup — ignore Remote Config, then navigate
+### Startup startup — ignore Remote Config, then navigate
 
-This replaces the `sonic-setup-new-project` 5-second Remote Config navigation gate once Entrance ads are wired.
+This replaces the `sonic-setup-new-project` 5-second Remote Config navigation gate once Startup ads are wired.
 
-In `EntranceViewModel` (`ScreenStarted`):
+In `StartupViewModel` (`ScreenStarted`):
 
 1. Start `FetchRemoteConfigUseCase` and **ignore its result**. Do not navigate from it. The first two ads stay default-on so this splash does not depend on a fetch that can take ~60s.
 2. Run the leave-splash sequence **in order**, then navigate:
    - Consent (`ConsentManager` / UMP) — **8 seconds** max
    - AdMob / `AdsSdk` init
-   - Ad calls (load, then show for the confirmed entrance formats) — **8 seconds** max
+   - Ad calls (load, then show for the confirmed startup formats) — **8 seconds** max
 3. **Navigate after that sequence.** Total cap is **16 seconds** (8 + 8). If a phase finishes early, continue. If it hits its cap, continue anyway.
 
 ```kotlin
@@ -187,13 +187,13 @@ private fun onScreenStarted() {
 
 Load/show stay on `:gmaAds` extensions. Do not add an Intent / State / Effect per ad event. `showAppOpenOrInterstitialAd` (when that format was confirmed) is an ad call inside the 8-second ads window, before navigate.
 
-If `isAppPurchased` is already true, or the billing response sets it true during this sequence, cancel the job (consent, init, ad calls) and do not show an ad. A first-time user still continues to Language / Onboarding. A returning user goes to Dashboard and skips Welcome Back (`sonic-implement-in-app-billing`).
+If `isAppPurchased` is already true, or the billing response sets it true during this sequence, cancel the job (consent, init, ad calls) and do not show an ad. A first-time user still continues to Language / Onboarding. A returning user goes to `MainActivity` and skips Startup Welcome Back / Startup Premium (`sonic-implement-in-app-billing`).
 
 ### First two ads default on
 
 SharedPref read default is **`1`** for the first **two** confirmed placements in funnel order:
 
-Entrance (App Open, then Interstitial, then any other entrance format) → Language → Onboarding → Menu → Dashboard → Home → Trending / Settings → Feature screens.
+StartupFragment (App Open, then Interstitial, then any other startup format) → StartupLanguage → StartupPremium → StartupIntro → StartupWelcomeBack → MainActivity shell → Home → Trending / Settings / in-app Language / Premium → Feature screens.
 
 Every later confirmed placement stays default **`0`**. If `RemoteConfigDataSource.DEFAULTS` exists, use the same `1` / `0` split. Catalog `isEnabled` stays `{ it.rcFlag != 0 }`. A console value of `0` still turns a placement off after a successful activate; the default only covers the window before that write. Banner TOP/BOTTOM default-on means `1` (adaptive).
 
@@ -232,7 +232,7 @@ Unconfirmed catalog rows: keep RC-off via `isEnabled = { 0 }` (or leave existing
 - `gmaAdsModule` registered; App ID present.
 - No MVI Intent/State/Effect for ads load/show.
 - SharedPrefManager / RC defaults contain **only** implemented placement keys (plus any pre-existing unrelated keys).
-- Entrance starts Remote Config and ignores its result. Navigation follows consent (8s) → AdMob init → ad calls (8s), then leaves. It does not leave on the Remote Config result.
+- Startup starts Remote Config and ignores its result. Navigation follows consent (8s) → AdMob init → ad calls (8s), then leaves. It does not leave on the Remote Config result.
 - First two confirmed placements use SharedPref default `1`; later ones use `0`.
 
 ---
@@ -244,12 +244,12 @@ Report **Confirmed & wired** and **Not selected** (developer skipped), not “au
 Example:
 
 ```
-Confirmed screens: Entrance, Language
+Confirmed screens: Startup, Startup Language
 Wired:
-- EntranceFragment — interstitial only (+ consent, blockAppOpen)
-- LanguageFragment — banner + native
+- StartupFragment — interstitial only (+ consent, blockAppOpen)
+- StartupLanguageFragment — native
 Not selected:
-- OnboardingFragment — developer skipped
+- StartupIntroFragment — developer skipped
 RC / prefs added:
 - interEntrance, bannerLanguage, nativeLanguage
 ```
@@ -339,7 +339,7 @@ Same handoff applies when later passes use `add-admob-*`, `sonic-implement-in-ap
 - Creating SharedPreferences / Remote Config keys for placements the developer did not confirm
 - Inventing formats not in the ref capability map for that screen role
 - Guessing “both” or enabling extra formats when the developer’s answer is incomplete
-- Navigating Entrance from the Remote Config result once ads are wired
+- Navigating Startup from the Remote Config result once ads are wired
 - Waiting on Remote Config before consent, AdMob init, or ad calls
 - Letting consent or ads run past their 8-second caps (16 seconds total) before navigating
 - Defaulting every placement to `0`, including the first two confirmed ads

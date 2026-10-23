@@ -10,14 +10,20 @@ import androidx.viewbinding.ViewBinding
 /**
  * Template — copy to `:core-ui` …/base/fragment/
  * Replace YOUR.PACKAGE with applicationId root.
+ *
+ * Hooks (reference: QiblaCompass BaseFragment):
+ *  - onViewInflated()           — optional, right after binding inflate (before the view is attached)
+ *  - initObservers()            — optional, collectors on viewLifecycleOwner
+ *  - onViewCreated(Bundle?)     — optional, when savedInstanceState is needed
+ *  - onViewCreated()            — mandatory screen setup
  */
 abstract class ParentFragment<T : ViewBinding>(
-    val bindingFactory: (LayoutInflater) -> T,
+    private val bindingFactory: (LayoutInflater) -> T,
 ) : Fragment() {
 
     private var _binding: T? = null
-    protected val binding get() =
-        _binding ?: throw IllegalStateException("Accessing binding outside of view lifecycle")
+    protected val binding: T
+        get() = _binding ?: error("Binding accessed outside of view lifecycle.")
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -25,6 +31,7 @@ abstract class ParentFragment<T : ViewBinding>(
         savedInstanceState: Bundle?,
     ): View {
         _binding = bindingFactory(inflater)
+        onViewInflated()
         return binding.root
     }
 
@@ -34,6 +41,8 @@ abstract class ParentFragment<T : ViewBinding>(
         onViewCreated(savedInstanceState)
         onViewCreated()
     }
+
+    open fun onViewInflated() {}
 
     open fun initObservers() {}
 

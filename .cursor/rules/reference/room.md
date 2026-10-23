@@ -52,7 +52,7 @@ abstract class AppDatabase : RoomDatabase() {
 
 ## DI (`module` if cold-start; else `lazyModule`)
 
-Room used by Entrance / first screen → **`module`**. Feature-only DB → **`lazyModule`**. See `07`.
+Room used by Startup / first screen → **`module`**. Feature-only DB → **`lazyModule`**. See `07`.
 
 ```kotlin
 val dataModule = module {

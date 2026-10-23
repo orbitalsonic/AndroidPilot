@@ -17,13 +17,15 @@ Obey `.claude/project-settings.json` when judging orientation / tests.
 - [ ] `domain` has no Android UI / presentation imports
 - [ ] UseCases + repository **interfaces** only in `:domain` — never in `:data`
 - [ ] No circular module dependencies
-- [ ] Koin uses **`module` (cold-start) and/or `lazyModule` (deferred)** per `07` — not “lazy everywhere”; Entrance deps must be eager `module`
+- [ ] Koin uses **`module` (cold-start) and/or `lazyModule` (deferred)** per `07` — not “lazy everywhere”; every `Startup*` screen (StartupActivity funnel) + MainActivity / Home-tab deps must be eager `module`
+- [ ] Exactly two Activities (`StartupActivity` launcher + `MainActivity`); startup twins (`StartupLanguageFragment` / `StartupPremiumFragment`) are separate from in-app `LanguageFragment` / `PremiumFragment`; no startup destination in `nav_graph_main` (`23`, `29`, `30`, `33`)
+- [ ] `ParentActivity` uses `InsetsMode` (`getInsetsMode()` per Activity) — no per-destination padding flags; `installSplashScreen` only in `StartupActivity` (`19`, `23`)
 - [ ] Theme applied after `startKoin` in Application; no `GlobalContext.getOrNull()` gates; `startKoin` never in Activity
 - [ ] Each `module` / `lazyModule` has readable `//// Section` headers (SoC: DataSources / Repositories / ViewModels / area UseCases, etc.)
 - [ ] `dataModule` ordered: `//// DataSources` then `//// Repositories`
 - [ ] UseCase factories in domain `useCaseModule` (grouped by area)
 - [ ] New modules registered in composition root (eager or lazy list; sectioned: Core / Data / Domain / Presentation or Feature / Ads)
-- [ ] **Cold-start Koin graph (Critical):** walk first UI resolve path — `App` `startKoin` + `modules(eager)` (+ optional `lazyModules`) → **eager** list includes every module those screens need → **MainActivity** (if it injects) / start destination (**EntranceFragment** / **EntranceScreen** / legacy **Splash***) ViewModel → **every constructor dependency** (`UseCase`, repo, manager, dispatcher, …) has a matching `viewModel` / `factory` / `single` in a **loaded eager `module`**. Missing def → **Fail** (`No definition found` / `Could not create instance`)
+- [ ] **Cold-start Koin graph (Critical):** walk first UI resolve path — `App` `startKoin` + `modules(eager)` (+ optional `lazyModules`) → **eager** list includes every module those screens need → **MainActivity** (if it injects) / start destination (**StartupFragment** / **StartupScreen** / legacy **Splash***) ViewModel → **every constructor dependency** (`UseCase`, repo, manager, dispatcher, …) has a matching `viewModel` / `factory` / `single` in a **loaded eager `module`**. Missing def → **Fail** (`No definition found` / `Could not create instance`)
 - [ ] Resolving **lazyModule** bindings at start uses `runOnKoinStarted` / wait APIs (`23-app-startup`); eager cold-start injects are fine right after `startKoin` returns
 
 ### MVI
@@ -99,6 +101,6 @@ One-line verdict: Pass / Pass with notes / Fail
 - rule files that applied
 ```
 
-Severity: boundary violations, Main-thread heavy work, and **cold-start missing Koin definitions** (Entrance/Splash/MainActivity inject graph) = **Critical**.
+Severity: boundary violations, Main-thread heavy work, and **cold-start missing Koin definitions** (Startup/Splash/MainActivity inject graph) = **Critical**.
 
 After the report: **do not fix yet** — ask which numbers to fix per `fix-selection.md` (e.g. user replies `fix 1, 2, 4, 7`).

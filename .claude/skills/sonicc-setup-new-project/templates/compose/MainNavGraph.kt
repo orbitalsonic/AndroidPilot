@@ -8,26 +8,28 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import YOUR.PACKAGE.feature.entrance.ENTRANCE_ROUTE
-import YOUR.PACKAGE.feature.entrance.EntranceScreen
+import YOUR.PACKAGE.feature.home.HOME_ROUTE
+import YOUR.PACKAGE.feature.home.HomeScreen
 
+/**
+ * Hosted by MainActivity. Home / tabs + in-app LANGUAGE_ROUTE / PREMIUM_ROUTE / settings / details.
+ * Never contains startup routes.
+ */
 @Composable
-fun NavGraph(modifier: Modifier = Modifier) {
+fun MainNavGraph(modifier: Modifier = Modifier) {
     val navController = rememberNavController()
     NavHost(
         navController = navController,
-        startDestination = ENTRANCE_ROUTE,
+        startDestination = HOME_ROUTE,
         modifier = modifier.fillMaxSize(),
         enterTransition = { slideInHorizontally { it } },
         exitTransition = { slideOutHorizontally { -it } },
         popEnterTransition = { slideInHorizontally { -it } },
         popExitTransition = { slideOutHorizontally { it } },
     ) {
-        composable(route = ENTRANCE_ROUTE) {
-            EntranceScreen(
-                navigateToNext = {
-                    // Wire first real destination in sonicc-create-mvi; keep popUpTo Entrance inclusive.
-                },
+        composable(route = HOME_ROUTE) {
+            HomeScreen(
+                // onNavigateToPremium = { navController.navigate(PREMIUM_ROUTE) } — added by sonicc-create-mvi
             )
         }
     }

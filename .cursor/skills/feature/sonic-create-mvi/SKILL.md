@@ -1,6 +1,6 @@
 ---
 name: sonic-create-mvi
-description: Sonic Cursor Skill: Scaffold presentation-layer MVI only (Intent/State/Effect/ViewModel). XML: Fragment/DI/nav_graph. Compose: `:feature-*` *Screen + NavGraph. No domain or data. Use when adding a new screen with ViewModel and layout already exists (or after figma-to-*). For full UI+MVI+domain in one invoke use sonic-create-screen. For new UseCases/repositories use sonic-create-clean-architecture. Do not use for ads / :gmaAds.
+description: Sonic Cursor Skill: Scaffold presentation-layer MVI only (Intent/State/Effect/ViewModel). XML: Fragment/DI/nav_graph_main. Compose: `:feature-*` *Screen + NavGraph. No domain or data. Use when adding a new screen with ViewModel and layout already exists (or after figma-to-*). For full UI+MVI+domain in one invoke use sonic-create-screen. For new UseCases/repositories use sonic-create-clean-architecture. Do not use for ads / :gmaAds.
 ---
 
 # Create MVI Feature (presentation only)
@@ -43,7 +43,16 @@ feature-<kebab>/src/main/java/…/feature/<name>/
   components/   # optional
 ```
 
-Copy [templates/compose/feature-module.gradle.kts](../../project/sonic-setup-new-project/templates/compose/feature-module.gradle.kts). `include` in settings. `:app` depends on the module. Register `*FeatureModule` in `KoinModules` (Entrance → eager; others → lazy/`featureList`). Add a `composable` in `:app` `NavGraph.kt`. See `28-compose-ui`.
+Copy [templates/compose/feature-module.gradle.kts](../../project/sonic-setup-new-project/templates/compose/feature-module.gradle.kts). `include` in settings. `:app` depends on the module. Register `*FeatureModule` in `KoinModules` (Startup → eager; others → lazy/`featureList`). Add a `composable` in `:app` `StartupNavGraph.kt` (startup funnel screens) or `MainNavGraph.kt` (everything else). See `28-compose-ui`.
+
+## Which host? (decide first)
+
+| Screen | Host | Naming |
+|--------|------|--------|
+| Splash / init, first-time language, startup paywall, onboarding, returning-user menu | `StartupActivity` · `nav_graph_startup` / `StartupNavGraph` | **`Startup` prefix**: `StartupLanguageFragment` + `fragment_startup_language.xml` + `startupLanguageFragment`; `Startup*ViewModel` in **eager** `startupPresentationModule` (`29`) |
+| Home, tabs, settings, details, in-app language (Apply + search), in-app premium | `MainActivity` · `nav_graph_main` / `MainNavGraph` | Plain names: `LanguageFragment` + `fragment_language.xml`; `lazyModule` unless it is the Home start tab (`30`, `32`, `33`) |
+
+Never share one Fragment between hosts via flags — the startup twin and the in-app twin are separate classes (`30-screen-language`, `33-screen-premium`). Leaving the funnel is `(activity as? StartupActivity)?.moveToMain()`, not a nav action.
 
 ## Kotlin checklist
 
@@ -58,8 +67,8 @@ Copy [templates/compose/feature-module.gradle.kts](../../project/sonic-setup-new
     - Inject **existing** UseCases / domain repos only — do not create new ones here
 5. **UI (xml)** — extend `Parent*` / `Base*`; View Binding only; member order per `19-base-ui`: `onViewCreated` (`setupRecyclerView` / `setupViewPager` / `setupBottomNavigation` as needed, then `screenStarted` — prefer `launchWhenResumed { handleIntent(ScreenStarted) }` when work must wait for resume; **inline** `setOnClickListener` — no `setupClicks()`) → helpers → `initObservers` → `renderState` → `handleEffect` → teardown; `collectWhenStarted` / `collectWhenCreated` via **`viewLifecycleOwner`**; navigate with `navigateTo` / `popFrom` / `navigateRootTo`
    - Paywall / Premium: sticky footer + 3s delayed close (`33-screen-premium`)
-   - Dashboard + bottom nav: dual graphs + backpress (`32-screen-dashboard`, `17-navigation`)
-   - Funnel screens: `29`–`31` + [reference/app-flow.md](../../../rules/reference/app-flow.md)
+   - Bottom nav: tabs top-level in `nav_graph_main`, BNV + backpress owned by `MainActivity` (`32-screen-dashboard`, `17-navigation`); nested `DashboardFragment` only as the optional variant
+   - Startup funnel screens (`Startup*`): `29`–`31`, `33` + [reference/app-flow.md](../../../rules/reference/app-flow.md); back blocked by `StartupActivity`
 5b. **UI (compose)** — `*Screen` + private `*ScreenContent` (`28-compose-ui`): `koinViewModel()`, `collectAsStateWithLifecycle`, `LaunchedEffect(viewModel) { effect.collect }`; `onNavigate*` lambdas; Coil `AsyncImage`; no `NavController` in the feature
 6. **Mapping** — heavy work in Repo/UseCase; `toUi()` in ViewModel with dispatcher if large lists
 7. **Logs** — `Constants.TAG*` format; prefer Repository; ViewModel not every method
@@ -81,7 +90,7 @@ Existing UseCases may be injected into the new ViewModel.
 **xml** (`*PresentationModule` in `:presentation`):
 
 ```kotlin
-// Entrance / cold-start → module { }; secondary screens → lazyModule { }
+// Startup / cold-start → module { }; secondary screens → lazyModule { }
 val featurePresentationModule = lazyModule {
 
     //// ViewModels
@@ -97,17 +106,17 @@ val homeFeatureModule = lazyModule {
 }
 ```
 
-Register in app composition root (`KoinModules` — `featureList` when compose). **Entrance / Splash / cold-start → `module` on the eager list; other features → `lazyModule` on the lazy list.** Use `//// Section` headers (`07-dependency-injection`).
+Register in app composition root (`KoinModules` — `featureList` when compose). **Startup / Splash / cold-start → `module` on the eager list; other features → `lazyModule` on the lazy list.** Use `//// Section` headers (`07-dependency-injection`).
 
-If the screen is **Entrance** / start destination / cold-start Splash: use **`module`**, register every ViewModel ctor dependency (UseCases in `useCaseModule`, repos/sources in `dataModule`, etc.), and confirm those modules are on the **eager** `KoinModules` list — incomplete graph crashes on first open (`23`, `29`, `sonic-review-architecture`).
+If the screen is **Startup** / start destination / cold-start Splash: use **`module`**, register every ViewModel ctor dependency (UseCases in `useCaseModule`, repos/sources in `dataModule`, etc.), and confirm those modules are on the **eager** `KoinModules` list — incomplete graph crashes on first open (`23`, `29`, `sonic-review-architecture`).
 
 Do **not** add `useCaseModule` / `dataModule` entries here — that belongs to `sonic-create-clean-architecture`.
 
 ## Navigation
 
-**xml:** destination in `nav_*.xml`; Safe Args property **`navArgs`**. ViewModel emits Effect; Fragment calls `NavController`. Every `<action>` uses reference slide anims (`17-navigation`).
+**xml:** destination in `nav_graph_startup.xml` (startup funnel) or `nav_graph_main.xml` (app); Safe Args property **`navArgs`** (`StartupPremiumFragment` takes `isFirstTime`). ViewModel emits Effect; Fragment calls `NavController` (or `moveToMain()` when leaving the funnel). Every `<action>` uses reference slide anims; actions out of `startupFragment` are `popUpToInclusive` (`17-navigation`).
 
-**compose:** `FEATURE_ROUTE` on `*Screen.kt`; register `composable` in `:app` `NavGraph.kt` with the same slide enter/exit as the host `NavHost`. ViewModel emits Effect; `*Screen` calls the `onNavigate*` lambda. Nested tabs: content slots, not feature→feature deps (`28-compose-ui`).
+**compose:** `FEATURE_ROUTE` on `*Screen.kt`; register `composable` in `:app` `StartupNavGraph.kt` or `MainNavGraph.kt` with the same slide enter/exit as the host `NavHost`. ViewModel emits Effect; `*Screen` calls the `onNavigate*` lambda. Nested tabs: content slots, not feature→feature deps (`28-compose-ui`).
 
 ## Strings
 
@@ -129,6 +138,6 @@ Do **not** add `useCaseModule` / `dataModule` entries here — that belongs to `
 - [ ] xml: Fragment collectors use `viewLifecycleOwner`; nav via `navigateTo` / `popFrom`; member order per `19-base-ui`
 - [ ] compose: `*Screen` / `*ScreenContent` split; route const; NavGraph entry; `koinViewModel`; no `NavController` in feature
 - [ ] ViewModel: single `handleIntent` launch, `suspend` handlers, `handleError` last
-- [ ] Module + every VM ctor dep registered in `KoinModules` — Entrance on **eager** `module` list; other features `lazyModule` (Critical for cold-start)
+- [ ] Module + every VM ctor dep registered in `KoinModules` — Startup on **eager** `module` list; other features `lazyModule` (Critical for cold-start)
 - [ ] Icon buttons use `ButtonStyle.IconButton` when applicable
 - [ ] `DiffUtil.ItemCallback`: simple `areItemsTheSame` / `areContentsTheSame` as one-liners (see `04-mvi-presentation`)

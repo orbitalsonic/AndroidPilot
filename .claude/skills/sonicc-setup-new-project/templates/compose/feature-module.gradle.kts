@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "YOUR.PACKAGE.feature.entrance"
+    namespace = "YOUR.PACKAGE.feature.startup"
     compileSdk {
         version = release(37) {
             minorApiLevel = 1

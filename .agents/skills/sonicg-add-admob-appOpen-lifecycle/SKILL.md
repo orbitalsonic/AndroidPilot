@@ -1,6 +1,6 @@
 ---
 name: sonicg-add-admob-appOpen-lifecycle
-description: OrbitalSonic Gemini Skill: Wire AdMob App Open LIFECYCLE placement (Dashboard unblock/preload, AppOpenLifecycle or AppOpenLoadingActivity). Use for resume/foreground app open, or @sonicg-add-admob-appOpen-lifecycle. For splash entrance use sonicg-add-admob-appOpen-Entrance. If ads were never wired, use sonicg-implement-admob-ads first.
+description: OrbitalSonic Gemini Skill: Wire AdMob App Open LIFECYCLE placement (MainActivity unblock/preload, AppOpenLifecycle or AppOpenLoadingActivity). Use for resume/foreground app open, or @sonicg-add-admob-appOpen-lifecycle. For splash startup use sonicg-add-admob-appOpen-Entrance. If ads were never wired, use sonicg-implement-admob-ads first.
 ---
 
 # Add AdMob App Open — Lifecycle
@@ -25,12 +25,12 @@ Sibling: `sonicg-add-admob-appOpen-Entrance` for splash `ENTRANCE`.
 
 | Flag      | Behavior                                                                                                                 |
 |-----------|--------------------------------------------------------------------------------------------------------------------------|
-| **true**  | `AppOpenLoadingActivity` loads then shows `LIFECYCLE`. Do **not** preload on Dashboard or reload after dismiss.          |
-| **false** | Load `LIFECYCLE` on Dashboard (or main shell); `AppOpenLifecycle` shows on process foreground and reloads after dismiss. |
+| **true**  | `AppOpenLoadingActivity` loads then shows `LIFECYCLE`. Do **not** preload in `MainActivity` or reload after dismiss.          |
+| **false** | Load `LIFECYCLE` in `MainActivity` (home shell); `AppOpenLifecycle` shows on process foreground and reloads after dismiss. |
 
 2. Ensure `AppOpenAdKey.LIFECYCLE` + catalog row + `resValue` unit IDs in `gmaAds/build.gradle.kts` + RC exist.
 3. Confirm `AppOpenLifecycle` is registered in `gmaAdsModule` (shipped with module — do not reinvent).
-4. On Dashboard / main shell when ads are active:
+4. In `MainActivity.onCreated()` (home shell) when ads are active:
 
 ```kotlin
 unblockAppOpen()
@@ -38,10 +38,10 @@ unblockAppOpen()
 loadAppOpenAd(AppOpenAdKey.LIFECYCLE)
 ```
 
-5. Keep Entrance blocked through splash (`blockAppOpen` on Entrance) so lifecycle does not steal the entrance ad.
+5. Keep App Open blocked through the whole `StartupActivity` funnel (`blockAppOpen` on `StartupFragment`) so lifecycle does not steal the startup ad.
 6. Usually extend `LIFECYCLE` rather than adding a third app-open key for resume ads.
 7. Compose: call `unblockAppOpen` / load from the host Activity that owns the main shell.
 
 ## Remove
 
-Stop Dashboard preload / loading-activity usage; if removing `LIFECYCLE` entirely, also stop relying on `AppOpenLifecycle` for show — follow `ads-gma.md` remove steps.
+Stop `MainActivity` preload / loading-activity usage; if removing `LIFECYCLE` entirely, also stop relying on `AppOpenLifecycle` for show — follow `ads-gma.md` remove steps.

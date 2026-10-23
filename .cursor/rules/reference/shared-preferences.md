@@ -63,7 +63,7 @@ Prefer injecting `ioDispatcher` from DI when project provides dispatchers in `co
 
 ## DI (cold-start → `module`)
 
-SharedPref is used at Entrance — register with **eager `module`** (see `07`).
+SharedPref is used at Startup — register with **eager `module`** (see `07`).
 
 ```kotlin
 val dataModule = module {
@@ -96,7 +96,7 @@ Register in `data/di/DataModule.kt` (or split module val).
 - `SharedPreferences` in Fragment / ViewModel
 - Dispatcher on DataSource / `SharedPrefManager`
 - UseCase or repository **interface** under `:data`
-- Registering SharedPref / Entrance deps only as `lazyModule` (must be eager `module`)
+- Registering SharedPref / Startup deps only as `lazyModule` (must be eager `module`)
 - `suspend` on sync prefs data source class
 
 ## Tests

@@ -15,7 +15,7 @@ Do not invent a parallel `BillingClient` wrapper — use the library + Clean Arc
 | **Subscriptions**    | Weekly / monthly / yearly premium (ads-off + paid features)                                  |
 | **One-time in-app**  | Non-consumable (lifetime unlock) or consumable (credits) via same `BillingManager`           |
 | **Entitlement flag** | `isAppPurchased` in SharedPreferences — source of truth for ads/UI (subs + lifetime in-app)  |
-| **Paywalls**         | Splash premium (optional) + in-app Premium screen                                            |
+| **Paywalls**         | `StartupPremiumFragment` (startup funnel, `isFirstTime` arg) + in-app `PremiumFragment` (`33-screen-premium`)  |
 | **Library**          | `com.github.orbitalsonic:SonicInApp` via JitPack — **not** raw `BillingClient` in features |
 
 ---
@@ -238,6 +238,8 @@ koin.get<BillingDataSource>().start(applicationScope)
 - DEBUG: fake success; RELEASE: real Play sheet
 
 ### Paywall UI (mandatory)
+
+- **Two paywalls** (`33-screen-premium`): `StartupPremiumFragment` in `StartupActivity` (close → `StartupIntroFragment` when `isFirstTime`, else `moveToMain()`; purchase → `moveToMain()`) and in-app `PremiumFragment` in `MainActivity` (close → `popFrom`; purchase → restart `MainActivity` with `FLAG_ACTIVITY_NEW_TASK or FLAG_ACTIVITY_CLEAR_TASK`). Share offers / purchase UseCases; do not share one Fragment with flags
 
 - **Sticky footer:** primary CTA + legal/footer text fixed at bottom of root; benefits/plans scroll in `NestedScrollView` above (`09-resources-xml`, `33-screen-premium`)
 - **Close (X):** hidden until State `showCloseButton == true`

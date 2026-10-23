@@ -32,7 +32,7 @@ Extraction file map + `:core-ui` scaffold: [reference.md](reference.md).
 ## Do not
 
 - Stop because `:core-ui` is missing — create it and keep going
-- Create `:presentation`, `:domain`, `:data`, Entrance, or `Parent*`
+- Create `:presentation`, `:domain`, `:data`, Startup, or `Parent*`
 - Implement a product screen from this file (`sonicg-figma-to-xml` / `sonicg-figma-to-compose`)
 - Paint default roots with `colorSurface`
 - Duplicate hex on semantic (or `md_theme_*`) tokens — only primitives hold hex
