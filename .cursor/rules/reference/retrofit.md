@@ -1,3 +1,9 @@
+---
+description: Full detail for 26-data-persistence (Retrofit) — :core-network, ApiService, error mapping, DI
+globs: ["**/data/**/*.kt", "**/*Api*.kt", "**/network/**", "**/core-network/**"]
+alwaysApply: false
+---
+
 # Retrofit API (reference pattern)
 
 Follow `.cursor/rules/08-gradle.mdc`, `13-libraries-stack.mdc`, `06-coroutines-flow.mdc`, `18-errors-result.mdc`, `22-platform-firebase.mdc`, `26-data-persistence.mdc`. **Add Retrofit/OkHttp/Moshi only with approval** — catalog first.

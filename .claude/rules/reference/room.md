@@ -1,3 +1,14 @@
+---
+description: Full detail for 26-data-persistence (Room) — :core-database, entities, DAOs, repository mapping, DI
+paths:
+  - "**/data/**/*.kt"
+  - "**/Room*.kt"
+  - "**/*Dao*.kt"
+  - "**/*Entity*.kt"
+  - "**/database/**"
+  - "**/core-database/**"
+---
+
 # Room Cache (reference pattern)
 
 Follow `.claude/rules/08-gradle.md`, `13-libraries-stack.md`, `06-coroutines-flow.md`, `03-android-architecture.md`, `26-data-persistence.md`. **Add Room only with human approval** — add to `libs.versions.toml` first.

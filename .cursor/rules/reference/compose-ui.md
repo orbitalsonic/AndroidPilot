@@ -1,3 +1,9 @@
+---
+description: Full detail for 28-compose-ui — feature modules, Screen / ScreenContent, StartupNavGraph / MainNavGraph, AppTheme
+globs: ["**/feature*/**/*.kt", "**/core/ui/theme/**/*.kt", "**/navigation/**/*.kt"]
+alwaysApply: false
+---
+
 # Compose UI — feature modules, screens, navigation
 
 Full detail for `28-compose-ui.mdc`. Canonical app: **AnimeHub** (`E:\SohaibAhmed\Github\AnimeHub`). Do not invent a parallel Compose layout.

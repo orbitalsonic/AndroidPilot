@@ -1,3 +1,12 @@
+---
+description: Full detail for 21-ads-billing (billing) and 33-screen-premium — SonicInApp v4, BillingDataSource, paywalls
+paths:
+  - "**/billing/**"
+  - "**/premium/**"
+  - "**/Premium*"
+  - "**/Billing*"
+---
+
 # Premium / In-App Billing — reference
 
 Full playbook for subscriptions and one-time in-app products using [orbitalsonic/SonicInApp](https://github.com/orbitalsonic/SonicInApp) (`4.0.0+`, Play Billing Library 9.1.0).

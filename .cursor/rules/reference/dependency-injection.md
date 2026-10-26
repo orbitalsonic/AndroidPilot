@@ -1,3 +1,9 @@
+---
+description: Full detail for 07-dependency-injection — Koin module vs lazyModule, section headers, cold-start graph
+globs: ["**/di/**/*.kt", "**/*Module*.kt", "**/App.kt"]
+alwaysApply: false
+---
+
 # Dependency injection conventions
 
 Full detail for `07-dependency-injection.mdc`. Do not delete lines from this file — edit here and keep the rule stub in sync.

@@ -1,3 +1,9 @@
+---
+description: Full detail for 30-screen-language — 104-language catalog, DpLanguages / LanguageDataSource list, code → values-* folder rules, RTL
+globs: ["**/values-*/**", "**/language/**", "**/Language*", "**/DpLanguages*"]
+alwaysApply: false
+---
+
 # Supported languages catalog — `DpLanguages` / `LanguageDataSource`
 
 Full detail for `30-screen-language`. Do not delete lines from this file — edit here and keep the rule stub in sync.

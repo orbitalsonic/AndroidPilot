@@ -1,3 +1,9 @@
+---
+description: Full detail for 09-resources-xml — layouts, drawables, strings, colors, themes
+paths:
+  - "**/res/**/*.xml"
+---
+
 # XML layouts, drawables, strings, colors, and themes
 
 Full detail for `09-resources-xml.md`. Do not delete lines from this file — edit here and keep the rule stub in sync.

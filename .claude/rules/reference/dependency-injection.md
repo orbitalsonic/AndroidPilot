@@ -1,3 +1,11 @@
+---
+description: Full detail for 07-dependency-injection — Koin module vs lazyModule, section headers, cold-start graph
+paths:
+  - "**/di/**/*.kt"
+  - "**/*Module*.kt"
+  - "**/App.kt"
+---
+
 # Dependency injection conventions
 
 Full detail for `07-dependency-injection.md`. Do not delete lines from this file — edit here and keep the rule stub in sync.

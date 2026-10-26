@@ -1,3 +1,10 @@
+---
+description: Full detail for 04-mvi-presentation — Intent / State / Effect / ViewModel structure, Fragment and Compose rules
+paths:
+  - "**/presentation/**/*.kt"
+  - "**/feature*/**/*.kt"
+---
+
 # MVI pattern — Intent, State, Effect, ViewModel
 
 Full detail for `04-mvi-presentation.md`. Do not delete lines from this file — edit here and keep the rule stub in sync.

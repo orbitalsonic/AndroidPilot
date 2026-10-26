@@ -27,7 +27,7 @@ Do **not** grow a large `.cursor/commands/` tree — prefer skills with `/` invo
 
 ## Hard rules when editing this template
 
-1. **Do not delete rule meaning.** Prefer move / merge / link. If text must leave a `.mdc`, put the **full body** in `rules/reference/` and leave a short stub + link.
+1. **Do not delete rule meaning.** Prefer move / merge / link. If text must leave a `.mdc`, put the **full body** in `rules/reference/` and leave a short stub + link. Every `rules/reference/*.md` **must start with path-scoped frontmatter** (`description` + `globs` / `alwaysApply: false` in `.cursor`, `description` + `paths:` in `.claude` / `.agents`, scoped like the stub that owns it). Claude Code loads every `.md` under `.claude/rules/` recursively, so a reference doc without `paths:` becomes always-on and blows the 150k-char instruction budget.
 2. **Do not invent a second stack** (Hilt, Data Binding, RxJava; Compose when `uiFramework` is `xml`; XML Fragment screens when `uiFramework` is `compose`) unless the user explicitly asks. UI stack is **`uiFramework`**: `xml` | `compose`.
 3. **Obey existing patterns** in `.cursor/rules/` — especially `00-global.mdc`.
 4. **Unique skill `name:`** — never two skills with the same `name`.

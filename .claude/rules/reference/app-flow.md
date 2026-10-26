@@ -1,3 +1,13 @@
+---
+description: Full detail for 29–32 screen rules — StartupActivity funnel vs MainActivity, routing, prefs, completion writes
+paths:
+  - "**/startup/**"
+  - "**/Startup*"
+  - "**/nav_graph_*.xml"
+  - "**/MainActivity.kt"
+  - "**/StartupActivity.kt"
+---
+
 # App flow — two Activities, first-time vs returning user
 
 Companion to screen rules `29`–`33` and SharedPreferences patterns (`reference/shared-preferences.md`). Reference app: QiblaCompass.

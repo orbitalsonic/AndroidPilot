@@ -1,3 +1,9 @@
+---
+description: Full detail for 19-base-ui — Parent* / Base* classes, InsetsMode, ViewBinding lifecycle, Flow collection, Fragment member order
+globs: ["**/ui/**/*.kt", "**/base/**/*.kt", "**/presentation/**/*.kt", "**/feature*/**/*.kt", "**/core/ui/**/*.kt"]
+alwaysApply: false
+---
+
 # Base UI classes, ViewBinding lifecycle, and Flow collection
 
 Full detail for `19-base-ui.mdc`. Do not delete lines from this file — edit here and keep the rule stub in sync.

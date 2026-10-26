@@ -1,3 +1,12 @@
+---
+description: Full detail for 21-ads-billing (ads) — :gmaAds playbook, placements, call shapes, Remote Config
+paths:
+  - "**/gmaAds/**"
+  - "**/admob*/**"
+  - "**/*Ad*.kt"
+  - "**/BannerAdView*"
+---
+
 # :gmaAds — AdMob playbook
 
 Source of truth for module behavior: [orbitalsonic/Admob-Ads](https://github.com/orbitalsonic/Admob-Ads) `gmaAds/README.md`. Local learn path: `E:\SohaibAhmed\Github\Admob-Ads`.

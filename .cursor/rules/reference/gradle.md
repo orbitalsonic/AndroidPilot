@@ -1,3 +1,9 @@
+---
+description: Full detail for 08-gradle — module script order, catalog, signing, R8 keepRules
+globs: ["**/*.gradle.kts", "**/libs.versions.toml", "**/gradle.properties"]
+alwaysApply: false
+---
+
 # Gradle, build config, catalog sections/naming, and dependency management
 
 Full detail for `08-gradle.mdc`. Do not delete lines from this file — edit here and keep the rule stub in sync.

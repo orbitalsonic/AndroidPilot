@@ -1,3 +1,13 @@
+---
+description: Full detail for 19-base-ui — Parent* / Base* classes, InsetsMode, ViewBinding lifecycle, Flow collection, Fragment member order
+paths:
+  - "**/ui/**/*.kt"
+  - "**/base/**/*.kt"
+  - "**/presentation/**/*.kt"
+  - "**/feature*/**/*.kt"
+  - "**/core/ui/**/*.kt"
+---
+
 # Base UI classes, ViewBinding lifecycle, and Flow collection
 
 Full detail for `19-base-ui.md`. Do not delete lines from this file — edit here and keep the rule stub in sync.

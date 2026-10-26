@@ -1,3 +1,11 @@
+---
+description: Full detail for 26-data-persistence (SharedPreferences) — SharedPrefManager data source, repository with dispatcher, DI
+paths:
+  - "**/data/**/*.kt"
+  - "**/SharedPref*.kt"
+  - "**/repository/**/*.kt"
+---
+
 # SharedPreferences (reference pattern)
 
 Follow `.claude/rules/03-android-architecture.md`, `07-dependency-injection.md`, `16-logging.md`, `18-errors-result.md`, `26-data-persistence.md`. Match reference layout:

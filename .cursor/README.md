@@ -12,7 +12,7 @@ This folder is part of the [AndroidPilot](https://github.com/orbitalsonic/Androi
 | When | Always-on or glob-matched while editing        | Invoked by name (`/` or agent pick) or trigger description |
 | Size | Prefer clear invariants + BAD/GOOD             | Full workflows                                             |
 
-**Long detail** lives under [`rules/reference/`](rules/reference/). `.mdc` rule files hold **short invariants + links** to those reference docs (so Agent context stays smaller). Do not delete reference files — edit them when rules change.
+**Long detail** lives under [`rules/reference/`](rules/reference/). `.mdc` rule files hold **short invariants + links** to those reference docs (so Agent context stays smaller). Each reference doc starts with `globs` + `alwaysApply: false` frontmatter scoped like its stub (the Claude / Gemini twins convert it to `paths:`), so no tool loads it always-on. Do not delete reference files — edit them when rules change.
 
 **Commands:** Prefer skills with `/` invoke. Do not grow a large `.cursor/commands/` tree unless needed.
 

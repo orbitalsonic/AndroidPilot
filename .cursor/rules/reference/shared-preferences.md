@@ -1,3 +1,9 @@
+---
+description: Full detail for 26-data-persistence (SharedPreferences) — SharedPrefManager data source, repository with dispatcher, DI
+globs: ["**/data/**/*.kt", "**/SharedPref*.kt", "**/repository/**/*.kt"]
+alwaysApply: false
+---
+
 # SharedPreferences (reference pattern)
 
 Follow `.cursor/rules/03-android-architecture.mdc`, `07-dependency-injection.mdc`, `16-logging.mdc`, `18-errors-result.mdc`, `26-data-persistence.mdc`. Match reference layout:

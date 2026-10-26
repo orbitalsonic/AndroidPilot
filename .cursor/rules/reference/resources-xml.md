@@ -1,3 +1,9 @@
+---
+description: Full detail for 09-resources-xml — layouts, drawables, strings, colors, themes
+globs: ["**/res/**/*.xml"]
+alwaysApply: false
+---
+
 # XML layouts, drawables, strings, colors, and themes
 
 Full detail for `09-resources-xml.mdc`. Do not delete lines from this file — edit here and keep the rule stub in sync.

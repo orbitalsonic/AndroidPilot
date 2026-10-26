@@ -1,3 +1,11 @@
+---
+description: Full detail for 08-gradle — module script order, catalog, signing, R8 keepRules
+paths:
+  - "**/*.gradle.kts"
+  - "**/libs.versions.toml"
+  - "**/gradle.properties"
+---
+
 # Gradle, build config, catalog sections/naming, and dependency management
 
 Full detail for `08-gradle.md`. Do not delete lines from this file — edit here and keep the rule stub in sync.
