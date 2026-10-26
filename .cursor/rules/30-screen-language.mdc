@@ -33,7 +33,7 @@ Shared pieces live once: `LanguageAdapter` (`ListAdapter` + DiffUtil), `Language
 - Startup: Continue in the toolbar (not a sticky footer) unless Figma says otherwise; in-app: list fills between search and banner
 - Search: filter on `doAfterTextChanged` → Intent `SearchChanged(query)`; filtering in ViewModel/UseCase, never in the Fragment
 - Rows: flag + display name come from the data source list (catalog). Display name is `English (native)` by design and is **not** translated (`translatable="false"` if ever moved to resources); search matches English name and native name
-- Saved locale = the catalog `languageCode` (`zh-CN`, `ceb`, `jw`, …). Convert to the Android folder / `Locale` only at the apply step — never rewrite the stored code
+- Saved locale = the catalog `languageCode` (`zh-CN`, `ceb`, `jv`, …). Convert to the Android folder / `Locale` only at the apply step — never rewrite the stored code
 
 ## UI helpers
 

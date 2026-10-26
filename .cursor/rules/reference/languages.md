@@ -34,7 +34,7 @@ class DpLanguages {
 
 | Field | Rule |
 |-------|------|
-| `languageCode` | Column **Code** below — exactly as written (`zh-CN`, `zh-TW`, `ceb`, `jw`, …). This is what prefs store and what the localize skill reads |
+| `languageCode` | Column **Code** below — exactly as written (`zh-CN`, `zh-TW`, `ceb`, `jv`, …). This is what prefs store and what the localize skill reads |
 | English name | Column **English name** — used for search / sort |
 | Display name | Column **Display name** — `English name (native)`; shown in the list row. Not translated; `translatable="false"` if moved to resources |
 | Flag | Column **Flag** — `flag_*` drawable in `:core-ui` (`09-resources-xml` prefix table) |
@@ -96,7 +96,7 @@ class DpLanguages {
 | 44 | `ga` | Irish | Irish (Gaeilge) | `flag_ireland` | `values-ga` | LTR | one/two/few/many/other plurals |
 | 45 | `it` | Italian | Italian | `flag_italy` | `values-it` | LTR | |
 | 46 | `ja` | Japanese | Japanese (日本) | `flag_japan` | `values-ja` | LTR | No plural distinction (`other` only) |
-| 47 | `jw` | Javanese | Javanese (basa jawa) | `flag_indonesia` | `values-jv` | LTR | `jw` is the deprecated ISO code kept in the app; the resource folder uses ISO 639-1 `jv` |
+| 47 | `jv` | Javanese | Javanese (basa jawa) | `flag_indonesia` | `values-jv` | LTR | ISO 639-1 is `jv`. The shipped QiblaCompass list used the withdrawn code `jw` — use `jv` in `DpLanguages`, prefs and folder; map a saved legacy `jw` to `jv` when reading prefs |
 | 48 | `kn` | Kannada | Kannada (ಕನ್ನಡ) | `flag_india` | `values-kn` | LTR | |
 | 49 | `kk` | Kazakh | Kazakh (қазақ) | `flag_kazakhstan` | `values-kk` | LTR | |
 | 50 | `km` | Khmer | Khmer (ខ្មែរ) | `flag_cambodia` | `values-km` | LTR | |
@@ -168,7 +168,7 @@ Apply in this order; the table above is the result.
    - `id` → `values-in` (or `values-id`)
    - `yi` → `values-ji` (or `values-yi`)
    Prefer the legacy folder on a fresh project; on an existing project reuse whichever already exists. Never create both.
-4. **Deprecated ISO code in the app** → current ISO 639-1 folder: `jw` → `values-jv`.
+4. **Withdrawn ISO codes are not allowed in the app list**: Javanese is `jv` (`jw` was withdrawn in 2001), so code, saved pref and folder all use `jv` → `values-jv`. Only Android's own legacy folder codes (rule 3) may differ from the app code.
 5. **Code with region** `xx-YY` → `values-xx-rYY` (`zh-CN` → `values-zh-rCN`, `zh-TW` → `values-zh-rTW`, `pt-BR` → `values-pt-rBR`, `fr-CA` → `values-fr-rCA`).
 6. **Three-letter code** (ISO 639-2/3) → BCP 47 folder `values-b+<code>` (`ceb` → `values-b+ceb`, `haw` → `values-b+haw`, `hmn` → `values-b+hmn`). Region on a 3-letter code: `values-b+<code>+<REGION>`.
 7. **Filipino** `tl` → `values-tl` (Android treats it as `fil`; `values-b+fil` is equivalent — keep one).
@@ -187,5 +187,5 @@ Apply in this order; the table above is the result.
 - Hardcoding this list in Fragments / ViewModels / `*ScreenContent` — it lives in `DpLanguages` / `LanguageDataSource` (`:data`) only
 - A language code in the app that is not in this catalog (ask first, then add the row here)
 - Two folders for the same language (`values-he` **and** `values-iw`, `values-id` **and** `values-in`)
-- `values-en/`, `values-jw/`, `values-ceb/` (invalid or duplicate qualifiers)
+- `values-en/`, `values-jw/`, `values-ceb/` (invalid or duplicate qualifiers); `"jw"` as an app code (withdrawn — use `jv`)
 - Translating the display-name column — it is already `English (native)` by design

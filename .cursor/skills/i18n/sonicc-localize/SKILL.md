@@ -32,7 +32,7 @@ Search the whole project by **filename**, in this order, and use the first hit:
 1. `DpLanguages.kt` — reference / legacy apps (QiblaCompass): `class DpLanguages { fun getLanguagesList(languageCode: String = ""): List<LanguageItem> }`
 2. `LanguageDataSource.kt` — template name on new projects (`:data`), same list shape
 
-Do not search for an annotation named `LanguageDataSource`. Open the file and read every `LanguageItem(...)` row (or the enum / list / constants that hold codes). The **first argument** of each row is the language code the app stores (`"en"`, `"zh-CN"`, `"ceb"`, `"jw"`, …); then English name, display name (`English (native)`), `flag_*` drawable, `selected`.
+Do not search for an annotation named `LanguageDataSource`. Open the file and read every `LanguageItem(...)` row (or the enum / list / constants that hold codes). The **first argument** of each row is the language code the app stores (`"en"`, `"zh-CN"`, `"ceb"`, `"jv"`, …); then English name, display name (`English (native)`), `flag_*` drawable, `selected`.
 
 ```kotlin
 class DpLanguages {
@@ -146,7 +146,7 @@ Do this once, fast, before any worker starts.
    - `ur` → `values-ur/`
    - `zh-CN` → `values-zh-rCN/`, `zh-TW` → `values-zh-rTW/`, `pt-BR` → `values-pt-rBR/`, `fr-CA` → `values-fr-rCA/`
    - `he` → `values-iw/`, `id` → `values-in/`, `yi` → `values-ji/` (legacy Android codes; `values-he` / `values-id` / `values-yi` are equivalent — never create both)
-   - `jw` → `values-jv/` (deprecated ISO code in the app, current ISO 639-1 code on disk)
+   - `jv` → `values-jv/` (Javanese; a legacy app list may still say `jw` — that code is withdrawn, treat it as `jv` and tell the user to fix the data source)
    - `ceb` → `values-b+ceb/`, `haw` → `values-b+haw/`, `hmn` → `values-b+hmn/` (3-letter codes need the BCP 47 `b+` form; `values-ceb/` is invalid)
    - `tl` → `values-tl/`, `no` → `values-no/`
    If a code is outside the catalog and those rules do not settle it, ask. Do not guess.
