@@ -1,6 +1,6 @@
 ---
 name: sonicc-review-architecture
-description: Sonic Cursor Skill: Review Android changes against Clean Architecture, MVI, module boundaries, and project rules. Use when reviewing PRs, refactors, or asking if code follows architecture standards. Prefer sonicc-review-complete for a full multi-check pass.
+description: Sonic Cursor Skill: Review Android changes against Clean Architecture, MVI, module boundaries, and project rules. Use when reviewing PRs, refactors, or asking if code follows architecture standards. Prefer sonicc-review for a full multi-check pass.
 ---
 
 # Architecture Review

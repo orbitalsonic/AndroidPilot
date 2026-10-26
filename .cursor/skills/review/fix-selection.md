@@ -1,6 +1,6 @@
 # Fix selection (shared)
 
-Used by `sonicc-review-architecture`, `sonicc-review-performance`, `sonicc-review-security`, `sonicc-review-cleanup`, and `sonicc-review-complete`.
+Used by `sonicc-review-architecture`, `sonicc-review-performance`, `sonicc-review-security`, `sonicc-review-cleanup`, and `sonicc-review`.
 
 ## Numbering (mandatory)
 
@@ -8,7 +8,7 @@ Used by `sonicc-review-architecture`, `sonicc-review-performance`, `sonicc-revie
 2. Order: **Critical → Warnings / High → Medium → Suggestions / optional**.
 3. Each numbered line must be one concrete fix (actionable), not a vague note.
 4. Skip pure informational “Pass” notes — only number items the agent could implement if asked.
-5. For `sonicc-review-complete`, keep **one** number sequence across Architecture + Performance + Security + Cleanup (do not restart at 1 per section).
+5. For `sonicc-review`, keep **one** number sequence across Architecture + Performance + Security + Cleanup (do not restart at 1 per section).
 
 Example shape:
 

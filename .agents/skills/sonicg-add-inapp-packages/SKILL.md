@@ -11,7 +11,7 @@ Full detail: [`.agents/rules/reference/premium-billing.md`](../rules/reference/p
 
 Obey `.agents/project-settings.json` when present.
 
-For greenfield billing → use `sonicg-implement-in-app-billing`. For subscription tiers → use `sonicg-add-subscription-packages`.
+For greenfield billing → use `sonicg-inapp-billing`. For subscription tiers → use `sonicg-add-subscription-packages`.
 
 ---
 
@@ -19,8 +19,8 @@ For greenfield billing → use `sonicg-implement-in-app-billing`. For subscripti
 
 | App state           | Action                                |
 |---------------------|---------------------------------------|
-| No billing stack    | Stop → **`sonicg-implement-in-app-billing`** |
-| Legacy v3 listeners | Stop → **`sonicg-update-in-app-billing`**    |
+| No billing stack    | Stop → **`sonicg-inapp-billing`** |
+| Legacy v3 listeners | Stop → **`sonicg-inapp-billing-update`**    |
 | Billing exists      | Continue below                        |
 
 ---
@@ -173,7 +173,7 @@ When `writeTestsWithFeatures: true`:
 ## Do not
 
 - Add subscription tiers here (use `sonicg-add-subscription-packages`)
-- Greenfield billing setup (use `sonicg-implement-in-app-billing`)
+- Greenfield billing setup (use `sonicg-inapp-billing`)
 - Duplicate product IDs already in `setNonConsumables` / `setConsumables`
 - Hardcode prices — always from `productsState` mapper
 - Log purchase tokens or PII

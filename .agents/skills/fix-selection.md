@@ -1,6 +1,6 @@
 # Fix selection (shared)
 
-Used by `sonicg-review-architecture`, `sonicg-review-performance`, `sonicg-review-security`, `sonicg-review-cleanup`, and `sonicg-review-complete`.
+Used by `sonicg-review-architecture`, `sonicg-review-performance`, `sonicg-review-security`, `sonicg-review-cleanup`, and `sonicg-review`.
 
 ## Numbering (mandatory)
 
@@ -8,7 +8,7 @@ Used by `sonicg-review-architecture`, `sonicg-review-performance`, `sonicg-revie
 2. Order: **Critical → Warnings / High → Medium → Suggestions / optional**.
 3. Each numbered line must be one concrete fix (actionable), not a vague note.
 4. Skip pure informational “Pass” notes — only number items the agent could implement if asked.
-5. For `sonicg-review-complete`, keep **one** number sequence across Architecture + Performance + Security + Cleanup (do not restart at 1 per section).
+5. For `sonicg-review`, keep **one** number sequence across Architecture + Performance + Security + Cleanup (do not restart at 1 per section).
 
 Example shape:
 

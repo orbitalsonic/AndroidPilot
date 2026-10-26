@@ -11,7 +11,7 @@ Full detail: [`.claude/rules/reference/premium-billing.md`](../rules/reference/p
 
 Obey `.claude/project-settings.json` when present.
 
-For greenfield billing → use `sonic-implement-in-app-billing`. For subscription tiers → use `sonic-add-subscription-packages`.
+For greenfield billing → use `sonic-inapp-billing`. For subscription tiers → use `sonic-add-subscription-packages`.
 
 ---
 
@@ -19,8 +19,8 @@ For greenfield billing → use `sonic-implement-in-app-billing`. For subscriptio
 
 | App state           | Action                                |
 |---------------------|---------------------------------------|
-| No billing stack    | Stop → **`sonic-implement-in-app-billing`** |
-| Legacy v3 listeners | Stop → **`sonic-update-in-app-billing`**    |
+| No billing stack    | Stop → **`sonic-inapp-billing`** |
+| Legacy v3 listeners | Stop → **`sonic-inapp-billing-update`**    |
 | Billing exists      | Continue below                        |
 
 ---
@@ -173,7 +173,7 @@ When `writeTestsWithFeatures: true`:
 ## Do not
 
 - Add subscription tiers here (use `sonic-add-subscription-packages`)
-- Greenfield billing setup (use `sonic-implement-in-app-billing`)
+- Greenfield billing setup (use `sonic-inapp-billing`)
 - Duplicate product IDs already in `setNonConsumables` / `setConsumables`
 - Hardcode prices — always from `productsState` mapper
 - Log purchase tokens or PII

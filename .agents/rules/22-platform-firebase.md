@@ -14,7 +14,7 @@ paths:
 |---------|--------|
 | `InternetManager` | `:core-platform` |
 | `PlatformFirebase` object | `:core-platform` |
-| **`firebase-messaging` dependency** | `:core-platform` (mandatory on new projects via `sonicg-setup-new-project`; no service in template) |
+| **`firebase-messaging` dependency** | `:core-platform` (mandatory on new projects via `sonicg-setup-new-project`; no service in template; push wiring → `sonicg-fcm`) |
 | Event name constants (`EventsProvider`) | `:core-common` |
 | Remote Config DataSource | `:data` |
 | RC cache in `SharedPrefManager` | `:data` |
@@ -42,7 +42,7 @@ object PlatformFirebase {
 
 - **`sonicg-setup-new-project`** must add `firebase-messaging` to the catalog + `implementation(libs.firebase.messaging)` on **`:core-platform`** only
 - Dependency only — **no** `FirebaseMessagingService`, manifest FCM entries, or token code in the template bootstrap
-- Later push handling: separate feature work; optional dep-only add for existing apps → skill `sonicg-implement-firebase-messaging`
+- Later push handling (`SonicMessagingService`, topics, custom notification, `MainActivity` setup) → skill `sonicg-fcm` (QiblaCompass `SonicFcmManager` shape); optional dep-only add for existing apps → skill `sonicg-setup-firebase-messaging`
 
 ## Analytics events
 

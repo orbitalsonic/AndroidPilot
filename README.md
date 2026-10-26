@@ -52,9 +52,9 @@ Cursor: `/sonicc-…` · Claude Code: `/sonic-…` · Gemini: `@sonicg-…` (sam
 1. `/sonicc-setup-new-project` or `/sonic-setup-new-project` or `@sonicg-setup-new-project` (greenfield) · `/sonicc-setup-old-project` or `/sonic-setup-old-project` or `@sonicg-setup-old-project` (existing app)
 2. `/sonicc-setup-design-system` or `/sonic-setup-design-system` or `@sonicg-setup-design-system` — Figma tokens/themes in `:core-ui`
 3. `/sonicc-figma-to-xml` or `/sonic-figma-to-xml` or `@sonicg-figma-to-xml` if xml; `/sonicc-figma-to-compose` or `/sonic-figma-to-compose` or `@sonicg-figma-to-compose` if compose
-4. `/sonicc-create-mvi` or `/sonic-create-mvi` or `@sonicg-create-mvi` — Intent / State / Effect / ViewModel + Fragment **or** `*Screen`
-5. `/sonicc-create-clean-architecture` or `/sonic-create-clean-architecture` or `@sonicg-create-clean-architecture` — only when new domain / data is required
-6. `/sonicc-review-complete` or `/sonic-review-complete` or `@sonicg-review-complete` before PR
+4. `/sonicc-mvi` or `/sonic-mvi` or `@sonicg-mvi` — Intent / State / Effect / ViewModel + Fragment **or** `*Screen`
+5. `/sonicc-clean-architecture` or `/sonic-clean-architecture` or `@sonicg-clean-architecture` — only when new domain / data is required
+6. `/sonicc-review` or `/sonic-review` or `@sonicg-review` before PR
 
 **Shortcut:** `/sonicc-create-screen` / `/sonic-create-screen` / `@sonicg-create-screen` runs steps 3–5 in one invoke.
 

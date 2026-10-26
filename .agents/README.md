@@ -53,9 +53,9 @@ All skills live flat under `.agents/skills/sonicg-<name>/SKILL.md`.
 sonicg-setup-new-project          Bootstrap multi-module app + persist settings (Firebase BOM + analytics/crashlytics/messaging + RC cache)
 sonicg-setup-old-project          Migrate existing production app to sonicg-setup-new-project architecture; preserve product behavior; confirm settings first
 sonicg-setup-design-system        Figma design-system file → :core-ui tokens/themes (+ AppTheme in core/ui/theme/ when compose)
-sonicg-create-screen              Full screen: UI (sonicg-figma-to-xml|compose) + sonicg-create-mvi + sonicg-create-clean-architecture when needed
-sonicg-create-mvi                 Presentation MVI only (no domain/data) — Fragment if xml, `*Screen` in `:feature-*` if compose
-sonicg-create-clean-architecture  Domain + data + core pieces as needed
+sonicg-create-screen              Full screen: UI (sonicg-figma-to-xml|compose) + sonicg-mvi + sonicg-clean-architecture when needed
+sonicg-mvi                 Presentation MVI only (no domain/data) — Fragment if xml, `*Screen` in `:feature-*` if compose
+sonicg-clean-architecture  Domain + data + core pieces as needed
 sonicg-figma-to-xml               XML layouts (+ Figma design-to-code); `uiFramework` xml only
 sonicg-figma-to-compose           Compose screens (AnimeHub `*Screen` / `*ScreenContent`); `uiFramework` compose
 sonicg-create-dialog              Dialog UI — XML if xml, Compose `*Dialog` if compose
@@ -66,35 +66,37 @@ sonicg-review-architecture        Architecture / MVI / boundaries
 sonicg-review-performance         ANR / lists / dispatchers
 sonicg-review-security            Secrets / manifest / PII
 sonicg-review-cleanup             Unused code/resources / app size / release shrink
-sonicg-review-complete            Runs all review-* + summary report
-sonicg-test-unit                  Write+run JVM unit/Flow tests; consent before fix
-sonicg-test-integration           Write+run multi-layer tests; consent before fix
-sonicg-test-e2e                   Write+run E2E on device; consent before fix
-sonicg-test-complete              Full run + walkthrough; consent before fix
+sonicg-review            Yes/no per architecture / cleanup / performance / security → runs chosen review-* + one report
+sonicg-write-unit-test                  Write+run JVM unit/Flow tests; consent before fix
+sonicg-write-integration-test           Write+run multi-layer tests; consent before fix
+sonicg-write-e2e-test                   Write+run E2E on device; consent before fix
+sonicg-write-test              Yes/no per unit / integration / E2E → runs chosen suites (+ walkthrough); consent before fix
 sonicg-gradle-organize            Catalog + android/base/dependencies section order (signingConfigs, bundle, R8 optimization/keepRules)
 sonicg-gradle-update              Groovy→KTS if needed; AGP 9.3+; R8 optimization + keepRules; bump all deps (catalog + hardcodes)
 sonicg-build-debug-apk            Debug APK → device install + launch
 sonicg-build-release-apk          Release signing + APK → device install + launch
 sonicg-build-release-bundle       Release signing + AAB (no device)
-sonicg-implement-in-app-update    Play In-App Updates
-sonicg-implement-in-app-review    Play In-App Review
-sonicg-implement-firebase-messaging      firebase-messaging dep (:core-platform) only
-sonicg-implement-firebase-remote-config  First-time RC + SharedPref cache + StartupFragment fetch
+sonicg-inapp-update    Play In-App Updates
+sonicg-inapp-review    Play In-App Review
+sonicg-setup-firebase          Firebase base (plugins, dummy google-services.json, Analytics + Crashlytics) + yes/no run of events / RC / messaging
+sonicg-setup-firebase-messaging      firebase-messaging dep (:core-platform) only
+sonicg-fcm                     Full FCM push: SonicMessagingService + topics + custom notification (QiblaCompass)
+sonicg-setup-firebase-remote-config  First-time RC + SharedPref cache + StartupFragment fetch
 sonicg-add-firebase-remote-config        Add RC keys to existing SharedPref + Remote Config classes
-sonicg-implement-firebase-events         First-time full-app Analytics (screen_view + ui_click)
+sonicg-setup-firebase-events         First-time full-app Analytics (screen_view + ui_click)
 sonicg-add-firebase-events               Add Analytics events for selected screens
-sonicg-implement-in-app-billing   Greenfield Play billing (subs + in-app, v4 stack)
-sonicg-update-in-app-billing      Migrate orbitalsonic SonicInApp v3 → v4.0.0
+sonicg-inapp-billing   Greenfield Play billing (subs + in-app, v4 stack)
+sonicg-inapp-billing-update      Migrate orbitalsonic SonicInApp v3 → v4.0.0
 sonicg-add-subscription-packages  Add subscription tiers to existing billing
 sonicg-add-inapp-packages         Add one-time in-app products to existing billing
-sonicg-implement-admob-ads        First-time AdMob screen wiring (:gmaAds from GitHub)
-sonicg-add-admob-banner           Add banner placement to existing :gmaAds
-sonicg-add-admob-interstitial     Add interstitial placement
-sonicg-add-admob-native           Add native placement
-sonicg-add-admob-rewarded         Add rewarded placement
-sonicg-add-admob-rewarded-interstitial   Add rewarded interstitial placement
-sonicg-add-admob-appOpen-Entrance Wire App Open ENTRANCE (splash/consent)
-sonicg-add-admob-appOpen-lifecycle       Wire App Open LIFECYCLE (resume)
+sonicg-setup-admob-ads        First-time AdMob screen wiring (:gmaAds from GitHub)
+sonicg-admob-banner           Add banner placement to existing :gmaAds
+sonicg-admob-interstitial     Add interstitial placement
+sonicg-admob-native           Add native placement
+sonicg-admob-rewarded         Add rewarded placement
+sonicg-admob-rewarded-interstitial   Add rewarded interstitial placement
+sonicg-admob-appOpen-Startup Wire App Open STARTUP — StartupFragment, `:gmaAds` key `ENTRANCE` (splash/consent)
+sonicg-admob-appOpen-lifecycle       Wire App Open LIFECYCLE (resume)
 ```
 
 ### Typical feature flow
@@ -104,8 +106,8 @@ sonicg-add-admob-appOpen-lifecycle       Wire App Open LIFECYCLE (resume)
 1. `sonicg-setup-new-project` (greenfield) or `sonicg-setup-old-project` (existing production app) — persist **`uiFramework`**
 2. `sonicg-setup-design-system` — Figma tokens/themes in `:core-ui` (Compose `AppTheme` in `core/ui/theme/` when compose)
 3. `sonicg-figma-to-xml` if `uiFramework` is `xml`; `sonicg-figma-to-compose` if `compose` (or dialog / bottom-sheet)
-4. `sonicg-create-mvi` — Intent/State/Effect/VM + Fragment **or** `*Screen` in `:feature-*`
-5. `sonicg-create-clean-architecture` — when new domain/data is required
+4. `sonicg-mvi` — Intent/State/Effect/VM + Fragment **or** `*Screen` in `:feature-*`
+5. `sonicg-clean-architecture` — when new domain/data is required
 
 Data patterns (Retrofit, Room, SharedPreferences) live in **rules** + [`.agents/rules/reference/`](rules/reference/) — not separate skills.
 
@@ -121,7 +123,7 @@ Data patterns (Retrofit, Room, SharedPreferences) live in **rules** + [`.agents/
 | `11`–`13`              | Testing, naming, libraries                                                                                                                                           |
 | `14`–`16`              | Security (always), compatibility, logging (always)                                                                                                                   |
 | `17`–`20`              | Nav (`nav_graph_startup` + `nav_graph_main`, optional nested dashboard / `navigateRootTo`), errors, base UI (`19` → `reference/`: `InsetsMode` edge-to-edge), permissions |
-| `21`–`25`              | Ads/billing (**ads are not MVI** — `:gmaAds` from GitHub; see `sonicg-implement-admob-ads` / `sonicg-add-admob-*` + `reference/ads-gma.md`), Firebase, startup, Figma assets, in-app update |
+| `21`–`25`              | Ads/billing (**ads are not MVI** — `:gmaAds` from GitHub; see `sonicg-setup-admob-ads` / `sonicg-admob-*` + `reference/ads-gma.md`), Firebase, startup, Figma assets, in-app update |
 | `26-data-persistence`  | Retrofit / Room / SharedPreferences (`:core-network` / `:core-database` when added)                                                                                  |
 | `27-in-app-review`     | Play In-App Review placement (`InAppReviewManager`)                                                                                                                  |
 | `28-compose-ui`        | Compose feature modules / Screen-Content / NavGraph (`uiFramework` compose) — [reference/compose-ui.md](rules/reference/compose-ui.md)                               |
@@ -153,4 +155,4 @@ Data patterns (Retrofit, Room, SharedPreferences) live in **rules** + [`.agents/
 2. Open the project in Android Studio (Gemini Agent) or Gemini CLI.
 3. Type `@` and pick a skill (e.g. `@sonicg-create-screen`, `@sonicg-figma-to-xml`, `@sonicg-figma-to-compose`, `@sonicg-localize`).
 4. Skills point at `.agents/rules/`. Read `00-global`, `14-security-secrets`, and `16-logging` on every task; path-scoped rules apply when those files are touched.
-5. Before PRs: `@sonicg-review-complete` or individual `sonicg-review-*` skills.
+5. Before PRs: `@sonicg-review` or individual `sonicg-review-*` skills.

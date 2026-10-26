@@ -11,7 +11,7 @@ Obey `.cursor/project-settings.json` when present (`uiFramework`, `orientation`,
 
 **If `uiFramework` is `compose`:** stop. Use `sonicc-figma-to-compose` instead (unless the user explicitly asked to convert this app to XML).
 
-**Never** create Kotlin Fragment/ViewModel/DI here — point user to `sonicc-create-mvi` / `sonicc-create-clean-architecture` afterward.
+**Never** create Kotlin Fragment/ViewModel/DI here — point user to `sonicc-mvi` / `sonicc-clean-architecture` afterward.
 
 ## Workflow
 
@@ -80,7 +80,7 @@ Startup and in-app Language / Premium are **two layouts each** — never one lay
 
 ## Bottom navigation (when Figma has a bottom bar)
 
-**Default (reference QiblaCompass):** the bar lives in **`activity_main.xml`** (`fcvContainerMain` + banner slot `bannerAdViewMain` + `bnvMain`), tabs are **top-level destinations in `nav_graph_main.xml`**, menu is `menu_bottom_nav_main.xml` (item ids = tab fragment ids). Produce the tab `fragment_*.xml` layouts + menu and add the tab destinations to `nav_graph_main` — no `fragment_dashboard.xml`. Kotlin (`setupBottomNavigation`, backpress) → `sonicc-create-mvi` + `32-screen-dashboard`.
+**Default (reference QiblaCompass):** the bar lives in **`activity_main.xml`** (`fcvContainerMain` + banner slot `bannerAdViewMain` + `bnvMain`), tabs are **top-level destinations in `nav_graph_main.xml`**, menu is `menu_bottom_nav_main.xml` (item ids = tab fragment ids). Produce the tab `fragment_*.xml` layouts + menu and add the tab destinations to `nav_graph_main` — no `fragment_dashboard.xml`. Kotlin (`setupBottomNavigation`, backpress) → `sonicc-mvi` + `32-screen-dashboard`.
 
 **Optional nested variant** (only when the product needs a `DashboardFragment` shell inside a deeper flow): produce **XML resources only** as below. Follow `17-navigation`.
 
@@ -122,15 +122,15 @@ Also ensure root `nav_graph_main.xml` has a `dashboardFragment` destination (add
 
 ### After BNV layouts
 
-Tell the user to run **`sonicc-create-mvi`** for each tab (and for `DashboardFragment` in the nested variant) and wire:
+Tell the user to run **`sonicc-mvi`** for each tab (and for `DashboardFragment` in the nested variant) and wire:
 
 - `setupBottomNavigation()` in `MainActivity` (default) or nested `navController` lazy from `childFragmentManager` + `fcvContainerDashboard` (nested variant)
 - Backpress: non-tab pop → Home tab → Exit / double-back (`32-screen-dashboard`)
 
 ## Do not create
 
-- Kotlin Fragment/ViewModel (use `sonicc-create-mvi` skill)
-- Domain / data / repository layers (use `sonicc-create-clean-architecture`)
+- Kotlin Fragment/ViewModel (use `sonicc-mvi` skill)
+- Domain / data / repository layers (use `sonicc-clean-architecture`)
 - Strings in presentation module — add to shared `strings.xml` (incl. `cd_*`)
 - `dimens.xml`
 - `findViewById` references
@@ -144,4 +144,4 @@ Tell the user to run **`sonicc-create-mvi`** for each tab (and for `DashboardFra
 - Call out any asset that fell back from SVG → raster and why
 - Call out any gradient angle rounded to a multiple of 45
 - If Dashboard/BNV: list the menu + `nav_graph_dashboard` + tab layouts created
-- Tell user to wire via `sonicc-create-mvi` (presentation) and `sonicc-create-clean-architecture` if new domain/data is needed — or **`sonicc-create-screen`** for the full stack in one invoke
+- Tell user to wire via `sonicc-mvi` (presentation) and `sonicc-clean-architecture` if new domain/data is needed — or **`sonicc-create-screen`** for the full stack in one invoke

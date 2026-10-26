@@ -11,7 +11,7 @@ Obey `.claude/project-settings.json` when present (`uiFramework`, `orientation`,
 
 **If `uiFramework` is `xml`:** stop. Use `sonic-figma-to-xml` instead (unless the user explicitly asked to convert this app to Compose).
 
-**Never** create ViewModel / Intent / State / Effect / DI here — point user to `sonic-create-mvi` / `sonic-create-clean-architecture` afterward.
+**Never** create ViewModel / Intent / State / Effect / DI here — point user to `sonic-mvi` / `sonic-clean-architecture` afterward.
 
 Canonical layout: AnimeHub (`feature-*` modules, `*Screen` + `*ScreenContent`, route constants, NavGraph in `:app`).
 
@@ -32,7 +32,7 @@ Same output rules as below — create the requested `*Screen` / `*Dialog` / `*Bo
 
 ## Output
 
-Place UI in the matching **`:feature-<kebab>`** module (create the module if `sonic-create-mvi` has not yet). Stateless UI can land before the ViewModel exists.
+Place UI in the matching **`:feature-<kebab>`** module (create the module if `sonic-mvi` has not yet). Stateless UI can land before the ViewModel exists.
 
 | Type | Name | Location |
 |------|------|----------|
@@ -107,8 +107,8 @@ Obey **all** Compose invariants in `28-compose-ui.md` + [reference/compose-ui.md
 
 ## Do not create
 
-- ViewModel / Intent / State / Effect / Koin module (use `sonic-create-mvi`)
-- Domain / data / repository layers (use `sonic-create-clean-architecture`)
+- ViewModel / Intent / State / Effect / Koin module (use `sonic-mvi`)
+- Domain / data / repository layers (use `sonic-clean-architecture`)
 - XML `fragment_*` / `activity_*` layouts for this screen
 - `NavController` inside the feature composable — pass `onNavigate*` lambdas
 - Strings outside `:core-ui` `strings.xml` (incl. `cd_*`)
@@ -118,4 +118,4 @@ Obey **all** Compose invariants in `28-compose-ui.md` + [reference/compose-ui.md
 ## After UI
 
 - Call out any asset that fell back from SVG → raster and why
-- Tell user to wire via `sonic-create-mvi` (feature module MVI + NavGraph entry) and `sonic-create-clean-architecture` if new domain/data is needed — or **`sonic-create-screen`** for the full stack in one invoke
+- Tell user to wire via `sonic-mvi` (feature module MVI + NavGraph entry) and `sonic-clean-architecture` if new domain/data is needed — or **`sonic-create-screen`** for the full stack in one invoke

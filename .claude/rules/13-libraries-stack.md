@@ -15,7 +15,7 @@ paths:
 | Lifecycle | viewmodel-ktx, runtime-ktx |
 | DI | Koin (default) |
 | Coroutines | kotlinx-coroutines-core, play-services integration |
-| Firebase (new projects) | BOM + analytics/crashlytics/`firebase-messaging` on `:core-platform`; `firebase-config` + `kotlinx-coroutines-play-services` on `:data` — via `sonic-setup-new-project` (FCM: dependency only, no service) |
+| Firebase (new projects) | BOM + analytics/crashlytics/`firebase-messaging` on `:core-platform`; `firebase-config` + `kotlinx-coroutines-play-services` on `:data` — via `sonic-setup-new-project` (FCM: dependency only, no service — full push wiring via `sonic-fcm`) |
 | Images | **xml:** Glide via `ImageView.loadImage(...)`. **compose:** Coil 3 `AsyncImage` |
 | Splash | core-splashscreen |
 | Desugaring | desugar_jdk_libs (for java.time on older APIs) |

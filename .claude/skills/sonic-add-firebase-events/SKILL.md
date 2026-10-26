@@ -1,6 +1,6 @@
 ---
 name: sonic-add-firebase-events
-description: OrbitalSonic Claude Skill: Add Firebase Analytics screen_view and ui_click for one or more existing screens. Use when extending EventsProvider, adding events to selected Fragments or Compose Screens, or /sonic-add-firebase-events — not for first-time full-app wiring (use sonic-implement-firebase-events).
+description: OrbitalSonic Claude Skill: Add Firebase Analytics screen_view and ui_click for one or more existing screens. Use when extending EventsProvider, adding events to selected Fragments or Compose Screens, or /sonic-add-firebase-events — not for first-time full-app wiring (use sonic-setup-firebase-events).
 ---
 
 # Add Firebase Events (selected screens)
@@ -10,13 +10,13 @@ Shared event rules: [events.md](../events.md).
 
 Obey `.claude/project-settings.json` when present.
 
-For first-time full-app events → `sonic-implement-firebase-events`.
+For first-time full-app events → `sonic-setup-firebase-events`.
 
 ## Entry
 
 | App state | Action |
 |-----------|--------|
-| No `postScreenView`, or old per-screen / per-button events are still posted | Stop → **`sonic-implement-firebase-events`** (it removes the old posts, then wires this catalog for the whole app) |
+| No `postScreenView`, or old per-screen / per-button events are still posted | Stop → **`sonic-setup-firebase-events`** (it removes the old posts, then wires this catalog for the whole app) |
 | `postScreenView` and this catalog already exist | Continue. Add into **existing** files. Do **not** migrate modules without **explicit user approval**. |
 
 ---
@@ -70,14 +70,14 @@ Follow this app’s existing posts if they already fire from somewhere else. Do 
 - [ ] Only the screens the user picked
 - [ ] `screen_view` for the screen; `ui_click` for each real tap
 - [ ] No raw event strings in UI
-- [ ] No new Analytics library unless the poster was missing (then stop and send the user to `sonic-implement-firebase-events`)
+- [ ] No new Analytics library unless the poster was missing (then stop and send the user to `sonic-setup-firebase-events`)
 
 ## Do not
 
-- Full-app sweep (that is `sonic-implement-firebase-events`)
+- Full-app sweep (that is `sonic-setup-firebase-events`)
 - Remote Config (`sonic-add-firebase-remote-config`)
 - Replace `FirebaseUtils` with `PlatformFirebase` without approval
 - One event name per button
-- Add `screen_view` beside an old event name for the same screen (that cutover is `sonic-implement-firebase-events`)
+- Add `screen_view` beside an old event name for the same screen (that cutover is `sonic-setup-firebase-events`)
 - Rename a catalog name after it has shipped (`home_screen` stays `home_screen`)
 - Log PII

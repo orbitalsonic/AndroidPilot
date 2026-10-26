@@ -8,18 +8,18 @@ paths:
   - "**/*.gradle.kts"
 ---
 
-Apply when the project includes ads and/or IAP. Setup skills **always place** `:gmaAds` from GitHub; screen wiring needs user yes (or `/sonic-implement-admob-ads`).
+Apply when the project includes ads and/or IAP. Setup skills **always place** `:gmaAds` from GitHub; screen wiring needs user yes (or `/sonic-setup-admob-ads`).
 
 ## Ads are not MVI
 
 - Ads stay on **`:gmaAds`** (facade + controllers + Fragment/Activity extensions) — **not** Intent / State / Effect
-- Do **not** apply `sonic-create-mvi` to ads; do not inject `AdsManager` in screens
+- Do **not** apply `sonic-mvi` to ads; do not inject `AdsManager` in screens
 - Screens call extensions (`loadBannerAd`, `showInterstitialAd`, …) with placement keys
 - Convert ads to MVI **only** if the user **explicitly** asks
 
 Full playbook: [reference/ads-gma.md](reference/ads-gma.md)
 
-Skills: `sonic-implement-admob-ads`, `sonic-add-admob-banner`, `sonic-add-admob-interstitial`, `sonic-add-admob-native`, `sonic-add-admob-rewarded`, `sonic-add-admob-rewarded-interstitial`, `sonic-add-admob-appOpen-Entrance`, `sonic-add-admob-appOpen-lifecycle`
+Skills: `sonic-setup-admob-ads`, `sonic-admob-banner`, `sonic-admob-interstitial`, `sonic-admob-native`, `sonic-admob-rewarded`, `sonic-admob-rewarded-interstitial`, `sonic-admob-appOpen-Startup`, `sonic-admob-appOpen-lifecycle`
 
 ## Placing `:gmaAds`
 
@@ -48,7 +48,7 @@ Skills: `sonic-implement-admob-ads`, `sonic-add-admob-banner`, `sonic-add-admob-
 - After purchase success: update entitlement, then let ads/UI react
 - Library: [orbitalsonic/SonicInApp](https://github.com/orbitalsonic/SonicInApp) via JitPack (`com.github.orbitalsonic:SonicInApp`)
 - Full subs + in-app playbook: [reference/premium-billing.md](reference/premium-billing.md)
-- Skills: `sonic-implement-in-app-billing`, `sonic-add-subscription-packages`, `sonic-add-inapp-packages`
+- Skills: `sonic-inapp-billing`, `sonic-add-subscription-packages`, `sonic-add-inapp-packages`
 
 ## Forbidden
 

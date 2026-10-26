@@ -8,18 +8,18 @@ paths:
   - "**/*.gradle.kts"
 ---
 
-Apply when the project includes ads and/or IAP. Setup skills **always place** `:gmaAds` from GitHub; screen wiring needs user yes (or `@sonicg-implement-admob-ads`).
+Apply when the project includes ads and/or IAP. Setup skills **always place** `:gmaAds` from GitHub; screen wiring needs user yes (or `@sonicg-setup-admob-ads`).
 
 ## Ads are not MVI
 
 - Ads stay on **`:gmaAds`** (facade + controllers + Fragment/Activity extensions) — **not** Intent / State / Effect
-- Do **not** apply `sonicg-create-mvi` to ads; do not inject `AdsManager` in screens
+- Do **not** apply `sonicg-mvi` to ads; do not inject `AdsManager` in screens
 - Screens call extensions (`loadBannerAd`, `showInterstitialAd`, …) with placement keys
 - Convert ads to MVI **only** if the user **explicitly** asks
 
 Full playbook: [reference/ads-gma.md](reference/ads-gma.md)
 
-Skills: `sonicg-implement-admob-ads`, `sonicg-add-admob-banner`, `sonicg-add-admob-interstitial`, `sonicg-add-admob-native`, `sonicg-add-admob-rewarded`, `sonicg-add-admob-rewarded-interstitial`, `sonicg-add-admob-appOpen-Entrance`, `sonicg-add-admob-appOpen-lifecycle`
+Skills: `sonicg-setup-admob-ads`, `sonicg-admob-banner`, `sonicg-admob-interstitial`, `sonicg-admob-native`, `sonicg-admob-rewarded`, `sonicg-admob-rewarded-interstitial`, `sonicg-admob-appOpen-Startup`, `sonicg-admob-appOpen-lifecycle`
 
 ## Placing `:gmaAds`
 
@@ -48,7 +48,7 @@ Skills: `sonicg-implement-admob-ads`, `sonicg-add-admob-banner`, `sonicg-add-adm
 - After purchase success: update entitlement, then let ads/UI react
 - Library: [orbitalsonic/SonicInApp](https://github.com/orbitalsonic/SonicInApp) via JitPack (`com.github.orbitalsonic:SonicInApp`)
 - Full subs + in-app playbook: [reference/premium-billing.md](reference/premium-billing.md)
-- Skills: `sonicg-implement-in-app-billing`, `sonicg-add-subscription-packages`, `sonicg-add-inapp-packages`
+- Skills: `sonicg-inapp-billing`, `sonicg-add-subscription-packages`, `sonicg-add-inapp-packages`
 
 ## Forbidden
 

@@ -38,7 +38,7 @@ Obey **all** XML invariants in `09-resources-xml.md` + [reference/resources-xml.
 
 ## Do not create
 
-- Kotlin DialogFragment/ViewModel (use `sonic-create-mvi` or wire to existing host)
+- Kotlin DialogFragment/ViewModel (use `sonic-mvi` or wire to existing host)
 - Strings in presentation module — add to shared `strings.xml` (incl. `cd_*`)
 - `dimens.xml`
 - `findViewById` references
@@ -47,4 +47,4 @@ Obey **all** XML invariants in `09-resources-xml.md` + [reference/resources-xml.
 
 ## After layout
 
-Tell user to wire via `sonic-create-mvi` or existing Fragment / `*Screen` if Kotlin not requested.
+Tell user to wire via `sonic-mvi` or existing Fragment / `*Screen` if Kotlin not requested.

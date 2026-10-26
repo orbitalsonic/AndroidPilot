@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="NONE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="64be090b-99b6-4d58-a39c-4586ed02d018" name="Changes" comment="ai-rules">
+      <change beforePath="$PROJECT_DIR$/.agents/GEMINI.md" beforeDir="false" afterPath="$PROJECT_DIR$/.agents/GEMINI.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.agents/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/.agents/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.agents/rules/00-global.md" beforeDir="false" afterPath="$PROJECT_DIR$/.agents/rules/00-global.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.agents/rules/01-feature-checklist.md" beforeDir="false" afterPath="$PROJECT_DIR$/.agents/rules/01-feature-checklist.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.agents/rules/02-project-structure.md" beforeDir="false" afterPath="$PROJECT_DIR$/.agents/rules/02-project-structure.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.agents/rules/11-testing.md" beforeDir="false" afterPath="$PROJECT_DIR$/.agents/rules/11-testing.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.agents/rules/13-libraries-stack.md" beforeDir="false" afterPath="$PROJECT_DIR$/.agents/rules/13-libraries-stack.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.agents/rules/21-ads-billing.md" beforeDir="false" afterPath="$PROJECT_DIR$/.agents/rules/21-ads-billing.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.agents/rules/22-platform-firebase.md" beforeDir="false" afterPath="$PROJECT_DIR$/.agents/rules/22-platform-firebase.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.agents/rules/25-in-app-update.md" beforeDir="false" afterPath="$PROJECT_DIR$/.agents/rules/25-in-app-update.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.agents/rules/27-in-app-review.md" beforeDir="false" afterPath="$PROJECT_DIR$/.agents/rules/27-in-app-review.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.agents/rules/29-screen-startup.md" beforeDir="false" afterPath="$PROJECT_DIR$/.agents/rules/29-screen-startup.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.agents/rules/33-screen-premium.md" beforeDir="false" afterPath="$PROJECT_DIR$/.agents/rules/33-screen-premium.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.agents/rules/reference/ads-gma.md" beforeDir="false" afterPath="$PROJECT_DIR$/.agents/rules/reference/ads-gma.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.agents/rules/reference/gradle.md" beforeDir="false" afterPath="$PROJECT_DIR$/.agents/rules/reference/gradle.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.agents/rules/reference/premium-billing.md" beforeDir="false" afterPath="$PROJECT_DIR$/.agents/rules/reference/premium-billing.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.agents/skills/events.md" beforeDir="false" afterPath="$PROJECT_DIR$/.agents/skills/events.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.agents/skills/fix-selection.md" beforeDir="false" afterPath="$PROJECT_DIR$/.agents/skills/fix-selection.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.agents/skills/sonicg-add-admob-appOpen-Entrance/SKILL.md" beforeDir="false" afterPath="$PROJECT_DIR$/.agents/skills/sonicg-admob-appOpen-Startup/SKILL.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.agents/skills/sonicg-add-admob-appOpen-lifecycle/SKILL.md" beforeDir="false" afterPath="$PROJECT_DIR$/.agents/skills/sonicg-admob-appOpen-lifecycle/SKILL.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.agents/skills/sonicg-add-admob-banner/SKILL.md" beforeDir="false" afterPath="$PROJECT_DIR$/.agents/skills/sonicg-admob-banner/SKILL.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.agents/skills/sonicg-add-admob-interstitial/SKILL.md" beforeDir="false" afterPath="$PROJECT_DIR$/.agents/skills/sonicg-admob-interstitial/SKILL.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.agents/skills/sonicg-add-admob-native/SKILL.md" beforeDir="false" afterPath="$PROJECT_DIR$/.agents/skills/sonicg-admob-native/SKILL.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.agents/skills/sonicg-add-admob-rewarded-interstitial/SKILL.md" beforeDir="false" afterPath="$PROJECT_DIR$/.agents/skills/sonicg-admob-rewarded-interstitial/SKILL.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.agents/skills/sonicg-add-admob-rewarded/SKILL.md" beforeDir="false" afterPath="$PROJECT_DIR$/.agents/skills/sonicg-admob-rewarded/SKILL.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.agents/skills/sonicg-add-firebase-events/SKILL.md" beforeDir="false" afterPath="$PROJECT_DIR$/.agents/skills/sonicg-add-firebase-events/SKILL.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.agents/skills/sonicg-add-firebase-remote-config/SKILL.md" beforeDir="false" afterPath="$PROJECT_DIR$/.agents/skills/sonicg-add-firebase-remote-config/SKILL.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.agents/skills/sonicg-add-inapp-packages/SKILL.md" beforeDir="false" afterPath="$PROJECT_DIR$/.agents/skills/sonicg-add-inapp-packages/SKILL.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.agents/skills/sonicg-add-subscription-packages/SKILL.md" beforeDir="false" afterPath="$PROJECT_DIR$/.agents/skills/sonicg-add-subscription-packages/SKILL.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.agents/skills/sonicg-create-bottom-sheet/SKILL.md" beforeDir="false" afterPath="$PROJECT_DIR$/.agents/skills/sonicg-create-bottom-sheet/SKILL.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.agents/skills/sonicg-create-clean-architecture/SKILL.md" beforeDir="false" afterPath="$PROJECT_DIR$/.agents/skills/sonicg-clean-architecture/SKILL.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.agents/skills/sonicg-create-dialog/SKILL.md" beforeDir="false" afterPath="$PROJECT_DIR$/.agents/skills/sonicg-create-dialog/SKILL.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.agents/skills/sonicg-create-mvi/SKILL.md" beforeDir="false" afterPath="$PROJECT_DIR$/.agents/skills/sonicg-mvi/SKILL.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.agents/skills/sonicg-create-screen/SKILL.md" beforeDir="false" afterPath="$PROJECT_DIR$/.agents/skills/sonicg-create-screen/SKILL.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.agents/skills/sonicg-figma-to-compose/SKILL.md" beforeDir="false" afterPath="$PROJECT_DIR$/.agents/skills/sonicg-figma-to-compose/SKILL.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.agents/skills/sonicg-figma-to-xml/SKILL.md" beforeDir="false" afterPath="$PROJECT_DIR$/.agents/skills/sonicg-figma-to-xml/SKILL.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.agents/skills/sonicg-implement-admob-ads/SKILL.md" beforeDir="false" afterPath="$PROJECT_DIR$/.agents/skills/sonicg-setup-admob-ads/SKILL.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.agents/skills/sonicg-implement-firebase-events/SKILL.md" beforeDir="false" afterPath="$PROJECT_DIR$/.agents/skills/sonicg-setup-firebase-events/SKILL.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.agents/skills/sonicg-implement-firebase-messaging/SKILL.md" beforeDir="false" afterPath="$PROJECT_DIR$/.agents/skills/sonicg-setup-firebase-messaging/SKILL.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.agents/skills/sonicg-implement-firebase-remote-config/SKILL.md" beforeDir="false" afterPath="$PROJECT_DIR$/.agents/skills/sonicg-setup-firebase-remote-config/SKILL.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.agents/skills/sonicg-implement-firebase-remote-config/templates/FetchRemoteConfigUseCase.kt" beforeDir="false" afterPath="$PROJECT_DIR$/.agents/skills/sonicg-setup-firebase-remote-config/templates/FetchRemoteConfigUseCase.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.agents/skills/sonicg-implement-firebase-remote-config/templates/InternetManager.kt" beforeDir="false" afterPath="$PROJECT_DIR$/.agents/skills/sonicg-setup-firebase-remote-config/templates/InternetManager.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.agents/skills/sonicg-implement-firebase-remote-config/templates/RemoteConfigDataSource.kt" beforeDir="false" afterPath="$PROJECT_DIR$/.agents/skills/sonicg-setup-firebase-remote-config/templates/RemoteConfigDataSource.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.agents/skills/sonicg-implement-firebase-remote-config/templates/RemoteConfigRepository.kt" beforeDir="false" afterPath="$PROJECT_DIR$/.agents/skills/sonicg-setup-firebase-remote-config/templates/RemoteConfigRepository.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.agents/skills/sonicg-implement-firebase-remote-config/templates/RemoteConfigRepositoryImpl.kt" beforeDir="false" afterPath="$PROJECT_DIR$/.agents/skills/sonicg-setup-firebase-remote-config/templates/RemoteConfigRepositoryImpl.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.agents/skills/sonicg-implement-in-app-billing/SKILL.md" beforeDir="false" afterPath="$PROJECT_DIR$/.agents/skills/sonicg-inapp-billing/SKILL.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.agents/skills/sonicg-implement-in-app-review/SKILL.md" beforeDir="false" afterPath="$PROJECT_DIR$/.agents/skills/sonicg-inapp-review/SKILL.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.agents/skills/sonicg-implement-in-app-review/templates/InAppReviewManager.kt" beforeDir="false" afterPath="$PROJECT_DIR$/.agents/skills/sonicg-inapp-review/templates/InAppReviewManager.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.agents/skills/sonicg-implement-in-app-update/SKILL.md" beforeDir="false" afterPath="$PROJECT_DIR$/.agents/skills/sonicg-inapp-update/SKILL.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.agents/skills/sonicg-implement-in-app-update/templates/InAppUpdateManager.kt" beforeDir="false" afterPath="$PROJECT_DIR$/.agents/skills/sonicg-inapp-update/templates/InAppUpdateManager.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.agents/skills/sonicg-review-architecture/SKILL.md" beforeDir="false" afterPath="$PROJECT_DIR$/.agents/skills/sonicg-review-architecture/SKILL.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.agents/skills/sonicg-review-cleanup/SKILL.md" beforeDir="false" afterPath="$PROJECT_DIR$/.agents/skills/sonicg-review-cleanup/SKILL.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.agents/skills/sonicg-review-complete/SKILL.md" beforeDir="false" afterPath="$PROJECT_DIR$/.agents/skills/sonicg-review/SKILL.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.agents/skills/sonicg-review-performance/SKILL.md" beforeDir="false" afterPath="$PROJECT_DIR$/.agents/skills/sonicg-review-performance/SKILL.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.agents/skills/sonicg-review-security/SKILL.md" beforeDir="false" afterPath="$PROJECT_DIR$/.agents/skills/sonicg-review-security/SKILL.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.agents/skills/sonicg-setup-new-project/SKILL.md" beforeDir="false" afterPath="$PROJECT_DIR$/.agents/skills/sonicg-setup-new-project/SKILL.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.agents/skills/sonicg-setup-new-project/templates/compose/MainNavGraph.kt" beforeDir="false" afterPath="$PROJECT_DIR$/.agents/skills/sonicg-setup-new-project/templates/compose/MainNavGraph.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.agents/skills/sonicg-setup-new-project/templates/compose/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/.agents/skills/sonicg-setup-new-project/templates/compose/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.agents/skills/sonicg-setup-new-project/templates/compose/StartupNavGraph.kt" beforeDir="false" afterPath="$PROJECT_DIR$/.agents/skills/sonicg-setup-new-project/templates/compose/StartupNavGraph.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.agents/skills/sonicg-setup-new-project/templates/compose/StartupScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/.agents/skills/sonicg-setup-new-project/templates/compose/StartupScreen.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.agents/skills/sonicg-setup-new-project/templates/startup/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/.agents/skills/sonicg-setup-new-project/templates/startup/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.agents/skills/sonicg-setup-old-project/SKILL.md" beforeDir="false" afterPath="$PROJECT_DIR$/.agents/skills/sonicg-setup-old-project/SKILL.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.agents/skills/sonicg-test-complete/SKILL.md" beforeDir="false" afterPath="$PROJECT_DIR$/.agents/skills/sonicg-write-test/SKILL.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.agents/skills/sonicg-test-e2e/SKILL.md" beforeDir="false" afterPath="$PROJECT_DIR$/.agents/skills/sonicg-write-e2e-test/SKILL.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.agents/skills/sonicg-test-integration/SKILL.md" beforeDir="false" afterPath="$PROJECT_DIR$/.agents/skills/sonicg-write-integration-test/SKILL.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.agents/skills/sonicg-test-unit/SKILL.md" beforeDir="false" afterPath="$PROJECT_DIR$/.agents/skills/sonicg-write-unit-test/SKILL.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.agents/skills/sonicg-update-in-app-billing/SKILL.md" beforeDir="false" afterPath="$PROJECT_DIR$/.agents/skills/sonicg-inapp-billing-update/SKILL.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.claude/CLAUDE.md" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/CLAUDE.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.claude/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.claude/rules/00-global.md" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/rules/00-global.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.claude/rules/01-feature-checklist.md" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/rules/01-feature-checklist.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.claude/rules/02-project-structure.md" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/rules/02-project-structure.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.claude/rules/11-testing.md" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/rules/11-testing.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.claude/rules/13-libraries-stack.md" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/rules/13-libraries-stack.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.claude/rules/21-ads-billing.md" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/rules/21-ads-billing.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.claude/rules/22-platform-firebase.md" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/rules/22-platform-firebase.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.claude/rules/25-in-app-update.md" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/rules/25-in-app-update.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.claude/rules/27-in-app-review.md" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/rules/27-in-app-review.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.claude/rules/29-screen-startup.md" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/rules/29-screen-startup.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.claude/rules/33-screen-premium.md" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/rules/33-screen-premium.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.claude/rules/reference/ads-gma.md" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/rules/reference/ads-gma.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.claude/rules/reference/gradle.md" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/rules/reference/gradle.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.claude/rules/reference/premium-billing.md" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/rules/reference/premium-billing.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.claude/skills/events.md" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/skills/events.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.claude/skills/fix-selection.md" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/skills/fix-selection.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.claude/skills/sonic-add-admob-appOpen-Entrance/SKILL.md" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/skills/sonic-admob-appOpen-Startup/SKILL.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.claude/skills/sonic-add-admob-appOpen-lifecycle/SKILL.md" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/skills/sonic-admob-appOpen-lifecycle/SKILL.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.claude/skills/sonic-add-admob-banner/SKILL.md" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/skills/sonic-admob-banner/SKILL.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.claude/skills/sonic-add-admob-interstitial/SKILL.md" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/skills/sonic-admob-interstitial/SKILL.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.claude/skills/sonic-add-admob-native/SKILL.md" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/skills/sonic-admob-native/SKILL.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.claude/skills/sonic-add-admob-rewarded-interstitial/SKILL.md" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/skills/sonic-admob-rewarded-interstitial/SKILL.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.claude/skills/sonic-add-admob-rewarded/SKILL.md" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/skills/sonic-admob-rewarded/SKILL.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.claude/skills/sonic-add-firebase-events/SKILL.md" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/skills/sonic-add-firebase-events/SKILL.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.claude/skills/sonic-add-firebase-remote-config/SKILL.md" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/skills/sonic-add-firebase-remote-config/SKILL.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.claude/skills/sonic-add-inapp-packages/SKILL.md" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/skills/sonic-add-inapp-packages/SKILL.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.claude/skills/sonic-add-subscription-packages/SKILL.md" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/skills/sonic-add-subscription-packages/SKILL.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.claude/skills/sonic-create-bottom-sheet/SKILL.md" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/skills/sonic-create-bottom-sheet/SKILL.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.claude/skills/sonic-create-clean-architecture/SKILL.md" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/skills/sonic-clean-architecture/SKILL.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.claude/skills/sonic-create-dialog/SKILL.md" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/skills/sonic-create-dialog/SKILL.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.claude/skills/sonic-create-mvi/SKILL.md" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/skills/sonic-mvi/SKILL.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.claude/skills/sonic-create-screen/SKILL.md" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/skills/sonic-create-screen/SKILL.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.claude/skills/sonic-figma-to-compose/SKILL.md" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/skills/sonic-figma-to-compose/SKILL.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.claude/skills/sonic-figma-to-xml/SKILL.md" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/skills/sonic-figma-to-xml/SKILL.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.claude/skills/sonic-implement-admob-ads/SKILL.md" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/skills/sonic-setup-admob-ads/SKILL.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.claude/skills/sonic-implement-firebase-events/SKILL.md" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/skills/sonic-setup-firebase-events/SKILL.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.claude/skills/sonic-implement-firebase-messaging/SKILL.md" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/skills/sonic-setup-firebase-messaging/SKILL.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.claude/skills/sonic-implement-firebase-remote-config/SKILL.md" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/skills/sonic-setup-firebase-remote-config/SKILL.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.claude/skills/sonic-implement-firebase-remote-config/templates/FetchRemoteConfigUseCase.kt" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/skills/sonic-setup-firebase-remote-config/templates/FetchRemoteConfigUseCase.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.claude/skills/sonic-implement-firebase-remote-config/templates/InternetManager.kt" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/skills/sonic-setup-firebase-remote-config/templates/InternetManager.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.claude/skills/sonic-implement-firebase-remote-config/templates/RemoteConfigDataSource.kt" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/skills/sonic-setup-firebase-remote-config/templates/RemoteConfigDataSource.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.claude/skills/sonic-implement-firebase-remote-config/templates/RemoteConfigRepository.kt" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/skills/sonic-setup-firebase-remote-config/templates/RemoteConfigRepository.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.claude/skills/sonic-implement-firebase-remote-config/templates/RemoteConfigRepositoryImpl.kt" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/skills/sonic-setup-firebase-remote-config/templates/RemoteConfigRepositoryImpl.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.claude/skills/sonic-implement-in-app-billing/SKILL.md" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/skills/sonic-inapp-billing/SKILL.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.claude/skills/sonic-implement-in-app-review/SKILL.md" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/skills/sonic-inapp-review/SKILL.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.claude/skills/sonic-implement-in-app-review/templates/InAppReviewManager.kt" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/skills/sonic-inapp-review/templates/InAppReviewManager.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.claude/skills/sonic-implement-in-app-update/SKILL.md" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/skills/sonic-inapp-update/SKILL.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.claude/skills/sonic-implement-in-app-update/templates/InAppUpdateManager.kt" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/skills/sonic-inapp-update/templates/InAppUpdateManager.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.claude/skills/sonic-review-architecture/SKILL.md" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/skills/sonic-review-architecture/SKILL.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.claude/skills/sonic-review-cleanup/SKILL.md" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/skills/sonic-review-cleanup/SKILL.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.claude/skills/sonic-review-complete/SKILL.md" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/skills/sonic-review/SKILL.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.claude/skills/sonic-review-performance/SKILL.md" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/skills/sonic-review-performance/SKILL.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.claude/skills/sonic-review-security/SKILL.md" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/skills/sonic-review-security/SKILL.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.claude/skills/sonic-setup-new-project/SKILL.md" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/skills/sonic-setup-new-project/SKILL.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.claude/skills/sonic-setup-new-project/templates/compose/MainNavGraph.kt" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/skills/sonic-setup-new-project/templates/compose/MainNavGraph.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.claude/skills/sonic-setup-new-project/templates/compose/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/skills/sonic-setup-new-project/templates/compose/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.claude/skills/sonic-setup-new-project/templates/compose/StartupNavGraph.kt" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/skills/sonic-setup-new-project/templates/compose/StartupNavGraph.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.claude/skills/sonic-setup-new-project/templates/compose/StartupScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/skills/sonic-setup-new-project/templates/compose/StartupScreen.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.claude/skills/sonic-setup-new-project/templates/startup/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/skills/sonic-setup-new-project/templates/startup/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.claude/skills/sonic-setup-old-project/SKILL.md" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/skills/sonic-setup-old-project/SKILL.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.claude/skills/sonic-test-complete/SKILL.md" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/skills/sonic-write-test/SKILL.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.claude/skills/sonic-test-e2e/SKILL.md" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/skills/sonic-write-e2e-test/SKILL.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.claude/skills/sonic-test-integration/SKILL.md" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/skills/sonic-write-integration-test/SKILL.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.claude/skills/sonic-test-unit/SKILL.md" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/skills/sonic-write-unit-test/SKILL.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.claude/skills/sonic-update-in-app-billing/SKILL.md" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/skills/sonic-inapp-billing-update/SKILL.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.cursor/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/.cursor/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.cursor/rules/01-feature-checklist.mdc" beforeDir="false" afterPath="$PROJECT_DIR$/.cursor/rules/01-feature-checklist.mdc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.cursor/rules/02-project-structure.mdc" beforeDir="false" afterPath="$PROJECT_DIR$/.cursor/rules/02-project-structure.mdc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.cursor/rules/11-testing.mdc" beforeDir="false" afterPath="$PROJECT_DIR$/.cursor/rules/11-testing.mdc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.cursor/rules/13-libraries-stack.mdc" beforeDir="false" afterPath="$PROJECT_DIR$/.cursor/rules/13-libraries-stack.mdc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.cursor/rules/21-ads-billing.mdc" beforeDir="false" afterPath="$PROJECT_DIR$/.cursor/rules/21-ads-billing.mdc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.cursor/rules/22-platform-firebase.mdc" beforeDir="false" afterPath="$PROJECT_DIR$/.cursor/rules/22-platform-firebase.mdc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.cursor/rules/25-in-app-update.mdc" beforeDir="false" afterPath="$PROJECT_DIR$/.cursor/rules/25-in-app-update.mdc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.cursor/rules/27-in-app-review.mdc" beforeDir="false" afterPath="$PROJECT_DIR$/.cursor/rules/27-in-app-review.mdc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.cursor/rules/29-screen-startup.mdc" beforeDir="false" afterPath="$PROJECT_DIR$/.cursor/rules/29-screen-startup.mdc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.cursor/rules/33-screen-premium.mdc" beforeDir="false" afterPath="$PROJECT_DIR$/.cursor/rules/33-screen-premium.mdc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.cursor/rules/reference/ads-gma.md" beforeDir="false" afterPath="$PROJECT_DIR$/.cursor/rules/reference/ads-gma.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.cursor/rules/reference/gradle.md" beforeDir="false" afterPath="$PROJECT_DIR$/.cursor/rules/reference/gradle.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.cursor/rules/reference/premium-billing.md" beforeDir="false" afterPath="$PROJECT_DIR$/.cursor/rules/reference/premium-billing.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.cursor/skills/admob/sonicc-add-admob-appOpen-Entrance/SKILL.md" beforeDir="false" afterPath="$PROJECT_DIR$/.cursor/skills/admob/sonicc-admob-appOpen-Startup/SKILL.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.cursor/skills/admob/sonicc-add-admob-appOpen-lifecycle/SKILL.md" beforeDir="false" afterPath="$PROJECT_DIR$/.cursor/skills/admob/sonicc-admob-appOpen-lifecycle/SKILL.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.cursor/skills/admob/sonicc-add-admob-banner/SKILL.md" beforeDir="false" afterPath="$PROJECT_DIR$/.cursor/skills/admob/sonicc-admob-banner/SKILL.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.cursor/skills/admob/sonicc-add-admob-interstitial/SKILL.md" beforeDir="false" afterPath="$PROJECT_DIR$/.cursor/skills/admob/sonicc-admob-interstitial/SKILL.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.cursor/skills/admob/sonicc-add-admob-native/SKILL.md" beforeDir="false" afterPath="$PROJECT_DIR$/.cursor/skills/admob/sonicc-admob-native/SKILL.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.cursor/skills/admob/sonicc-add-admob-rewarded-interstitial/SKILL.md" beforeDir="false" afterPath="$PROJECT_DIR$/.cursor/skills/admob/sonicc-admob-rewarded-interstitial/SKILL.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.cursor/skills/admob/sonicc-add-admob-rewarded/SKILL.md" beforeDir="false" afterPath="$PROJECT_DIR$/.cursor/skills/admob/sonicc-admob-rewarded/SKILL.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.cursor/skills/admob/sonicc-implement-admob-ads/SKILL.md" beforeDir="false" afterPath="$PROJECT_DIR$/.cursor/skills/admob/sonicc-setup-admob-ads/SKILL.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.cursor/skills/billing/sonicc-add-inapp-packages/SKILL.md" beforeDir="false" afterPath="$PROJECT_DIR$/.cursor/skills/billing/sonicc-add-inapp-packages/SKILL.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.cursor/skills/billing/sonicc-add-subscription-packages/SKILL.md" beforeDir="false" afterPath="$PROJECT_DIR$/.cursor/skills/billing/sonicc-add-subscription-packages/SKILL.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.cursor/skills/billing/sonicc-implement-in-app-billing/SKILL.md" beforeDir="false" afterPath="$PROJECT_DIR$/.cursor/skills/billing/sonicc-inapp-billing/SKILL.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.cursor/skills/billing/sonicc-update-in-app-billing/SKILL.md" beforeDir="false" afterPath="$PROJECT_DIR$/.cursor/skills/billing/sonicc-inapp-billing-update/SKILL.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.cursor/skills/feature/sonicc-create-clean-architecture/SKILL.md" beforeDir="false" afterPath="$PROJECT_DIR$/.cursor/skills/feature/sonicc-clean-architecture/SKILL.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.cursor/skills/feature/sonicc-create-mvi/SKILL.md" beforeDir="false" afterPath="$PROJECT_DIR$/.cursor/skills/feature/sonicc-mvi/SKILL.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.cursor/skills/feature/sonicc-create-screen/SKILL.md" beforeDir="false" afterPath="$PROJECT_DIR$/.cursor/skills/feature/sonicc-create-screen/SKILL.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.cursor/skills/firebase/events.md" beforeDir="false" afterPath="$PROJECT_DIR$/.cursor/skills/firebase/events.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.cursor/skills/firebase/sonicc-add-firebase-events/SKILL.md" beforeDir="false" afterPath="$PROJECT_DIR$/.cursor/skills/firebase/sonicc-add-firebase-events/SKILL.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.cursor/skills/firebase/sonicc-add-firebase-remote-config/SKILL.md" beforeDir="false" afterPath="$PROJECT_DIR$/.cursor/skills/firebase/sonicc-add-firebase-remote-config/SKILL.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.cursor/skills/firebase/sonicc-implement-firebase-events/SKILL.md" beforeDir="false" afterPath="$PROJECT_DIR$/.cursor/skills/firebase/sonicc-setup-firebase-events/SKILL.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.cursor/skills/firebase/sonicc-implement-firebase-messaging/SKILL.md" beforeDir="false" afterPath="$PROJECT_DIR$/.cursor/skills/firebase/sonicc-setup-firebase-messaging/SKILL.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.cursor/skills/firebase/sonicc-implement-firebase-remote-config/SKILL.md" beforeDir="false" afterPath="$PROJECT_DIR$/.cursor/skills/firebase/sonicc-setup-firebase-remote-config/SKILL.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.cursor/skills/firebase/sonicc-implement-firebase-remote-config/templates/FetchRemoteConfigUseCase.kt" beforeDir="false" afterPath="$PROJECT_DIR$/.cursor/skills/firebase/sonicc-setup-firebase-remote-config/templates/FetchRemoteConfigUseCase.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.cursor/skills/firebase/sonicc-implement-firebase-remote-config/templates/InternetManager.kt" beforeDir="false" afterPath="$PROJECT_DIR$/.cursor/skills/firebase/sonicc-setup-firebase-remote-config/templates/InternetManager.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.cursor/skills/firebase/sonicc-implement-firebase-remote-config/templates/RemoteConfigDataSource.kt" beforeDir="false" afterPath="$PROJECT_DIR$/.cursor/skills/firebase/sonicc-setup-firebase-remote-config/templates/RemoteConfigDataSource.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.cursor/skills/firebase/sonicc-implement-firebase-remote-config/templates/RemoteConfigRepository.kt" beforeDir="false" afterPath="$PROJECT_DIR$/.cursor/skills/firebase/sonicc-setup-firebase-remote-config/templates/RemoteConfigRepository.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.cursor/skills/firebase/sonicc-implement-firebase-remote-config/templates/RemoteConfigRepositoryImpl.kt" beforeDir="false" afterPath="$PROJECT_DIR$/.cursor/skills/firebase/sonicc-setup-firebase-remote-config/templates/RemoteConfigRepositoryImpl.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.cursor/skills/platform/sonicc-implement-in-app-review/SKILL.md" beforeDir="false" afterPath="$PROJECT_DIR$/.cursor/skills/platform/sonicc-inapp-review/SKILL.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.cursor/skills/platform/sonicc-implement-in-app-review/templates/InAppReviewManager.kt" beforeDir="false" afterPath="$PROJECT_DIR$/.cursor/skills/platform/sonicc-inapp-review/templates/InAppReviewManager.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.cursor/skills/platform/sonicc-implement-in-app-update/SKILL.md" beforeDir="false" afterPath="$PROJECT_DIR$/.cursor/skills/platform/sonicc-inapp-update/SKILL.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.cursor/skills/platform/sonicc-implement-in-app-update/templates/InAppUpdateManager.kt" beforeDir="false" afterPath="$PROJECT_DIR$/.cursor/skills/platform/sonicc-inapp-update/templates/InAppUpdateManager.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.cursor/skills/project/sonicc-setup-new-project/SKILL.md" beforeDir="false" afterPath="$PROJECT_DIR$/.cursor/skills/project/sonicc-setup-new-project/SKILL.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.cursor/skills/project/sonicc-setup-new-project/templates/compose/MainNavGraph.kt" beforeDir="false" afterPath="$PROJECT_DIR$/.cursor/skills/project/sonicc-setup-new-project/templates/compose/MainNavGraph.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.cursor/skills/project/sonicc-setup-new-project/templates/compose/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/.cursor/skills/project/sonicc-setup-new-project/templates/compose/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.cursor/skills/project/sonicc-setup-new-project/templates/compose/StartupNavGraph.kt" beforeDir="false" afterPath="$PROJECT_DIR$/.cursor/skills/project/sonicc-setup-new-project/templates/compose/StartupNavGraph.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.cursor/skills/project/sonicc-setup-new-project/templates/compose/StartupScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/.cursor/skills/project/sonicc-setup-new-project/templates/compose/StartupScreen.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.cursor/skills/project/sonicc-setup-new-project/templates/startup/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/.cursor/skills/project/sonicc-setup-new-project/templates/startup/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.cursor/skills/project/sonicc-setup-old-project/SKILL.md" beforeDir="false" afterPath="$PROJECT_DIR$/.cursor/skills/project/sonicc-setup-old-project/SKILL.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.cursor/skills/review/fix-selection.md" beforeDir="false" afterPath="$PROJECT_DIR$/.cursor/skills/review/fix-selection.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.cursor/skills/review/sonicc-review-architecture/SKILL.md" beforeDir="false" afterPath="$PROJECT_DIR$/.cursor/skills/review/sonicc-review-architecture/SKILL.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.cursor/skills/review/sonicc-review-cleanup/SKILL.md" beforeDir="false" afterPath="$PROJECT_DIR$/.cursor/skills/review/sonicc-review-cleanup/SKILL.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.cursor/skills/review/sonicc-review-complete/SKILL.md" beforeDir="false" afterPath="$PROJECT_DIR$/.cursor/skills/review/sonicc-review/SKILL.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.cursor/skills/review/sonicc-review-performance/SKILL.md" beforeDir="false" afterPath="$PROJECT_DIR$/.cursor/skills/review/sonicc-review-performance/SKILL.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.cursor/skills/review/sonicc-review-security/SKILL.md" beforeDir="false" afterPath="$PROJECT_DIR$/.cursor/skills/review/sonicc-review-security/SKILL.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.cursor/skills/test/sonicc-test-complete/SKILL.md" beforeDir="false" afterPath="$PROJECT_DIR$/.cursor/skills/test/sonicc-write-test/SKILL.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.cursor/skills/test/sonicc-test-e2e/SKILL.md" beforeDir="false" afterPath="$PROJECT_DIR$/.cursor/skills/test/sonicc-write-e2e-test/SKILL.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.cursor/skills/test/sonicc-test-integration/SKILL.md" beforeDir="false" afterPath="$PROJECT_DIR$/.cursor/skills/test/sonicc-write-integration-test/SKILL.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.cursor/skills/test/sonicc-test-unit/SKILL.md" beforeDir="false" afterPath="$PROJECT_DIR$/.cursor/skills/test/sonicc-write-unit-test/SKILL.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.cursor/skills/ui/sonicc-create-bottom-sheet/SKILL.md" beforeDir="false" afterPath="$PROJECT_DIR$/.cursor/skills/ui/sonicc-create-bottom-sheet/SKILL.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.cursor/skills/ui/sonicc-create-dialog/SKILL.md" beforeDir="false" afterPath="$PROJECT_DIR$/.cursor/skills/ui/sonicc-create-dialog/SKILL.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.cursor/skills/ui/sonicc-figma-to-compose/SKILL.md" beforeDir="false" afterPath="$PROJECT_DIR$/.cursor/skills/ui/sonicc-figma-to-compose/SKILL.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.cursor/skills/ui/sonicc-figma-to-xml/SKILL.md" beforeDir="false" afterPath="$PROJECT_DIR$/.cursor/skills/ui/sonicc-figma-to-xml/SKILL.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MUST_READ_BEFORE_SKILL_CHANGES.md" beforeDir="false" afterPath="$PROJECT_DIR$/MUST_READ_BEFORE_SKILL_CHANGES.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ClangdSettings">
+    <option name="formatViaClangd" value="false" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;orbitalsonic&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/orbitalsonic/AndroidPilot.git&quot;,
+    &quot;accountId&quot;: &quot;2ff3c0b1-d442-4dc2-a3db-d1299e2b8e76&quot;
+  }
+}</component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 6,
+  &quot;fromUser&quot;: false
+}</component>
+  <component name="ProjectId" id="3HtbQiwNUPlxnCa6OuG4VHOqaYx" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;CidrDebugProfileConversion&quot;: &quot;true&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.readMode.enableVisualFormatting&quot;: &quot;true&quot;,
+    &quot;cf.first.check.clang-format&quot;: &quot;false&quot;,
+    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/RawProjects/AndroidPilot&quot;
+  }
+}</component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="64be090b-99b6-4d58-a39c-4586ed02d018" name="Changes" comment="" />
+      <created>1786690297939</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1786690297939</updated>
+    </task>
+    <task id="LOCAL-00001" summary="ai-rules">
+      <option name="closed" value="true" />
+      <created>1786690785475</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1786690785475</updated>
+    </task>
+    <task id="LOCAL-00002" summary="ai-rules">
+      <option name="closed" value="true" />
+      <created>1786690830022</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1786690830022</updated>
+    </task>
+    <task id="LOCAL-00003" summary="ai-rules">
+      <option name="closed" value="true" />
+      <created>1786701594754</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1786701594754</updated>
+    </task>
+    <task id="LOCAL-00004" summary="ai-rules">
+      <option name="closed" value="true" />
+      <created>1786701612498</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1786701612498</updated>
+    </task>
+    <task id="LOCAL-00005" summary="ai-rules">
+      <option name="closed" value="true" />
+      <created>1786702002532</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1786702002532</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
+    <servers />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="ai-rules" />
+    <option name="LAST_COMMIT_MESSAGE" value="ai-rules" />
+  </component>
+</project>

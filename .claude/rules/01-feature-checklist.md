@@ -1,5 +1,5 @@
 ---
-description: New feature / screen scaffolding checklist — use when adding a feature, sonic-create-screen, sonic-create-mvi, sonic-create-clean-architecture, or verifying a feature is complete
+description: New feature / screen scaffolding checklist — use when adding a feature, sonic-create-screen, sonic-mvi, sonic-clean-architecture, or verifying a feature is complete
 ---
 
 ## New feature checklist
@@ -25,4 +25,4 @@ description: New feature / screen scaffolding checklist — use when adding a fe
 - [ ] If ads/premium: gate on entitlement + RC; use existing ads extensions — not raw SDK in Fragments. **Do not** wrap ads in MVI unless the user explicitly asks (`21-ads-billing`). Paywalls: sticky footer + 3s delayed close (`33-screen-premium`)
 - [ ] Funnel / Dashboard: obey `29`–`32` + `reference/app-flow.md` when touching those screens
 - [ ] Obey `.claude/project-settings.json` (tests / orientation / theme modes / **`uiFramework`**)
-- [ ] Full screen scaffold via `sonic-create-screen` (UI + MVI + optional domain/data); or leaf skills: presentation via `sonic-create-mvi`, new domain/data via `sonic-create-clean-architecture` (feature screens only — not ads)
+- [ ] Full screen scaffold via `sonic-create-screen` (UI + MVI + optional domain/data); or leaf skills: presentation via `sonic-mvi`, new domain/data via `sonic-clean-architecture` (feature screens only — not ads)

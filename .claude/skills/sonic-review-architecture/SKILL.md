@@ -1,6 +1,6 @@
 ---
 name: sonic-review-architecture
-description: OrbitalSonic Claude Skill: Review Android changes against Clean Architecture, MVI, module boundaries, and project rules. Use when reviewing PRs, refactors, or asking if code follows architecture standards. Prefer sonic-review-complete for a full multi-check pass.
+description: OrbitalSonic Claude Skill: Review Android changes against Clean Architecture, MVI, module boundaries, and project rules. Use when reviewing PRs, refactors, or asking if code follows architecture standards. Prefer sonic-review for a full multi-check pass.
 ---
 
 # Architecture Review

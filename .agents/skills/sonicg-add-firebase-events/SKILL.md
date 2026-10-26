@@ -1,6 +1,6 @@
 ---
 name: sonicg-add-firebase-events
-description: OrbitalSonic Gemini Skill: Add Firebase Analytics screen_view and ui_click for one or more existing screens. Use when extending EventsProvider, adding events to selected Fragments or Compose Screens, or @sonicg-add-firebase-events — not for first-time full-app wiring (use sonicg-implement-firebase-events).
+description: OrbitalSonic Gemini Skill: Add Firebase Analytics screen_view and ui_click for one or more existing screens. Use when extending EventsProvider, adding events to selected Fragments or Compose Screens, or @sonicg-add-firebase-events — not for first-time full-app wiring (use sonicg-setup-firebase-events).
 ---
 
 # Add Firebase Events (selected screens)
@@ -10,13 +10,13 @@ Shared event rules: [events.md](../events.md).
 
 Obey `.agents/project-settings.json` when present.
 
-For first-time full-app events → `sonicg-implement-firebase-events`.
+For first-time full-app events → `sonicg-setup-firebase-events`.
 
 ## Entry
 
 | App state | Action |
 |-----------|--------|
-| No `postScreenView`, or old per-screen / per-button events are still posted | Stop → **`sonicg-implement-firebase-events`** (it removes the old posts, then wires this catalog for the whole app) |
+| No `postScreenView`, or old per-screen / per-button events are still posted | Stop → **`sonicg-setup-firebase-events`** (it removes the old posts, then wires this catalog for the whole app) |
 | `postScreenView` and this catalog already exist | Continue. Add into **existing** files. Do **not** migrate modules without **explicit user approval**. |
 
 ---
@@ -70,14 +70,14 @@ Follow this app’s existing posts if they already fire from somewhere else. Do 
 - [ ] Only the screens the user picked
 - [ ] `screen_view` for the screen; `ui_click` for each real tap
 - [ ] No raw event strings in UI
-- [ ] No new Analytics library unless the poster was missing (then stop and send the user to `sonicg-implement-firebase-events`)
+- [ ] No new Analytics library unless the poster was missing (then stop and send the user to `sonicg-setup-firebase-events`)
 
 ## Do not
 
-- Full-app sweep (that is `sonicg-implement-firebase-events`)
+- Full-app sweep (that is `sonicg-setup-firebase-events`)
 - Remote Config (`sonicg-add-firebase-remote-config`)
 - Replace `FirebaseUtils` with `PlatformFirebase` without approval
 - One event name per button
-- Add `screen_view` beside an old event name for the same screen (that cutover is `sonicg-implement-firebase-events`)
+- Add `screen_view` beside an old event name for the same screen (that cutover is `sonicg-setup-firebase-events`)
 - Rename a catalog name after it has shipped (`home_screen` stays `home_screen`)
 - Log PII

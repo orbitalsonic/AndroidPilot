@@ -1,13 +1,13 @@
 ---
 name: sonic-add-firebase-remote-config
-description: OrbitalSonic Claude Skill: Add one or more Remote Config keys to an existing SharedPreferences cache. Asks the user for value/values (Firebase key, type, default), then matches this app’s SharedPref and Remote Config classes (DataSource or repositories). Use when extending RC cache keys, adding a flag to SharedPrefManager/saveValues, or /sonic-add-firebase-remote-config — not for first-time RC wiring (use sonic-implement-firebase-remote-config).
+description: OrbitalSonic Claude Skill: Add one or more Remote Config keys to an existing SharedPreferences cache. Asks the user for value/values (Firebase key, type, default), then matches this app’s SharedPref and Remote Config classes (DataSource or repositories). Use when extending RC cache keys, adding a flag to SharedPrefManager/saveValues, or /sonic-add-firebase-remote-config — not for first-time RC wiring (use sonic-setup-firebase-remote-config).
 ---
 
 # Add Firebase Remote Config keys
 
 Follow `.claude/rules/22-platform-firebase.md`, `26-data-persistence.md`, `16-logging.md`.  
 Prefs shape: [`.claude/rules/reference/shared-preferences.md`](../rules/reference/shared-preferences.md).  
-First-time RC stack → **`sonic-implement-firebase-remote-config`**.
+First-time RC stack → **`sonic-setup-firebase-remote-config`**.
 
 Obey `.claude/project-settings.json` when present.
 
@@ -26,7 +26,7 @@ Do **not** invent a new RC/prefs layout. Clone neighboring keys.
 
 | App state                                                                 | Action |
 |---------------------------------------------------------------------------|--------|
-| No RC DataSource / repository **and** no RC cache properties on prefs     | Stop → **`sonic-implement-firebase-remote-config`** |
+| No RC DataSource / repository **and** no RC cache properties on prefs     | Stop → **`sonic-setup-firebase-remote-config`** |
 | Legacy Application helper (`RemoteConfiguration`) only                    | Add the key into **that** helper + whatever prefs it already writes. Do not migrate without approval. |
 | RC + prefs cache exist                                                    | Continue. Edit **existing** files only. |
 
@@ -133,7 +133,7 @@ Do not change fetch/activate, mutex, or listener registration.
 
 ## Do not
 
-- First-time RC stack (`sonic-implement-firebase-remote-config`)
+- First-time RC stack (`sonic-setup-firebase-remote-config`)
 - Analytics / `EventsProvider` (`sonic-add-firebase-events`)
 - Copy ads/premium keys from another app
 - Per-key methods on a generic `RemoteConfigDataSource`

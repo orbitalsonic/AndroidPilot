@@ -29,7 +29,7 @@ fun MainNavGraph(modifier: Modifier = Modifier) {
     ) {
         composable(route = HOME_ROUTE) {
             HomeScreen(
-                // onNavigateToPremium = { navController.navigate(PREMIUM_ROUTE) } — added by sonic-create-mvi
+                // onNavigateToPremium = { navController.navigate(PREMIUM_ROUTE) } — added by sonic-mvi
             )
         }
     }

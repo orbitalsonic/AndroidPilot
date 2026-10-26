@@ -280,7 +280,7 @@ implementation("androidx.core:core-ktx:1.12.0")
 - Keep **AGP 9.3+** (latest stable 9.x) and the Gradle wrapper compatible when bumping. Do **not** apply `org.jetbrains.kotlin.android`
 - Update the version in `[versions]` only — all aliases using `version.ref` pick it up
 - When scaffolding a new project (`sonicg-setup-new-project`), seed the catalog with latest stable for the whole core stack
-- **`sonicg-setup-new-project` mandatory:** Firebase BOM + `firebase-analytics` / `firebase-crashlytics` / `firebase-messaging` on **`:core-platform`**; `firebase-config` + `kotlinx-coroutines-play-services` on **`:data`** (see `sonicg-implement-firebase-messaging` — no MessagingService). Place `kotlinx-coroutines-play-services` under `# Kotlin Coroutines` / `// Kotlin Coroutines`.
+- **`sonicg-setup-new-project` mandatory:** Firebase BOM + `firebase-analytics` / `firebase-crashlytics` / `firebase-messaging` on **`:core-platform`**; `firebase-config` + `kotlinx-coroutines-play-services` on **`:data`** (see `sonicg-setup-firebase-messaging` — no MessagingService). Place `kotlinx-coroutines-play-services` under `# Kotlin Coroutines` / `// Kotlin Coroutines`.
 
 ### `sonicg-gradle-update` (mandatory behavior)
 

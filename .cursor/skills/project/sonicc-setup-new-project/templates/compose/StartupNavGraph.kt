@@ -33,7 +33,7 @@ fun StartupNavGraph(
         composable(route = STARTUP_ROUTE) {
             StartupScreen(
                 navigateToNext = {
-                    // sonicc-create-mvi wires STARTUP_LANGUAGE_ROUTE / STARTUP_WELCOME_BACK_ROUTE with popUpTo(STARTUP_ROUTE) { inclusive = true }
+                    // sonicc-mvi wires STARTUP_LANGUAGE_ROUTE / STARTUP_WELCOME_BACK_ROUTE with popUpTo(STARTUP_ROUTE) { inclusive = true }
                 },
                 navigateToMain = onFinished,
             )

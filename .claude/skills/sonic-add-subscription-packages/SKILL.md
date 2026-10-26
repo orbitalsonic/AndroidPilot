@@ -11,7 +11,7 @@ Full detail: [`.claude/rules/reference/premium-billing.md`](../rules/reference/p
 
 Obey `.claude/project-settings.json` when present.
 
-For greenfield billing → use `sonic-implement-in-app-billing`. For in-app products → use `sonic-add-inapp-packages`.
+For greenfield billing → use `sonic-inapp-billing`. For in-app products → use `sonic-add-inapp-packages`.
 
 ---
 
@@ -19,8 +19,8 @@ For greenfield billing → use `sonic-implement-in-app-billing`. For in-app prod
 
 | App state                                                  | Action                                |
 |------------------------------------------------------------|---------------------------------------|
-| No `BillingDataSource` / `BillingRepository` / paywall     | Stop → **`sonic-implement-in-app-billing`** |
-| Legacy v3 (`BillingPurchaseListener`, `startConnection()`) | Stop → **`sonic-update-in-app-billing`**    |
+| No `BillingDataSource` / `BillingRepository` / paywall     | Stop → **`sonic-inapp-billing`** |
+| Legacy v3 (`BillingPurchaseListener`, `startConnection()`) | Stop → **`sonic-inapp-billing-update`**    |
 | Billing exists                                             | Continue below                        |
 
 ---
@@ -73,7 +73,7 @@ If tier **already in code** and user wants different IDs → warn: Play Console 
 
 ### 0.4 ID validation
 
-Same rules as `sonic-implement-in-app-billing`:
+Same rules as `sonic-inapp-billing`:
 
 **Product ID:** lowercase start, `[a-z0-9_.]`, max 40 chars — warn and re-ask on violation.
 
@@ -170,7 +170,7 @@ When `writeTestsWithFeatures: true`:
 
 ## Do not
 
-- Re-scaffold billing from scratch (use `sonic-implement-in-app-billing`)
+- Re-scaffold billing from scratch (use `sonic-inapp-billing`)
 - Add in-app products here (use `sonic-add-inapp-packages`)
 - Change existing product IDs without user confirm + Console alignment
 - Hardcode offer IDs

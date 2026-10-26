@@ -4,18 +4,18 @@ globs: ["**/gmaAds/**", "**/admob*/**", "**/billing/**", "**/premium/**", "**/*.
 alwaysApply: false
 ---
 
-Apply when the project includes ads and/or IAP. Setup skills **always place** `:gmaAds` from GitHub; screen wiring needs user yes (or `/sonicc-implement-admob-ads`).
+Apply when the project includes ads and/or IAP. Setup skills **always place** `:gmaAds` from GitHub; screen wiring needs user yes (or `/sonicc-setup-admob-ads`).
 
 ## Ads are not MVI
 
 - Ads stay on **`:gmaAds`** (facade + controllers + Fragment/Activity extensions) — **not** Intent / State / Effect
-- Do **not** apply `sonicc-create-mvi` to ads; do not inject `AdsManager` in screens
+- Do **not** apply `sonicc-mvi` to ads; do not inject `AdsManager` in screens
 - Screens call extensions (`loadBannerAd`, `showInterstitialAd`, …) with placement keys
 - Convert ads to MVI **only** if the user **explicitly** asks
 
 Full playbook: [reference/ads-gma.md](reference/ads-gma.md)
 
-Skills: `admob/sonicc-implement-admob-ads`, `admob/sonicc-add-admob-banner`, `admob/sonicc-add-admob-interstitial`, `admob/sonicc-add-admob-native`, `admob/sonicc-add-admob-rewarded`, `admob/sonicc-add-admob-rewarded-interstitial`, `admob/sonicc-add-admob-appOpen-Entrance`, `admob/sonicc-add-admob-appOpen-lifecycle`
+Skills: `admob/sonicc-setup-admob-ads`, `admob/sonicc-admob-banner`, `admob/sonicc-admob-interstitial`, `admob/sonicc-admob-native`, `admob/sonicc-admob-rewarded`, `admob/sonicc-admob-rewarded-interstitial`, `admob/sonicc-admob-appOpen-Startup`, `admob/sonicc-admob-appOpen-lifecycle`
 
 ## Placing `:gmaAds`
 
@@ -44,7 +44,7 @@ Skills: `admob/sonicc-implement-admob-ads`, `admob/sonicc-add-admob-banner`, `ad
 - After purchase success: update entitlement, then let ads/UI react
 - Library: [orbitalsonic/SonicInApp](https://github.com/orbitalsonic/SonicInApp) via JitPack (`com.github.orbitalsonic:SonicInApp`)
 - Full subs + in-app playbook: [reference/premium-billing.md](reference/premium-billing.md)
-- Skills: `billing/sonicc-implement-in-app-billing`, `billing/sonicc-add-subscription-packages`, `billing/sonicc-add-inapp-packages` (Claude: flat skill names)
+- Skills: `billing/sonicc-inapp-billing`, `billing/sonicc-add-subscription-packages`, `billing/sonicc-add-inapp-packages` (Claude: flat skill names)
 
 ## Forbidden
 

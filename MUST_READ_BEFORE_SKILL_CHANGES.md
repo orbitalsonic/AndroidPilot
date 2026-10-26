@@ -47,7 +47,7 @@ When you change a **skill**, **rule**, or **reference** doc, find every peer tha
 1. Same topic area (`gradle/`, `firebase/`, `review/`, `test/`, …).
 2. Skills that **call or defer to** each other (`sonicc-gradle-update` ↔ `sonicc-gradle-organize`; `sonicc-setup-old-project` ↔ Gradle skills).
 3. Matching **rule + `rules/reference/`** pair (`08-gradle.mdc` ↔ `reference/gradle.md`).
-4. Orchestrators that list the skill (`sonicc-review-complete`, `sonicc-test-complete`, skill map in `.cursor/README.md`).
+4. Orchestrators that list the skill (`sonicc-review`, `sonicc-write-test`, skill map in `.cursor/README.md`).
 5. `.claude/` (`sonic-`) and `.agents/` (`sonicg-`) twins of anything under `.cursor/`.
 
 ### Example clusters (not exhaustive)
@@ -58,15 +58,15 @@ When you change a **skill**, **rule**, or **reference** doc, find every peer tha
 | **`gradle/sonicc-gradle-organize`**                         | `sonicc-gradle-update`, `sonicc-setup-new-project` / `sonicc-setup-old-project` Gradle steps, `08` + `reference/gradle.md`                                                                                                                                    |
 | **Groovy → Kotlin DSL guidance**                     | Lives in / must stay aligned with **`sonicc-gradle-update`** (convert before bump) **and** `sonicc-setup-old-project` Step 2 / `migration.md`; do not teach Groovy conversion in only one place                                                        |
 | **`sonicc-setup-design-system`**                            | Skill `reference.md`, color/theme notes in `09` / `reference/resources-xml.md` if invariants change, `.claude` / `.agents` twin                                                                                                                      |
-| **`sonicc-create-mvi` / MVI law**                           | `04-mvi-presentation` + `reference/mvi-presentation.md`, `01-feature-checklist`, `28-compose-ui` + `reference/compose-ui.md` when compose, `sonicc-create-screen` (orchestrator), `sonicc-review-architecture` if gates change                      |
-| **`sonicc-create-screen` (orchestrator)**                   | Leaf skills it runs (`sonicc-figma-to-xml` / `sonicc-figma-to-compose`, `sonicc-create-mvi`, `sonicc-create-clean-architecture`), `01-feature-checklist`, skill maps in `.cursor/README.md` + `.claude/README.md` + `.agents/README.md`, `.claude` / `.agents` twin                                  |
-| **`sonicc-create-clean-architecture`**                      | `26` + `reference/` (retrofit/room/prefs), `sonicc-create-mvi`, `sonicc-create-screen`, `01-feature-checklist`, `.claude` / `.agents` twin                                                                                                                          |
+| **`sonicc-mvi` / MVI law**                           | `04-mvi-presentation` + `reference/mvi-presentation.md`, `01-feature-checklist`, `28-compose-ui` + `reference/compose-ui.md` when compose, `sonicc-create-screen` (orchestrator), `sonicc-review-architecture` if gates change                      |
+| **`sonicc-create-screen` (orchestrator)**                   | Leaf skills it runs (`sonicc-figma-to-xml` / `sonicc-figma-to-compose`, `sonicc-mvi`, `sonicc-clean-architecture`), `01-feature-checklist`, skill maps in `.cursor/README.md` + `.claude/README.md` + `.agents/README.md`, `.claude` / `.agents` twin                                  |
+| **`sonicc-clean-architecture`**                      | `26` + `reference/` (retrofit/room/prefs), `sonicc-mvi`, `sonicc-create-screen`, `01-feature-checklist`, `.claude` / `.agents` twin                                                                                                                          |
 | **UI / Figma (`sonicc-figma-to-xml` / `sonicc-figma-to-compose`)** | Sibling UI skills (`sonicc-create-dialog`, `sonicc-create-bottom-sheet`, `sonicc-create-custom-view`), `sonicc-create-screen`, `09` / `28`, `sonicc-setup-new-project` / `sonicc-setup-old-project`, `.claude` / `.agents` twins                                                               |
-| **Any `test-*` skill**                               | Sibling `test-*` banners/consent rules, `sonicc-test-complete`, `11-testing.mdc`                                                                                                                                                                |
-| **Any `review-*` skill**                             | Sibling `review-*` including `sonicc-review-cleanup`, `sonicc-review-complete`, and `sonic-` / `sonicg-` twins                                                                                                                                            |
+| **Any `test-*` skill**                               | Sibling `test-*` banners/consent rules, `sonicc-write-test`, `11-testing.mdc`                                                                                                                                                                |
+| **Any `review-*` skill**                             | Sibling `review-*` including `sonicc-review-cleanup`, `sonicc-review`, and `sonic-` / `sonicg-` twins                                                                                                                                            |
 | **Firebase / billing / platform skill**              | Sibling skills in that area + matching numbered rule if one exists                                                                                                                                                                       |
 | **Any `admob/*` / ads skill**                        | Sibling `admob/sonicc-*` / `sonic-*` skills, `21-ads-billing` + `reference/ads-gma.md`, `sonicc-setup-new-project` / `sonicc-setup-old-project` ads steps, `.claude` / `.agents` twins                                                                                                |
-| **Two-Activity shape (`StartupActivity` / `MainActivity`), `Startup*` twins vs in-app twins** | `23`, `29`–`33`, `17`, `10`, `02`, `19` + `reference/base-ui.md` (`InsetsMode`), `reference/app-flow.md`, `sonicc-setup-new-project` (Steps 3–5 + `templates/startup/`, `templates/compose/`), `sonicc-setup-old-project` + `migration.md`, `sonicc-create-mvi` “Which host?”, `sonicc-figma-to-xml` naming table, ads / billing / in-app-update skills, `.claude` / `.agents` twins |
+| **Two-Activity shape (`StartupActivity` / `MainActivity`), `Startup*` twins vs in-app twins** | `23`, `29`–`33`, `17`, `10`, `02`, `19` + `reference/base-ui.md` (`InsetsMode`), `reference/app-flow.md`, `sonicc-setup-new-project` (Steps 3–5 + `templates/startup/`, `templates/compose/`), `sonicc-setup-old-project` + `migration.md`, `sonicc-mvi` “Which host?”, `sonicc-figma-to-xml` naming table, ads / billing / in-app-update skills, `.claude` / `.agents` twins |
 | **Screen / app-flow / premium UI**                   | `29`–`33` screen rules, `reference/app-flow.md`, `17` / `23` / `09`, billing skills + `reference/premium-billing.md`, `sonicc-setup-new-project`, `.claude` / `.agents` twins                                                                              |
 | **Gemini (`.agents/` / `sonicg-…`) and localize**       | `.agents/` is the full Gemini twin (`sonicg-` folders, `@sonicg-…`, **OrbitalSonic Gemini Skill:**), not localization-only. Keep `sonicg-localize` aligned with `sonicc-localize` + `sonic-localize`. Discover **`DpLanguages.kt`** first, then **`LanguageDataSource.kt`** (filename — not `@LanguageDataSource` annotation). Supported languages + code → `values-*` mapping live in **`rules/reference/languages.md`** (104 languages, QiblaCompass `DpLanguages`): changing the list means updating that reference in all three trees, `30-screen-language`, and all three localize twins together. |
 | **Language catalog (`rules/reference/languages.md`, `DpLanguages` / `LanguageDataSource` list)** | `30-screen-language` (all three trees), `reference/languages.md` in `.cursor` + `.claude` + `.agents`, the three localize skills (`sonicc-` / `sonic-` / `sonicg-localize` Steps 1, 2, 4, worker prompt), `.cursor/README.md` + twins reference index, root `README.md` localization steps |
@@ -162,17 +162,17 @@ Obey `.cursor/project-settings.json` when present.
 
 | You want to…                                                       | Prefer                                                                                                                                                   |
 |--------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Full feature screen (UI + MVI + optional domain/data) in one invoke | `feature/sonicc-create-screen` (orchestrates UI + `sonicc-create-mvi` + `sonicc-create-clean-architecture`)                                                                   |
-| Scaffold presentation only (Intent/State/Effect/VM + Fragment or `*Screen`) | `feature/sonicc-create-mvi`                                                                                                                              |
-| Add domain/data/repo                                               | `feature/sonicc-create-clean-architecture`                                                                                                                      |
+| Full feature screen (UI + MVI + optional domain/data) in one invoke | `feature/sonicc-create-screen` (orchestrates UI + `sonicc-mvi` + `sonicc-clean-architecture`)                                                                   |
+| Scaffold presentation only (Intent/State/Effect/VM + Fragment or `*Screen`) | `feature/sonicc-mvi`                                                                                                                              |
+| Add domain/data/repo                                               | `feature/sonicc-clean-architecture`                                                                                                                      |
 | XML / Figma layout only                                            | `ui/sonicc-figma-to-xml` (or dialog / bottom-sheet) — when `uiFramework` is `xml`                                                                               |
 | Compose / Figma screen only                                        | `ui/sonicc-figma-to-compose` (or dialog / bottom-sheet) — when `uiFramework` is `compose`                                                                       |
-| Review PR / architecture / perf / security                         | `review/review-*` (+ wire into `sonicc-review-complete` if full gate)                                                                                           |
-| Unit / integration / E2E tests                                     | `test/test-*` (+ `sonicc-test-complete` if full suite)                                                                                                          |
+| Review PR / architecture / perf / security                         | `review/review-*` (+ wire into `sonicc-review` if full gate)                                                                                           |
+| Unit / integration / E2E tests                                     | `test/test-*` (+ `sonicc-write-test` if full suite)                                                                                                          |
 | Gradle catalog / organize                                          | `gradle/`                                                                                                                                                |
 | Ship checklist                                                     | `release/pre-release`                                                                                                                                    |
-| In-app billing / subscriptions / premium                           | `premium/sonicc-implement-in-app-billing`, `premium/sonicc-add-subscription-packages`, `premium/sonicc-add-inapp-packages`                                                    |
-| Firebase RC / Analytics events                                     | `firebase/sonicc-implement-firebase-remote-config`, `firebase/sonicc-add-firebase-remote-config`, `firebase/sonicc-implement-firebase-events`, `firebase/sonicc-add-firebase-events` |
+| In-app billing / subscriptions / premium                           | `premium/sonicc-inapp-billing`, `premium/sonicc-add-subscription-packages`, `premium/sonicc-add-inapp-packages`                                                    |
+| Firebase setup / RC / Analytics events                            | `firebase/sonicc-setup-firebase` (orchestrator: base + yes/no leaf run), `firebase/sonicc-setup-firebase-remote-config`, `firebase/sonicc-add-firebase-remote-config`, `firebase/sonicc-setup-firebase-events`, `firebase/sonicc-add-firebase-events` |
 | New multi-step product feature (ads, IAP, …)                       | New skill under a clear area (`admob/`, `billing/`, …); add **rules** for invariants                                                                     |
 | String localization                                                | Cursor `i18n/sonicc-localize` (`/sonicc-localize`), Claude `sonic-localize` (`/sonic-localize`), Gemini `.agents/skills/sonicg-localize` (`@sonicg-localize`). Do not rename the English word localize. |
 
@@ -191,7 +191,7 @@ Obey `.cursor/project-settings.json` when present.
 
 ## New product / platform skills — learn from reference apps first
 
-When the user asks to **create a new skill** for a real product feature (examples: `sonicc-implement-in-app-update`, `sonicc-implement-in-app-review`, billing, ads helpers, etc.), **do not invent the flow from scratch**.
+When the user asks to **create a new skill** for a real product feature (examples: `sonicc-inapp-update`, `sonicc-inapp-review`, billing, ads helpers, etc.), **do not invent the flow from scratch**.
 
 ### Reference apps (search in this order)
 
@@ -237,7 +237,7 @@ Only after the user accepts → write `SKILL.md` (put the agreed host screen / m
 ### New feature conventions
 
 1. Read `00-global`, `01-feature-checklist`, `04` / `reference/mvi-presentation`, `03`, `07` / DI reference.
-2. Prefer extending existing skills (`sonicc-create-screen`, `sonicc-create-mvi`, `sonicc-create-clean-architecture`) over parallel skills. Full screens → `sonicc-create-screen`; layer-only work → leaf skills.
+2. Prefer extending existing skills (`sonicc-create-screen`, `sonicc-mvi`, `sonicc-clean-architecture`) over parallel skills. Full screens → `sonicc-create-screen`; layer-only work → leaf skills.
 3. Add a **rule** only for new invariants; add a **skill** only for a new multi-step flow.
 
 ### Updates (deps, Gradle, platform)
@@ -249,7 +249,7 @@ Only after the user accepts → write `SKILL.md` (put the agreed host screen / m
 
 ### Testing
 
-1. Extend `test/sonicc-test-unit`, `sonicc-test-integration`, `sonicc-test-e2e`, or `sonicc-test-complete`.
+1. Extend `test/sonicc-write-unit-test`, `sonicc-write-integration-test`, `sonicc-write-e2e-test`, or `sonicc-write-test`.
 2. Conventions → `11-testing.mdc` (pyramid: unit = fakes/Flow; integration = Room/MockWebServer; e2e = device UI).
 3. Each `test-*` skill starts with a one-line `We are going to …` banner; device-needed skills must mention emulator/physical device (or already attached).
 4. Authoring skills **write missing tests, execute, and report**. On failures: **ask user consent** before fixing production code, then retest. Do not silently weaken assertions.
@@ -258,7 +258,7 @@ Only after the user accepts → write `SKILL.md` (put the agreed host screen / m
 
 ### Review
 
-1. Extend `review/sonicc-review-architecture`, `sonicc-review-performance`, `sonicc-review-security`, or `sonicc-review-complete`.
+1. Extend `review/sonicc-review-architecture`, `sonicc-review-performance`, `sonicc-review-security`, or `sonicc-review`.
 2. Keep Pass/Fail report style consistent with existing review skills.
 
 ---

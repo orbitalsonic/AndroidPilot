@@ -11,7 +11,7 @@ paths:
 
 Full playbook for subscriptions and one-time in-app products using [orbitalsonic/SonicInApp](https://github.com/orbitalsonic/SonicInApp) (`4.0.0+`, Play Billing Library 9.1.0).
 
-**Skills:** `sonic-implement-in-app-billing`, `sonic-add-subscription-packages`, `sonic-add-inapp-packages`.
+**Skills:** `sonic-inapp-billing`, `sonic-add-subscription-packages`, `sonic-add-inapp-packages`.
 
 Do not invent a parallel `BillingClient` wrapper — use the library + Clean Architecture below.
 
@@ -274,7 +274,7 @@ koin.get<BillingDataSource>().start(applicationScope)
 
 ### 3.x → 4.0.0 migration
 
-**Workflow skill:** `billing/sonicc-update-in-app-billing` (`.cursor`) / `sonic-update-in-app-billing` (`.claude`) / `sonicg-update-in-app-billing` (`.agents`).
+**Workflow skill:** `billing/sonicc-inapp-billing-update` (`.cursor`) / `sonic-inapp-billing-update` (`.claude`) / `sonicg-inapp-billing-update` (`.agents`).
 
 | 3.x                                        | 4.0.0                                      |
 |--------------------------------------------|--------------------------------------------|

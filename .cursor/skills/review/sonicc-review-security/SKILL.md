@@ -1,6 +1,6 @@
 ---
 name: sonicc-review-security
-description: Sonic Cursor Skill: Review Android code for secrets, exported components, permissions, logging leaks, and R8 keep rules. Use when security review, release prep, or auditing sensitive data handling. Prefer sonicc-review-complete for a full multi-check pass.
+description: Sonic Cursor Skill: Review Android code for secrets, exported components, permissions, logging leaks, and R8 keep rules. Use when security review, release prep, or auditing sensitive data handling. Prefer sonicc-review for a full multi-check pass.
 ---
 
 # Security Review

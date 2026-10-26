@@ -1,6 +1,6 @@
 ---
 name: sonicg-review-performance
-description: OrbitalSonic Gemini Skill: Review Android code for ANR risk, large dataset handling, dispatchers, and RecyclerView performance. Use when optimizing lists, fixing jank, ANR, or slow screens. Prefer sonicg-review-complete for a full multi-check pass.
+description: OrbitalSonic Gemini Skill: Review Android code for ANR risk, large dataset handling, dispatchers, and RecyclerView performance. Use when optimizing lists, fixing jank, ANR, or slow screens. Prefer sonicg-review for a full multi-check pass.
 ---
 
 # Performance Review

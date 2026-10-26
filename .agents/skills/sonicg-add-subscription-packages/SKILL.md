@@ -11,7 +11,7 @@ Full detail: [`.agents/rules/reference/premium-billing.md`](../rules/reference/p
 
 Obey `.agents/project-settings.json` when present.
 
-For greenfield billing → use `sonicg-implement-in-app-billing`. For in-app products → use `sonicg-add-inapp-packages`.
+For greenfield billing → use `sonicg-inapp-billing`. For in-app products → use `sonicg-add-inapp-packages`.
 
 ---
 
@@ -19,8 +19,8 @@ For greenfield billing → use `sonicg-implement-in-app-billing`. For in-app pro
 
 | App state                                                  | Action                                |
 |------------------------------------------------------------|---------------------------------------|
-| No `BillingDataSource` / `BillingRepository` / paywall     | Stop → **`sonicg-implement-in-app-billing`** |
-| Legacy v3 (`BillingPurchaseListener`, `startConnection()`) | Stop → **`sonicg-update-in-app-billing`**    |
+| No `BillingDataSource` / `BillingRepository` / paywall     | Stop → **`sonicg-inapp-billing`** |
+| Legacy v3 (`BillingPurchaseListener`, `startConnection()`) | Stop → **`sonicg-inapp-billing-update`**    |
 | Billing exists                                             | Continue below                        |
 
 ---
@@ -73,7 +73,7 @@ If tier **already in code** and user wants different IDs → warn: Play Console 
 
 ### 0.4 ID validation
 
-Same rules as `sonicg-implement-in-app-billing`:
+Same rules as `sonicg-inapp-billing`:
 
 **Product ID:** lowercase start, `[a-z0-9_.]`, max 40 chars — warn and re-ask on violation.
 
@@ -170,7 +170,7 @@ When `writeTestsWithFeatures: true`:
 
 ## Do not
 
-- Re-scaffold billing from scratch (use `sonicg-implement-in-app-billing`)
+- Re-scaffold billing from scratch (use `sonicg-inapp-billing`)
 - Add in-app products here (use `sonicg-add-inapp-packages`)
 - Change existing product IDs without user confirm + Console alignment
 - Hardcode offer IDs

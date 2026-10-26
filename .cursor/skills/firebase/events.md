@@ -1,6 +1,6 @@
 # Firebase Analytics events — shared
 
-Used by `sonicc-implement-firebase-events` and `sonicc-add-firebase-events`. Follow `.cursor/rules/22-platform-firebase.mdc`, `12-naming-conventions.mdc`, `16-logging.mdc`.
+Used by `sonicc-setup-firebase-events` and `sonicc-add-firebase-events`. Follow `.cursor/rules/22-platform-firebase.mdc`, `12-naming-conventions.mdc`, `16-logging.mdc`.
 
 Every app uses the same event names. Screens and buttons are parameter values, so GA4 paths, funnels, and retention match across apps.
 
@@ -11,7 +11,7 @@ Every app uses the same event names. Screens and buttons are parameter values, s
 | Multi-module + no events yet | `EventsProvider` in **`:core-common`**. `PlatformFirebase` poster in **`:core-platform`**. |
 | Already has `EventsProvider` / `FirebaseUtils` / other event constants | **Add into that structure.** Do **not** create a second provider. Do **not** move files without **explicit user approval**. |
 | Single-module, no events yet | One `EventsProvider` next to existing helpers. Ask before inventing a new module. |
-| Old per-screen or per-button event names (`postFirebaseEvent`, `"HOME_SCREEN"`) | **`sonicc-implement-firebase-events` removes them first**, then posts only this catalog. Do not send both. |
+| Old per-screen or per-button event names (`postFirebaseEvent`, `"HOME_SCREEN"`) | **`sonicc-setup-firebase-events` removes them first**, then posts only this catalog. Do not send both. |
 
 ## Names
 
@@ -20,7 +20,7 @@ Kotlin constants are `SCREAMING_SNAKE`. The string value is lowercase `snake_cas
 - Start with a letter. Only `a-z`, `0-9`, `_`. Event names are at most 40 characters.
 - Never start a name with `firebase_`, `google_`, or `ga_`.
 - Never use reserved GA4 names: `ad_click`, `error`, `session_start`.
-- A name from this catalog, once released, is never renamed or reused. A removed screen keeps its name reserved. Old event names outside this catalog are deleted by `sonicc-implement-firebase-events` and are not posted again.
+- A name from this catalog, once released, is never renamed or reused. A removed screen keeps its name reserved. Old event names outside this catalog are deleted by `sonicc-setup-firebase-events` and are not posted again.
 - No raw event strings in UI.
 
 ```kotlin

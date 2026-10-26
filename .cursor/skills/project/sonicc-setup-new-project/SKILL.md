@@ -37,10 +37,10 @@ Also ask:
 
 0. **`uiFramework`** — `xml` or `compose`. Show both options. Default is `xml`. Compose follows AnimeHub (`:feature-*`, `:app` `StartupNavGraph.kt` + `MainNavGraph.kt`) — see `28-compose-ui` + [templates/compose/](templates/compose/).
 1. **Ads** — always place `:gmaAds` from GitHub (see **Step — Place `:gmaAds`**). Ask: **Implement ads on screens now?**
-    - **yes** — after modules/DI exist, run **`sonicc-implement-admob-ads`** (wire existing screens only; report changed Fragments/`*Screen`s)
+    - **yes** — after modules/DI exist, run **`sonicc-setup-admob-ads`** (wire existing screens only; report changed Fragments/`*Screen`s)
     - **no** — keep `:gmaAds` in the project (builds) but do **not** wire screens
       Never convert ads to MVI unless the user **explicitly** asks. See `21-ads-billing` + [reference/ads-gma.md](../../../rules/reference/ads-gma.md).
-2. **Firebase Cloud Messaging** is **mandatory** for every new project: add `firebase-messaging` to the catalog + `implementation` on `:core-platform` only (dependency — no `FirebaseMessagingService` or push UI). See **`sonicc-implement-firebase-messaging`**.
+2. **Firebase Cloud Messaging** is **mandatory** for every new project: add `firebase-messaging` to the catalog + `implementation` on `:core-platform` only (dependency — no `FirebaseMessagingService` or push UI). See **`sonicc-setup-firebase-messaging`**; push handling later via **`sonicc-fcm`**.
 3. **Design system (Figma)** — ask the user to pick:
     - **a)** Provide a Figma link to build the design system (`figma.com/design/...`)
     - **b)** Ignore design system now (later)
@@ -87,7 +87,7 @@ Do this once modules and host types (`Constants.TAG_ADS`, `InternetManager`, `Sh
 4. Remap Gradle (`:core` / `:data` → `:core-common` + `:core-platform` + `:data`) and host-only imports. Catalog: `play-services-ads`, UMP.
 5. Register `gmaAdsModule` (`lazyModule` — deferred); AdMob App ID in `:app` manifest (sample for debug).
 6. During place: **do not** edit engine or catalog inside `:gmaAds`.
-7. If user said **yes** to implement → run **`sonicc-implement-admob-ads`**. If **no** → stop after place (module only).
+7. If user said **yes** to implement → run **`sonicc-setup-admob-ads`**. If **no** → stop after place (module only).
 
 ## Step 1 — Gradle
 
@@ -102,7 +102,7 @@ Follow `08-gradle.mdc` + [reference/gradle.md](../../../rules/reference/gradle.m
 7. `:app` may keep only `mipmap` / `xml` / launcher `drawable` — **no** layouts, menus, nav, `strings.xml` / `themes.xml` / `colors.xml`
 8. **Manifests:** only `:app` (full), `:gmaAds`, `:core-platform` (network state) as needed — **no** empty manifests on every module (`10-manifest`)
 9. **Every module** gets a `.gitignore`: libraries → `/build`; `:app` → `/build` + `/release` (see `02-project-structure`)
-10. **Firebase (mandatory):** catalog BOM + analytics / crashlytics / **messaging** on **`:core-platform`**; **config** + `kotlinx-coroutines-play-services` on **`:data`**. Latest stable. **No** `FirebaseMessagingService` / FCM manifest / token UI during setup (see **`sonicc-implement-firebase-messaging`**)
+10. **Firebase (mandatory):** catalog BOM + analytics / crashlytics / **messaging** on **`:core-platform`**; **config** + `kotlinx-coroutines-play-services` on **`:data`**. Latest stable. **No** `FirebaseMessagingService` / FCM manifest / token UI during setup (see **`sonicc-setup-firebase-messaging`**)
 
 Organize dependency sections with **`sonicc-gradle-organize`**.
 
@@ -183,7 +183,7 @@ Copy [templates/startup/](templates/startup/README.md) (replace `YOUR.PACKAGE`).
 
 **xml:** two graphs in `:presentation` `res/navigation/` (templates in [templates/startup/](templates/startup/)):
 
-- `nav_graph_startup.xml` — `app:startDestination="@id/startupFragment"`. Class `StartupFragment` under `presentation/startup/ui/`, layout `fragment_startup.xml`. Actions out of `startupFragment` use `popUpTo="@id/startupFragment"` + `popUpToInclusive="true"`. Later destinations (added by `sonicc-create-screen` / `sonicc-create-mvi`): `startupLanguageFragment`, `startupPremiumFragment` (`isFirstTime` arg), `startupIntroFragment`, `startupWelcomeBackFragment` — nothing else
+- `nav_graph_startup.xml` — `app:startDestination="@id/startupFragment"`. Class `StartupFragment` under `presentation/startup/ui/`, layout `fragment_startup.xml`. Actions out of `startupFragment` use `popUpTo="@id/startupFragment"` + `popUpToInclusive="true"`. Later destinations (added by `sonicc-create-screen` / `sonicc-mvi`): `startupLanguageFragment`, `startupPremiumFragment` (`isFirstTime` arg), `startupIntroFragment`, `startupWelcomeBackFragment` — nothing else
 - `nav_graph_main.xml` — `startDestination` = Home (first tab). Scaffold a minimal `HomeFragment` + `fragment_home.xml` placeholder so the app launches; `sonicc-create-screen` replaces it. In-app `languageFragment` / `premiumFragment` / `settingsFragment` / `exitFragment` and details join this graph later (`30`, `33`)
 - No Home / Splash as the startup start destination; no startup screens in `nav_graph_main`. Copy anims from [templates/anim/](templates/anim/) + [templates/anim-ldrtl/](templates/anim-ldrtl/) into `:core-ui`. Every forward `<action>` must include the four slide anim attrs (`17-navigation`). Nested `nav_graph_dashboard` only for the optional `DashboardFragment` variant (`32-screen-dashboard`)
 
@@ -208,9 +208,9 @@ See `17-navigation.mdc`.
 
 ## Step 5 — Startup MVI
 
-**xml:** scaffold `presentation/startup/{di,intent,state,effect,viewModel,ui}` via **`sonicc-create-mvi`**. `StartupFragment` extends `BaseFragment` (`ParentFragment` if no Base layer). Register `startupPresentationModule` on the **eager** list — it also holds `StartupLanguageViewModel` / `StartupPremiumViewModel` / `StartupIntroViewModel` / `StartupWelcomeBackViewModel` as those screens are added (`29-screen-startup`, `30`, `31`, `33`). `StartupFragment` routes per [reference/app-flow.md](../../../rules/reference/app-flow.md) and leaves with `(activity as? StartupActivity)?.moveToMain()`.
+**xml:** scaffold `presentation/startup/{di,intent,state,effect,viewModel,ui}` via **`sonicc-mvi`**. `StartupFragment` extends `BaseFragment` (`ParentFragment` if no Base layer). Register `startupPresentationModule` on the **eager** list — it also holds `StartupLanguageViewModel` / `StartupPremiumViewModel` / `StartupIntroViewModel` / `StartupWelcomeBackViewModel` as those screens are added (`29-screen-startup`, `30`, `31`, `33`). `StartupFragment` routes per [reference/app-flow.md](../../../rules/reference/app-flow.md) and leaves with `(activity as? StartupActivity)?.moveToMain()`.
 
-**compose:** module `:feature-startup`. Copy [templates/compose/StartupScreen.kt](templates/compose/StartupScreen.kt) + [templates/compose/feature-module.gradle.kts](templates/compose/feature-module.gradle.kts). Then **`sonicc-create-mvi`** Compose path (Intent/State/Effect/ViewModel/`startupFeatureModule`). Wire `navigateToNext` in `StartupNavGraph` when the first funnel destination exists; `navigateToMain` = `onFinished`.
+**compose:** module `:feature-startup`. Copy [templates/compose/StartupScreen.kt](templates/compose/StartupScreen.kt) + [templates/compose/feature-module.gradle.kts](templates/compose/feature-module.gradle.kts). Then **`sonicc-mvi`** Compose path (Intent/State/Effect/ViewModel/`startupFeatureModule`). Wire `navigateToNext` in `StartupNavGraph` when the first funnel destination exists; `navigateToMain` = `onFinished`.
 
 - Strings only in `:core-ui`
 - Tests: only if `writeTestsWithFeatures` is `true`
@@ -278,7 +278,7 @@ If the user chose design-system **a**, **stop here and run `sonicc-setup-design-
 
 ### Firebase (catalog + `:core-platform` / `:data`)
 
-Follow **`sonicc-implement-firebase-messaging`** for FCM. Every new project **must** include Messaging; Analytics + Crashlytics + Remote Config match Speak-Translate.
+Follow **`sonicc-setup-firebase-messaging`** for FCM. Every new project **must** include Messaging; Analytics + Crashlytics + Remote Config match Speak-Translate.
 
 ```toml
 # Firebase
@@ -358,7 +358,7 @@ object PlatformFirebase {
 - Event and screen constants in `:core-common` `EventsProvider` (snake_case string values)
 - Manifest: `google_analytics_automatic_screen_reporting_enabled` = `false`
 - Do **not** log the Installation token value (`14-security-secrets`)
-- Ads revenue (`fun Float.logRevenueEvent(context: Context, threshold: Float = 0.1f)`): add when ads screens are wired (`sonicc-implement-admob-ads` / user said **yes**). Pass `Context` as an argument. Use this app's prefs name / cache key / event string — never copy Speak-Translate `rossPref` / `TaichiTroasCache`
+- Ads revenue (`fun Float.logRevenueEvent(context: Context, threshold: Float = 0.1f)`): add when ads screens are wired (`sonicc-setup-admob-ads` / user said **yes**). Pass `Context` as an argument. Use this app's prefs name / cache key / event string — never copy Speak-Translate `rossPref` / `TaichiTroasCache`
 
 ### InternetManager
 
@@ -381,7 +381,7 @@ data:
   remoteConfig/repository/RemoteConfigRepositoryImpl.kt
 ```
 
-**RemoteConfigDataSource** (no dispatcher). Copy [templates/remoteconfig/RemoteConfigDataSource.kt](templates/remoteconfig/RemoteConfigDataSource.kt) (same shape as `sonicc-implement-firebase-remote-config` templates). Replace `YOUR.PACKAGE`.
+**RemoteConfigDataSource** (no dispatcher). Copy [templates/remoteconfig/RemoteConfigDataSource.kt](templates/remoteconfig/RemoteConfigDataSource.kt) (same shape as `sonicc-setup-firebase-remote-config` templates). Replace `YOUR.PACKAGE`.
 
 - `private val fetchMutex = Mutex()` + `by lazy { FirebaseRemoteConfig.getInstance() }`
 - `minimumFetchIntervalInSeconds(0L)` always
@@ -432,7 +432,7 @@ viewModelScope.launch {
 }
 ```
 
-This 5-second gate is only for Startup **without** an ad startup sequence. When `sonicc-implement-admob-ads` wires Startup ads, that skill replaces it: Remote Config still starts, its result is ignored, and navigation follows consent (8s) → AdMob init → ad calls (8s).
+This 5-second gate is only for Startup **without** an ad startup sequence. When `sonicc-setup-admob-ads` wires Startup ads, that skill replaces it: Remote Config still starts, its result is ignored, and navigation follows consent (8s) → AdMob init → ad calls (8s).
 
 ## Step 9 — Verify
 
@@ -442,7 +442,7 @@ This 5-second gate is only for Startup **without** an ad startup sequence. When 
 - [ ] **xml** modules: app, domain, data, presentation, core-common, core-ui, core-platform, **gmaAds** (`include` alphabetical)
 - [ ] **compose** modules: app, domain, data, feature-startup, core-common, core-ui, core-platform, **gmaAds** — **no** `:presentation`, **no** `:core-design`
 - [ ] `:gmaAds` placed from GitHub; package `{applicationId}.gmaAds`; host imports remapped; `gmaAdsModule` registered
-- [ ] Ads screens wired only if user said **yes** (`sonicc-implement-admob-ads`); otherwise module-only
+- [ ] Ads screens wired only if user said **yes** (`sonicc-setup-admob-ads`); otherwise module-only
 - [ ] Manifests only as needed (`:app`, `:gmaAds`, `:core-platform`); application theme = `Theme.App`; `StartupActivity` = launcher with `Theme.App.Starting` and first in `<application>`; `MainActivity` `exported="false"` + `singleTask`; no Settings / Premium / Language Activities
 - [ ] `:app` `android` section order: defaultConfig → signingConfigs → buildTypes → buildFeatures → compileOptions → bundle
 - [ ] `:app` has `signingConfigs` (`.jks` path if found, else empty strings) + `bundle.language.enableSplit = false` + `base.archivesName`
@@ -490,4 +490,4 @@ This 5-second gate is only for Startup **without** an ad startup sequence. When 
 
 ## After setup
 
-Next: if design system was skipped, optional `/sonicc-setup-design-system`; then startup language / startup premium / onboarding / startup welcome back (`StartupActivity`, `29`–`33`) and home + in-app language / premium twins (`MainActivity`) via **`sonicc-figma-to-xml`** (xml) or **`sonicc-figma-to-compose`** (compose) → `sonicc-create-mvi` (or `sonicc-create-screen`); new domain/data via `sonicc-create-clean-architecture`; wire Startup Effects in `nav_graph_startup.xml` (xml) or `StartupNavGraph.kt` (compose). Existing apps missing RC or Analytics: `sonicc-implement-firebase-remote-config`, `sonicc-implement-firebase-events`; later screens: `sonicc-add-firebase-events`; extra RC keys: `sonicc-add-firebase-remote-config`.
+Next: if design system was skipped, optional `/sonicc-setup-design-system`; then startup language / startup premium / onboarding / startup welcome back (`StartupActivity`, `29`–`33`) and home + in-app language / premium twins (`MainActivity`) via **`sonicc-figma-to-xml`** (xml) or **`sonicc-figma-to-compose`** (compose) → `sonicc-mvi` (or `sonicc-create-screen`); new domain/data via `sonicc-clean-architecture`; wire Startup Effects in `nav_graph_startup.xml` (xml) or `StartupNavGraph.kt` (compose). Existing apps missing RC or Analytics: `sonicc-setup-firebase-remote-config`, `sonicc-setup-firebase-events`; later screens: `sonicc-add-firebase-events`; extra RC keys: `sonicc-add-firebase-remote-config`.

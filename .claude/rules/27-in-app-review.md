@@ -18,4 +18,4 @@ paths:
 - Do not put rating dialogs, prefs throttles, or Feedback screens inside the manager
 - Task success ≠ user reviewed (Play may skip UI)
 
-Use skill `.claude/skills/sonic-implement-in-app-review` to scaffold (see also this rule for placement/policy).
+Use skill `.claude/skills/sonic-inapp-review` to scaffold (see also this rule for placement/policy).

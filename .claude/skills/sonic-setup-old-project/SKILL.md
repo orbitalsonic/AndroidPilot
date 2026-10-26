@@ -94,7 +94,7 @@ Ask, in this order (use AskUserQuestion when available):
     - Ask explicitly whether they want **night mode**, **day only**, or **both**.
 5. **`writeTestsWithFeatures`** — `true` / `false`. Propose `true`.
 6. **`uiFramework`** — `xml` / `compose`. Detect from the inventory (Compose screens vs XML Fragments). Propose the current stack. **Do not** convert XML ↔ Compose unless the user explicitly asks.
-7. **Ads** — if a working ads stack already exists → **keep it** (do not convert to MVI; do **not** overwrite with a blind `:gmaAds` copy unless the user asks to migrate). If no ads module → **always place** `:gmaAds` from [orbitalsonic/Admob-Ads](https://github.com/orbitalsonic/Admob-Ads) (package `{applicationId}.gmaAds` + host remaps only; see `sonic-setup-new-project` Step — Place `:gmaAds` / [ads-gma.md](../../rules/reference/ads-gma.md)). Ask: **Implement ads on screens now?** **yes** → `sonic-implement-admob-ads` (existing screens only); **no** → module only.
+7. **Ads** — if a working ads stack already exists → **keep it** (do not convert to MVI; do **not** overwrite with a blind `:gmaAds` copy unless the user asks to migrate). If no ads module → **always place** `:gmaAds` from [orbitalsonic/Admob-Ads](https://github.com/orbitalsonic/Admob-Ads) (package `{applicationId}.gmaAds` + host remaps only; see `sonic-setup-new-project` Step — Place `:gmaAds` / [ads-gma.md](../../rules/reference/ads-gma.md)). Ask: **Implement ads on screens now?** **yes** → `sonic-setup-admob-ads` (existing screens only); **no** → module only.
 
 All later skills **must read** `.claude/project-settings.json` and obey it. Orientation / night resources are added or skipped **only** from this confirmation — do not add landscape or `values-night` unless the user chose `both` (or that single mode).
 
@@ -163,9 +163,9 @@ Do not rewrite parsers, endpoints, headers, or DB queries.
 1. API / JSON parsing in Activity/Fragment/Presenter → `:data` DataSource + Repository impl; domain interface + UseCase. If introducing Retrofit/OkHttp stack for the first time → also create **`:core-network`** (`26`, `reference/retrofit.md`).
 2. Room / SQLite → **`:core-database`** (entities under `entity/`, DAOs, `AppDatabase`); DataSources/repo impls stay in `:data`. Files / prefs → `:data`. Keep schema, keys, file names, prefs name.
 3. SharedPreferences: wrap the **existing** prefs file/name in `SharedPrefManager` (sync) + `SharedPrefRepository` (`26-data-persistence` + `reference/shared-preferences.md`). Do not change keys or defaults.
-4. Remote Config: if present, keep **existing keys**; wrap with DataSource + cache-to-prefs (`sonic-setup-new-project` Step 8 / `sonic-implement-firebase-remote-config`). If missing, add the template RC stack.
-5. Analytics: during this architecture move, keep **event names and params**; move posting into `PlatformFirebase` + `EventsProvider`. Do not rename events here. Cutting old per-screen names over to `screen_view` / `ui_click` is only [sonic-implement-firebase-events](../sonic-implement-firebase-events/SKILL.md) (it deletes the old posts first).
-6. Ads: if existing ads → keep managers / mediation; relocate into `:gmaAds` only if still inside `:app` and structure matches. If no ads → place GitHub `:gmaAds` (package + host remaps). Wire screens only if user said **yes** (`sonic-implement-admob-ads`). **Not** MVI unless the user explicitly asks (`21-ads-billing`).
+4. Remote Config: if present, keep **existing keys**; wrap with DataSource + cache-to-prefs (`sonic-setup-new-project` Step 8 / `sonic-setup-firebase-remote-config`). If missing, add the template RC stack.
+5. Analytics: during this architecture move, keep **event names and params**; move posting into `PlatformFirebase` + `EventsProvider`. Do not rename events here. Cutting old per-screen names over to `screen_view` / `ui_click` is only [sonic-setup-firebase-events](../sonic-setup-firebase-events/SKILL.md) (it deletes the old posts first).
+6. Ads: if existing ads → keep managers / mediation; relocate into `:gmaAds` only if still inside `:app` and structure matches. If no ads → place GitHub `:gmaAds` (package + host remaps). Wire screens only if user said **yes** (`sonic-setup-admob-ads`). **Not** MVI unless the user explicitly asks (`21-ads-billing`).
 7. Billing, maps, login SDKs, etc.: keep behavior; place per `02-project-structure`.
 
 Heavy mapping stays in Repository / UseCase — not in Fragments.
@@ -177,7 +177,7 @@ Preserve layouts / composables, click behavior, copy, and back-stack meaning.
 **xml:**
 
 1. Two Activities from `sonic-setup-new-project` [templates/startup/](../sonic-setup-new-project/templates/startup/README.md): `StartupActivity` (launcher, splash, `fcvContainerStartup` + `nav_graph_startup`, back blocked, `moveToMain()`) and `MainActivity` (`fcvContainerMain` + `nav_graph_main`, BNV + banner slot when the app has tabs). Both extend `ParentActivity` (`InsetsMode`). Old `SplashActivity` → `StartupActivity`; old per-feature Activities (Settings / Premium / Language) → Fragments in `nav_graph_main` (`23-app-startup`).
-2. Map each feature Activity (or MVC screen) to a Fragment + MVI via **`sonic-create-mvi`** patterns: move existing UI logic into Intent / State / Effect / ViewModel **without changing what the user sees**. Reuse the same XML (View Binding). See [migration.md](migration.md).
+2. Map each feature Activity (or MVC screen) to a Fragment + MVI via **`sonic-mvi`** patterns: move existing UI logic into Intent / State / Effect / ViewModel **without changing what the user sees**. Reuse the same XML (View Binding). See [migration.md](migration.md).
 3. Activity-per-screen → Fragments in `nav_graph_main` (same destinations and back behavior). Screens the user saw **before** the app proper (splash, first-time language, intro, startup paywall, returning-user menu) → `Startup*` Fragments in `nav_graph_startup`; their in-app counterparts (Settings → Language with Apply + search, in-app Premium) stay in `nav_graph_main` as separate `LanguageFragment` / `PremiumFragment` (`29`–`33`).
 4. **`nav_graph_startup` `app:startDestination="@id/startupFragment"`** is mandatory. Implement `StartupFragment` so it routes to whatever was the previous first screen (language / onboarding / `moveToMain()`). Do not insert a new user-facing splash unless the app already had one. Actions out of `startupFragment` are `popUpToInclusive`.
 5. Copy `anim/` + `anim-ldrtl/` slide_* into `:core-ui` if missing; every forward `<action>` gets the four anim attrs (`17-navigation`).
@@ -186,7 +186,7 @@ Preserve layouts / composables, click behavior, copy, and back-stack meaning.
 **compose:**
 
 1. `StartupActivity` (`installSplashScreen()`, `StartupNavGraph(onFinished)`) + `MainActivity` (`MainNavGraph()`) in `:app` from [templates/compose/](../sonic-setup-new-project/templates/compose/README.md) — **never** `GlobalContext.get()`.
-2. One `:feature-<kebab>` per screen (`sonic-create-mvi` Compose path). Keep existing composables; wrap in `*Screen` / `*ScreenContent`.
+2. One `:feature-<kebab>` per screen (`sonic-mvi` Compose path). Keep existing composables; wrap in `*Screen` / `*ScreenContent`.
 3. `StartupNavGraph.kt` (`STARTUP_ROUTE` start, funnel only) + `MainNavGraph.kt` (`HOME_ROUTE` start) in `:app` `navigation/`. Startup routes to the previous first screen, then `onFinished` → `MainActivity`.
 4. Slide transitions on the `NavHost`. Features never take `NavController`.
 5. Images: Coil `AsyncImage`.
@@ -204,7 +204,7 @@ Follow `sonic-setup-new-project` Step 7 for **placement**:
 - Remote Config on `:data`
 - `kotlinx-coroutines-play-services` on `:core-platform` and `:data`
 
-If Messaging (or a `FirebaseMessagingService`) already exists, **keep it** — do not delete push behavior. If FCM was never there, add the **dependency only** (no new service / token UI) per `sonic-implement-firebase-messaging`.
+If Messaging (or a `FirebaseMessagingService`) already exists, **keep it** — do not delete push behavior. If FCM was never there, add the **dependency only** (no new service / token UI) per `sonic-setup-firebase-messaging`. Full push (service + topics) only when the user asks → `sonic-fcm`.
 
 `PlatformFirebase` is an `object` with no Context field. Ads revenue helper: only if the app has ads; pass `Context` as an argument; keep this app’s prefs/event strings.
 
@@ -242,4 +242,4 @@ Dispatchers: register **without** `named("io")` / `named("default")`.
 
 ## After setup
 
-Same as `sonic-setup-new-project`: optional later `/sonic-setup-design-system`; screens via `sonic-figma-to-xml` **or** `sonic-figma-to-compose` → `sonic-create-mvi`; new domain/data via `sonic-create-clean-architecture`; `sonic-review-complete` before PR. Missing RC / Analytics coverage: `sonic-implement-firebase-remote-config`, `sonic-implement-firebase-events`, then `add-firebase-*` for later screens.
+Same as `sonic-setup-new-project`: optional later `/sonic-setup-design-system`; screens via `sonic-figma-to-xml` **or** `sonic-figma-to-compose` → `sonic-mvi`; new domain/data via `sonic-clean-architecture`; `sonic-review` before PR. Missing RC / Analytics coverage: `sonic-setup-firebase-remote-config`, `sonic-setup-firebase-events`, then `add-firebase-*` for later screens.

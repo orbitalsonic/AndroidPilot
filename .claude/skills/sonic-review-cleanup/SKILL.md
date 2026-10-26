@@ -1,6 +1,6 @@
 ---
 name: sonic-review-cleanup
-description: OrbitalSonic Claude Skill: Review unused code/drawables, APK/AAB size (PNG→WebP, vectors), and release R8/optimization on :app only. Use for cleanup, dead resources, or app-size suggestions. Prefer sonic-review-complete for a full multi-check pass.
+description: OrbitalSonic Claude Skill: Review unused code/drawables, APK/AAB size (PNG→WebP, vectors), and release R8/optimization on :app only. Use for cleanup, dead resources, or app-size suggestions. Prefer sonic-review for a full multi-check pass.
 ---
 
 # Cleanup / App Size Review
@@ -11,7 +11,7 @@ Obey `.claude/project-settings.json` when present.
 
 **Report only.** Do not delete assets, convert PNG→WebP, or change Gradle in the review turn — list findings, then ask which numbers to fix per [fix-selection.md](../fix-selection.md).
 
-When run inside **`sonic-review-complete`**: report detailed shrink/module findings under **Cleanup** only (do not duplicate the same Critical as Security).
+When run inside **`sonic-review`**: report detailed shrink/module findings under **Cleanup** only (do not duplicate the same Critical as Security).
 
 ## Module suitability (mandatory)
 

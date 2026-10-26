@@ -53,9 +53,9 @@ All skills live flat under `.claude/skills/sonic-<name>/SKILL.md`.
 sonic-setup-new-project          Bootstrap multi-module app + persist settings (Firebase BOM + analytics/crashlytics/messaging + RC cache)
 sonic-setup-old-project          Migrate existing production app to sonic-setup-new-project architecture; preserve product behavior; confirm settings first
 sonic-setup-design-system        Figma design-system file → :core-ui tokens/themes (+ AppTheme in core/ui/theme/ when compose)
-sonic-create-screen              Full screen: UI (sonic-figma-to-xml|compose) + sonic-create-mvi + sonic-create-clean-architecture when needed
-sonic-create-mvi                 Presentation MVI only (no domain/data) — Fragment if xml, `*Screen` in `:feature-*` if compose
-sonic-create-clean-architecture  Domain + data + core pieces as needed
+sonic-create-screen              Full screen: UI (sonic-figma-to-xml|compose) + sonic-mvi + sonic-clean-architecture when needed
+sonic-mvi                 Presentation MVI only (no domain/data) — Fragment if xml, `*Screen` in `:feature-*` if compose
+sonic-clean-architecture  Domain + data + core pieces as needed
 sonic-figma-to-xml               XML layouts (+ Figma design-to-code); `uiFramework` xml only
 sonic-figma-to-compose           Compose screens (AnimeHub `*Screen` / `*ScreenContent`); `uiFramework` compose
 sonic-create-dialog              Dialog UI — XML if xml, Compose `*Dialog` if compose
@@ -66,35 +66,37 @@ sonic-review-architecture        Architecture / MVI / boundaries
 sonic-review-performance         ANR / lists / dispatchers
 sonic-review-security            Secrets / manifest / PII
 sonic-review-cleanup             Unused code/resources / app size / release shrink
-sonic-review-complete            Runs all review-* + summary report
-sonic-test-unit                  Write+run JVM unit/Flow tests; consent before fix
-sonic-test-integration           Write+run multi-layer tests; consent before fix
-sonic-test-e2e                   Write+run E2E on device; consent before fix
-sonic-test-complete              Full run + walkthrough; consent before fix
+sonic-review            Yes/no per architecture / cleanup / performance / security → runs chosen review-* + one report
+sonic-write-unit-test                  Write+run JVM unit/Flow tests; consent before fix
+sonic-write-integration-test           Write+run multi-layer tests; consent before fix
+sonic-write-e2e-test                   Write+run E2E on device; consent before fix
+sonic-write-test              Yes/no per unit / integration / E2E → runs chosen suites (+ walkthrough); consent before fix
 sonic-gradle-organize            Catalog + android/base/dependencies section order (signingConfigs, bundle, R8 optimization/keepRules)
 sonic-gradle-update              Groovy→KTS if needed; AGP 9.3+; R8 optimization + keepRules; bump all deps (catalog + hardcodes)
 sonic-build-debug-apk            Debug APK → device install + launch
 sonic-build-release-apk          Release signing + APK → device install + launch
 sonic-build-release-bundle       Release signing + AAB (no device)
-sonic-implement-in-app-update    Play In-App Updates
-sonic-implement-in-app-review    Play In-App Review
-sonic-implement-firebase-messaging      firebase-messaging dep (:core-platform) only
-sonic-implement-firebase-remote-config  First-time RC + SharedPref cache + StartupFragment fetch
+sonic-inapp-update    Play In-App Updates
+sonic-inapp-review    Play In-App Review
+sonic-setup-firebase          Firebase base (plugins, dummy google-services.json, Analytics + Crashlytics) + yes/no run of events / RC / messaging
+sonic-setup-firebase-messaging      firebase-messaging dep (:core-platform) only
+sonic-fcm                     Full FCM push: SonicMessagingService + topics + custom notification (QiblaCompass)
+sonic-setup-firebase-remote-config  First-time RC + SharedPref cache + StartupFragment fetch
 sonic-add-firebase-remote-config        Add RC keys to existing SharedPref + Remote Config classes
-sonic-implement-firebase-events         First-time full-app Analytics (screen_view + ui_click)
+sonic-setup-firebase-events         First-time full-app Analytics (screen_view + ui_click)
 sonic-add-firebase-events               Add Analytics events for selected screens
-sonic-implement-in-app-billing   Greenfield Play billing (subs + in-app, v4 stack)
-sonic-update-in-app-billing      Migrate orbitalsonic SonicInApp v3 → v4.0.0
+sonic-inapp-billing   Greenfield Play billing (subs + in-app, v4 stack)
+sonic-inapp-billing-update      Migrate orbitalsonic SonicInApp v3 → v4.0.0
 sonic-add-subscription-packages  Add subscription tiers to existing billing
 sonic-add-inapp-packages         Add one-time in-app products to existing billing
-sonic-implement-admob-ads        First-time AdMob screen wiring (:gmaAds from GitHub)
-sonic-add-admob-banner           Add banner placement to existing :gmaAds
-sonic-add-admob-interstitial     Add interstitial placement
-sonic-add-admob-native           Add native placement
-sonic-add-admob-rewarded         Add rewarded placement
-sonic-add-admob-rewarded-interstitial   Add rewarded interstitial placement
-sonic-add-admob-appOpen-Entrance Wire App Open ENTRANCE (splash/consent)
-sonic-add-admob-appOpen-lifecycle       Wire App Open LIFECYCLE (resume)
+sonic-setup-admob-ads        First-time AdMob screen wiring (:gmaAds from GitHub)
+sonic-admob-banner           Add banner placement to existing :gmaAds
+sonic-admob-interstitial     Add interstitial placement
+sonic-admob-native           Add native placement
+sonic-admob-rewarded         Add rewarded placement
+sonic-admob-rewarded-interstitial   Add rewarded interstitial placement
+sonic-admob-appOpen-Startup Wire App Open STARTUP — StartupFragment, `:gmaAds` key `ENTRANCE` (splash/consent)
+sonic-admob-appOpen-lifecycle       Wire App Open LIFECYCLE (resume)
 ```
 
 ### Typical feature flow
@@ -104,8 +106,8 @@ sonic-add-admob-appOpen-lifecycle       Wire App Open LIFECYCLE (resume)
 1. `sonic-setup-new-project` (greenfield) or `sonic-setup-old-project` (existing production app) — persist **`uiFramework`**
 2. `sonic-setup-design-system` — Figma tokens/themes in `:core-ui` (Compose `AppTheme` in `core/ui/theme/` when compose)
 3. `sonic-figma-to-xml` if `uiFramework` is `xml`; `sonic-figma-to-compose` if `compose` (or dialog / bottom-sheet)
-4. `sonic-create-mvi` — Intent/State/Effect/VM + Fragment **or** `*Screen` in `:feature-*`
-5. `sonic-create-clean-architecture` — when new domain/data is required
+4. `sonic-mvi` — Intent/State/Effect/VM + Fragment **or** `*Screen` in `:feature-*`
+5. `sonic-clean-architecture` — when new domain/data is required
 
 Data patterns (Retrofit, Room, SharedPreferences) live in **rules** + [`.claude/rules/reference/`](rules/reference/) — not separate skills.
 
@@ -121,7 +123,7 @@ Data patterns (Retrofit, Room, SharedPreferences) live in **rules** + [`.claude/
 | `11`–`13`              | Testing, naming, libraries                                                                                                                                           |
 | `14`–`16`              | Security (always), compatibility, logging (always)                                                                                                                   |
 | `17`–`20`              | Nav (`nav_graph_startup` + `nav_graph_main`, optional nested dashboard / `navigateRootTo`), errors, base UI (`19` → `reference/`: `InsetsMode` edge-to-edge), permissions |
-| `21`–`25`              | Ads/billing (**ads are not MVI** — `:gmaAds` from GitHub; see `sonic-implement-admob-ads` / `sonic-add-admob-*` + `reference/ads-gma.md`), Firebase, startup, Figma assets, in-app update |
+| `21`–`25`              | Ads/billing (**ads are not MVI** — `:gmaAds` from GitHub; see `sonic-setup-admob-ads` / `sonic-admob-*` + `reference/ads-gma.md`), Firebase, startup, Figma assets, in-app update |
 | `26-data-persistence`  | Retrofit / Room / SharedPreferences (`:core-network` / `:core-database` when added)                                                                                  |
 | `27-in-app-review`     | Play In-App Review placement (`InAppReviewManager`)                                                                                                                  |
 | `28-compose-ui`        | Compose feature modules / Screen-Content / NavGraph (`uiFramework` compose) — [reference/compose-ui.md](rules/reference/compose-ui.md)                               |
@@ -151,6 +153,6 @@ Data patterns (Retrofit, Room, SharedPreferences) live in **rules** + [`.claude/
 
 1. Copy `.claude/` into the project root (this folder includes [`CLAUDE.md`](CLAUDE.md)).
 2. Open Android Studio, terminal at the repo root, run `claude`.
-3. Type `/` and pick a skill (e.g. `/sonic-create-screen`, `/sonic-figma-to-xml`, `/sonic-figma-to-compose`, `/sonic-create-mvi`).
+3. Type `/` and pick a skill (e.g. `/sonic-create-screen`, `/sonic-figma-to-xml`, `/sonic-figma-to-compose`, `/sonic-mvi`).
 4. Path-scoped rules load when matching files are touched; `00-global`, `14-security-secrets`, and `16-logging` always apply.
-5. Before PRs: `/sonic-review-complete` or individual `sonic-review-*` skills.
+5. Before PRs: `/sonic-review` or individual `sonic-review-*` skills.

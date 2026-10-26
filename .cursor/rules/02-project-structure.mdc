@@ -19,7 +19,7 @@ alwaysApply: false
 | `:core-database` | **When Room is added** — `AppDatabase`, `entity/`, DAOs, Koin module per `07`. Not created empty on every greenfield setup |
 | `:core-network` | **When Retrofit / API clients are added** — OkHttp/Retrofit wiring. Connectivity checks stay in `:core-platform`. Not created empty on every greenfield setup |
 | `:feature-*` | xml: optional self-contained feature libraries. **compose: required** — one module per screen cluster (`28-compose-ui`) |
-| `:gmaAds` | AdMob — **always place** from [orbitalsonic/Admob-Ads](https://github.com/orbitalsonic/Admob-Ads) on setup (package `{applicationId}.gmaAds` + host remaps). Screen wiring via `sonicc-implement-admob-ads` when user says yes. Extensions API — **not** MVI unless the user explicitly asks. See `21-ads-billing` + `reference/ads-gma.md` |
+| `:gmaAds` | AdMob — **always place** from [orbitalsonic/Admob-Ads](https://github.com/orbitalsonic/Admob-Ads) on setup (package `{applicationId}.gmaAds` + host remaps). Screen wiring via `sonicc-setup-admob-ads` when user says yes. Extensions API — **not** MVI unless the user explicitly asks. See `21-ads-billing` + `reference/ads-gma.md` |
 
 - Use as many `:core-*` modules as the project needs; keep each focused
 - Gradle module names: kebab-case (`:core-ui`, `:feature-auth`, `:gmaAds`)

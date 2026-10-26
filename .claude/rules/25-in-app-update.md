@@ -19,4 +19,4 @@ paths:
 - Optional RC → SharedPref cache (`0` off / `1` flexible / `2` immediate)
 - ViewModel emits Effect; Fragment runs Play UI APIs only
 
-Use skill `.claude/skills/sonic-implement-in-app-update` to scaffold (see also this rule for placement/policy).
+Use skill `.claude/skills/sonic-inapp-update` to scaffold (see also this rule for placement/policy).

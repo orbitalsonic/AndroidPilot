@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Template — copy to the module that hosts SonicMessagingService: res/values/firebase.xml
+  Channel id is referenced by the manifest meta-data `default_notification_channel_id` and by
+  NotificationChannelHelper. Replace YOUR_APP_ID / App Name. The channel name is shown by the
+  system notification settings, so it may be translated in values-* copies of this file.
+-->
+<resources>
+    <string name="default_notification_channel_id" translatable="false">YOUR_APP_ID_default_channel</string>
+    <string name="default_notification_channel_name">App Name notifications</string>
+</resources>

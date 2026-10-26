@@ -1,6 +1,6 @@
 ---
 name: sonicg-review-cleanup
-description: OrbitalSonic Gemini Skill: Review unused code/drawables, APK/AAB size (PNG→WebP, vectors), and release R8/optimization on :app only. Use for cleanup, dead resources, or app-size suggestions. Prefer sonicg-review-complete for a full multi-check pass.
+description: OrbitalSonic Gemini Skill: Review unused code/drawables, APK/AAB size (PNG→WebP, vectors), and release R8/optimization on :app only. Use for cleanup, dead resources, or app-size suggestions. Prefer sonicg-review for a full multi-check pass.
 ---
 
 # Cleanup / App Size Review
@@ -11,7 +11,7 @@ Obey `.agents/project-settings.json` when present.
 
 **Report only.** Do not delete assets, convert PNG→WebP, or change Gradle in the review turn — list findings, then ask which numbers to fix per [fix-selection.md](../fix-selection.md).
 
-When run inside **`sonicg-review-complete`**: report detailed shrink/module findings under **Cleanup** only (do not duplicate the same Critical as Security).
+When run inside **`sonicg-review`**: report detailed shrink/module findings under **Cleanup** only (do not duplicate the same Critical as Security).
 
 ## Module suitability (mandatory)
 

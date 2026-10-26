@@ -1,13 +1,13 @@
 ---
 name: sonicc-add-firebase-remote-config
-description: Sonic Cursor Skill: Add one or more Remote Config keys to an existing SharedPreferences cache. Asks the user for value/values (Firebase key, type, default), then matches this app’s SharedPref and Remote Config classes (DataSource or repositories). Use when extending RC cache keys, adding a flag to SharedPrefManager/saveValues, or /sonicc-add-firebase-remote-config — not for first-time RC wiring (use sonicc-implement-firebase-remote-config).
+description: Sonic Cursor Skill: Add one or more Remote Config keys to an existing SharedPreferences cache. Asks the user for value/values (Firebase key, type, default), then matches this app’s SharedPref and Remote Config classes (DataSource or repositories). Use when extending RC cache keys, adding a flag to SharedPrefManager/saveValues, or /sonicc-add-firebase-remote-config — not for first-time RC wiring (use sonicc-setup-firebase-remote-config).
 ---
 
 # Add Firebase Remote Config keys
 
 Follow `.cursor/rules/22-platform-firebase.mdc`, `26-data-persistence.mdc`, `16-logging.mdc`.  
 Prefs shape: [`.cursor/rules/reference/shared-preferences.md`](../../rules/reference/shared-preferences.md).  
-First-time RC stack → **`sonicc-implement-firebase-remote-config`**.
+First-time RC stack → **`sonicc-setup-firebase-remote-config`**.
 
 Obey `.cursor/project-settings.json` when present.
 
@@ -26,7 +26,7 @@ Do **not** invent a new RC/prefs layout. Clone neighboring keys.
 
 | App state                                                                 | Action |
 |---------------------------------------------------------------------------|--------|
-| No RC DataSource / repository **and** no RC cache properties on prefs     | Stop → **`sonicc-implement-firebase-remote-config`** |
+| No RC DataSource / repository **and** no RC cache properties on prefs     | Stop → **`sonicc-setup-firebase-remote-config`** |
 | Legacy Application helper (`RemoteConfiguration`) only                    | Add the key into **that** helper + whatever prefs it already writes. Do not migrate without approval. |
 | RC + prefs cache exist                                                    | Continue. Edit **existing** files only. |
 
@@ -133,7 +133,7 @@ Do not change fetch/activate, mutex, or listener registration.
 
 ## Do not
 
-- First-time RC stack (`sonicc-implement-firebase-remote-config`)
+- First-time RC stack (`sonicc-setup-firebase-remote-config`)
 - Analytics / `EventsProvider` (`sonicc-add-firebase-events`)
 - Copy ads/premium keys from another app
 - Per-key methods on a generic `RemoteConfigDataSource`

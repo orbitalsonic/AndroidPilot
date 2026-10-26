@@ -8,7 +8,7 @@ alwaysApply: false
 
 Full playbook for subscriptions and one-time in-app products using [orbitalsonic/SonicInApp](https://github.com/orbitalsonic/SonicInApp) (`4.0.0+`, Play Billing Library 9.1.0).
 
-**Skills:** `premium/sonicc-implement-in-app-billing`, `premium/sonicc-add-subscription-packages`, `premium/sonicc-add-inapp-packages`.
+**Skills:** `premium/sonicc-inapp-billing`, `premium/sonicc-add-subscription-packages`, `premium/sonicc-add-inapp-packages`.
 
 Do not invent a parallel `BillingClient` wrapper — use the library + Clean Architecture below.
 
@@ -271,7 +271,7 @@ koin.get<BillingDataSource>().start(applicationScope)
 
 ### 3.x → 4.0.0 migration
 
-**Workflow skill:** `billing/sonicc-update-in-app-billing` (`.cursor`) / `sonicc-update-in-app-billing` (`.claude`).
+**Workflow skill:** `billing/sonicc-inapp-billing-update` (`.cursor`) / `sonicc-inapp-billing-update` (`.claude`).
 
 | 3.x                                        | 4.0.0                                      |
 |--------------------------------------------|--------------------------------------------|

@@ -51,4 +51,4 @@ Obey **all** XML invariants in `09-resources-xml.md` + [reference/resources-xml.
 
 ## After layout
 
-Tell user to wire via `sonic-create-mvi` or existing host if Kotlin not requested.
+Tell user to wire via `sonic-mvi` or existing host if Kotlin not requested.

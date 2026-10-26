@@ -15,12 +15,12 @@ When [`.agents/project-settings.json`](project-settings.json) exists, obey `uiFr
 1. `@sonicg-setup-new-project` (greenfield) or `@sonicg-setup-old-project` (existing production app) — persist **`uiFramework`**
 2. `@sonicg-setup-design-system` — Figma tokens/themes in `:core-ui` (Compose `AppTheme` in `core/ui/theme/` when compose)
 3. `@sonicg-figma-to-xml` if xml; `@sonicg-figma-to-compose` if compose (or `@sonicg-create-dialog` / `@sonicg-create-bottom-sheet`)
-4. `@sonicg-create-mvi` — Intent / State / Effect / ViewModel + Fragment **or** `*Screen` in `:feature-*`
-5. `@sonicg-create-clean-architecture` — only when new domain / data is required
-6. `@sonicg-review-complete` before PR
+4. `@sonicg-mvi` — Intent / State / Effect / ViewModel + Fragment **or** `*Screen` in `:feature-*`
+5. `@sonicg-clean-architecture` — only when new domain / data is required
+6. `@sonicg-review` before PR
 
 ## Skills
 
-Invoke with `@` using the skill folder name (`@sonicg-create-screen`, `@sonicg-create-mvi`, `@sonicg-figma-to-xml`, `@sonicg-figma-to-compose`, `@sonicg-localize`, …). Descriptions start with **OrbitalSonic Gemini Skill:** — do not pick Figma plugin skills ("Created by Figma") for Android screens. Full map and rules index: [README.md](README.md).
+Invoke with `@` using the skill folder name (`@sonicg-create-screen`, `@sonicg-mvi`, `@sonicg-figma-to-xml`, `@sonicg-figma-to-compose`, `@sonicg-localize`, …). Descriptions start with **OrbitalSonic Gemini Skill:** — do not pick Figma plugin skills ("Created by Figma") for Android screens. Full map and rules index: [README.md](README.md).
 
 Cursor twins: `/sonicc-…` under `.cursor/`. Claude Code twins: `/sonic-…` under `.claude/`. Keep all three in sync (`MUST_READ_BEFORE_SKILL_CHANGES.md`).

@@ -12,4 +12,4 @@ Copied by `sonicc-setup-new-project` when `uiFramework` is `compose`. Replace `Y
 | `StartupScreen.kt` | `:feature-startup` `…/feature/startup/StartupScreen.kt` |
 | `feature-module.gradle.kts` | each `:feature-*` `build.gradle.kts` (adjust namespace + project deps) |
 
-MVI (`intent` / `state` / `effect` / `viewModel` / `di`) for Startup is scaffolded via `sonicc-create-mvi` Compose path. `StartupLanguageScreen` / `StartupPremiumScreen` / `StartupIntroScreen` / `StartupWelcomeBackScreen` live in `:feature-startup`; in-app `LanguageScreen` / `PremiumScreen` in `:feature-language` / `:feature-premium` (`30`, `33`). `HOME_ROUTE` (`:feature-home`) is created by `sonicc-create-screen`.
+MVI (`intent` / `state` / `effect` / `viewModel` / `di`) for Startup is scaffolded via `sonicc-mvi` Compose path. `StartupLanguageScreen` / `StartupPremiumScreen` / `StartupIntroScreen` / `StartupWelcomeBackScreen` live in `:feature-startup`; in-app `LanguageScreen` / `PremiumScreen` in `:feature-language` / `:feature-premium` (`30`, `33`). `HOME_ROUTE` (`:feature-home`) is created by `sonicc-create-screen`.

@@ -1,6 +1,6 @@
 ---
 name: sonicc-review-performance
-description: Sonic Cursor Skill: Review Android code for ANR risk, large dataset handling, dispatchers, and RecyclerView performance. Use when optimizing lists, fixing jank, ANR, or slow screens. Prefer sonicc-review-complete for a full multi-check pass.
+description: Sonic Cursor Skill: Review Android code for ANR risk, large dataset handling, dispatchers, and RecyclerView performance. Use when optimizing lists, fixing jank, ANR, or slow screens. Prefer sonicc-review for a full multi-check pass.
 ---
 
 # Performance Review

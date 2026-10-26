@@ -49,9 +49,9 @@ All feature/UI/test skills **must read and obey** this file when present:
 project/sonicc-setup-new-project          Bootstrap multi-module app + persist settings (Firebase BOM + analytics/crashlytics/messaging + RC cache)
 project/sonicc-setup-old-project          Migrate existing production app to sonicc-setup-new-project architecture; preserve product behavior; confirm settings first
 project/sonicc-setup-design-system        Figma design-system file → :core-ui tokens/themes (+ AppTheme in core/ui/theme/ when compose)
-feature/sonicc-create-screen              Full screen: UI (sonicc-figma-to-xml|compose) + sonicc-create-mvi + sonicc-create-clean-architecture when needed
-feature/sonicc-create-mvi                 Presentation MVI only (no domain/data) — Fragment if xml, `*Screen` in `:feature-*` if compose
-feature/sonicc-create-clean-architecture  Domain + data + core pieces as needed
+feature/sonicc-create-screen              Full screen: UI (sonicc-figma-to-xml|compose) + sonicc-mvi + sonicc-clean-architecture when needed
+feature/sonicc-mvi                 Presentation MVI only (no domain/data) — Fragment if xml, `*Screen` in `:feature-*` if compose
+feature/sonicc-clean-architecture  Domain + data + core pieces as needed
 ui/sonicc-figma-to-xml                    XML layouts (+ Figma design-to-code); `uiFramework` xml only
 ui/sonicc-figma-to-compose                Compose screens (AnimeHub `*Screen` / `*ScreenContent`); `uiFramework` compose
 ui/sonicc-create-dialog                   Dialog UI — XML if xml, Compose `*Dialog` if compose
@@ -62,36 +62,37 @@ review/sonicc-review-architecture         Architecture / MVI / boundaries
 review/sonicc-review-performance          ANR / lists / dispatchers
 review/sonicc-review-security             Secrets / manifest / PII
 review/sonicc-review-cleanup              Unused code/resources / app size / release shrink
-review/sonicc-review-complete             Runs all review-* + summary report
-test/sonicc-test-unit                     Write+run JVM unit/Flow tests; consent before fix
-test/sonicc-test-integration              Write+run multi-layer tests; consent before fix
-test/sonicc-test-e2e                      Write+run E2E on device; consent before fix
-test/sonicc-test-complete                 Full run + walkthrough; consent before fix
+review/sonicc-review             Yes/no per architecture / cleanup / performance / security → runs chosen review-* + one report
+test/sonicc-write-unit-test                     Write+run JVM unit/Flow tests; consent before fix
+test/sonicc-write-integration-test              Write+run multi-layer tests; consent before fix
+test/sonicc-write-e2e-test                      Write+run E2E on device; consent before fix
+test/sonicc-write-test                 Yes/no per unit / integration / E2E → runs chosen suites (+ walkthrough); consent before fix
 gradle/sonicc-gradle-organize             Catalog + android/base/dependencies section order (signingConfigs, bundle, R8 optimization/keepRules)
 gradle/sonicc-gradle-update               Groovy→KTS if needed; AGP 9.3+; R8 optimization + keepRules; bump all deps (catalog + hardcodes)
 build/sonicc-build-debug-apk              Debug APK → device install + launch
 build/sonicc-build-release-apk           Release signing + APK → device install + launch
 build/sonicc-build-release-bundle        Release signing + AAB (no device)
-platform/sonicc-implement-in-app-update   Play In-App Updates
-platform/sonicc-implement-in-app-review   Play In-App Review
-platform/sonicc-implement-firebase-messaging  firebase-messaging dep (:core-platform) only
-firebase/sonicc-implement-firebase-messaging  firebase-messaging dep (:core-platform) only
-firebase/sonicc-implement-firebase-remote-config  First-time RC + SharedPref cache + Startup fetch
+platform/sonicc-inapp-update   Play In-App Updates
+platform/sonicc-inapp-review   Play In-App Review
+firebase/sonicc-setup-firebase           Firebase base (plugins, dummy google-services.json, Analytics + Crashlytics) + yes/no run of events / RC / messaging
+firebase/sonicc-setup-firebase-messaging  firebase-messaging dep (:core-platform) only
+firebase/sonicc-fcm              Full FCM push: SonicMessagingService + topics + custom notification (QiblaCompass)
+firebase/sonicc-setup-firebase-remote-config  First-time RC + SharedPref cache + Startup fetch
 firebase/sonicc-add-firebase-remote-config  Add RC keys to existing SharedPref + Remote Config classes
-firebase/sonicc-implement-firebase-events  First-time full-app Analytics (screen_view + ui_click)
+firebase/sonicc-setup-firebase-events  First-time full-app Analytics (screen_view + ui_click)
 firebase/sonicc-add-firebase-events       Add Analytics events for selected screens
-premium/sonicc-implement-in-app-billing   Greenfield Play billing (subs + in-app, v4 stack)
-billing/sonicc-update-in-app-billing      Migrate orbitalsonic SonicInApp v3 → v4.0.0
+premium/sonicc-inapp-billing   Greenfield Play billing (subs + in-app, v4 stack)
+billing/sonicc-inapp-billing-update      Migrate orbitalsonic SonicInApp v3 → v4.0.0
 premium/sonicc-add-subscription-packages  Add subscription tiers to existing billing
 premium/sonicc-add-inapp-packages         Add one-time in-app products to existing billing
-admob/sonicc-implement-admob-ads          First-time AdMob screen wiring (:gmaAds from GitHub)
-admob/sonicc-add-admob-banner             Add banner placement to existing :gmaAds
-admob/sonicc-add-admob-interstitial       Add interstitial placement
-admob/sonicc-add-admob-native             Add native placement
-admob/sonicc-add-admob-rewarded           Add rewarded placement
-admob/sonicc-add-admob-rewarded-interstitial  Add rewarded interstitial placement
-admob/sonicc-add-admob-appOpen-Entrance   Wire App Open ENTRANCE (splash/consent)
-admob/sonicc-add-admob-appOpen-lifecycle  Wire App Open LIFECYCLE (resume)
+admob/sonicc-setup-admob-ads          First-time AdMob screen wiring (:gmaAds from GitHub)
+admob/sonicc-admob-banner             Add banner placement to existing :gmaAds
+admob/sonicc-admob-interstitial       Add interstitial placement
+admob/sonicc-admob-native             Add native placement
+admob/sonicc-admob-rewarded           Add rewarded placement
+admob/sonicc-admob-rewarded-interstitial  Add rewarded interstitial placement
+admob/sonicc-admob-appOpen-Startup   Wire App Open STARTUP — StartupFragment, `:gmaAds` key `ENTRANCE` (splash/consent)
+admob/sonicc-admob-appOpen-lifecycle  Wire App Open LIFECYCLE (resume)
 release/pre-release                Ship checklist
 ```
 
@@ -102,8 +103,8 @@ release/pre-release                Ship checklist
 1. `sonicc-setup-new-project` (greenfield) or `sonicc-setup-old-project` (existing production app) — persist **`uiFramework`**
 2. `sonicc-setup-design-system` — Figma tokens/themes in `:core-ui` (Compose `AppTheme` in `core/ui/theme/` when compose)
 3. `sonicc-figma-to-xml` if `uiFramework` is `xml`; `sonicc-figma-to-compose` if `compose` (or dialog / bottom-sheet)
-4. `sonicc-create-mvi` — Intent/State/Effect/VM + Fragment **or** `*Screen` in `:feature-*`
-5. `sonicc-create-clean-architecture` — when new domain/data is required
+4. `sonicc-mvi` — Intent/State/Effect/VM + Fragment **or** `*Screen` in `:feature-*`
+5. `sonicc-clean-architecture` — when new domain/data is required
 
 Data patterns (Retrofit, Room, SharedPreferences) live in **rules** + [`.cursor/rules/reference/`](rules/reference/) — not separate skills.
 
@@ -148,6 +149,6 @@ Data patterns (Retrofit, Room, SharedPreferences) live in **rules** + [`.cursor/
 ## How teammates use this
 
 1. Open project with this `.cursor/` present.
-2. Type `/` and pick a skill (e.g. `sonicc-create-screen`, `sonicc-figma-to-xml` / `sonicc-figma-to-compose`, `sonicc-create-mvi`).
+2. Type `/` and pick a skill (e.g. `sonicc-create-screen`, `sonicc-figma-to-xml` / `sonicc-figma-to-compose`, `sonicc-mvi`).
 3. Obey rules automatically while editing matching files.
-4. Before PRs: `/sonicc-review-complete` or individual `sonicc-review-*` skills.
+4. Before PRs: `/sonicc-review` or individual `sonicc-review-*` skills.

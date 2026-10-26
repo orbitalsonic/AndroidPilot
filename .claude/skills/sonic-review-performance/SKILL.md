@@ -1,6 +1,6 @@
 ---
 name: sonic-review-performance
-description: OrbitalSonic Claude Skill: Review Android code for ANR risk, large dataset handling, dispatchers, and RecyclerView performance. Use when optimizing lists, fixing jank, ANR, or slow screens. Prefer sonic-review-complete for a full multi-check pass.
+description: OrbitalSonic Claude Skill: Review Android code for ANR risk, large dataset handling, dispatchers, and RecyclerView performance. Use when optimizing lists, fixing jank, ANR, or slow screens. Prefer sonic-review for a full multi-check pass.
 ---
 
 # Performance Review

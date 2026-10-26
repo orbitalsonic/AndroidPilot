@@ -11,7 +11,7 @@ paths:
 
 Source of truth for module behavior: [orbitalsonic/Admob-Ads](https://github.com/orbitalsonic/Admob-Ads) `gmaAds/README.md`. Local learn path: `E:\SohaibAhmed\Github\Admob-Ads`.
 
-Skills: `sonicg-implement-admob-ads`, `sonicg-add-admob-*`. Rule stub: `21-ads-billing`.
+Skills: `sonicg-setup-admob-ads`, `sonicg-admob-*`. Rule stub: `21-ads-billing`.
 
 ## Architecture
 
@@ -50,7 +50,7 @@ Unit IDs live in **`gmaAds/build.gradle.kts`**, not `src/main/res/values/ad_ids.
     - Ref `:data` → `:data`
     - Rewrite imports for `Constants.TAG_ADS`, `InternetManager`, `SharedPrefManager`, `launchWhenResumed`, `onBackPressedDispatcher` to the target app packages
 5. Do **not** edit controllers, validators, `AdsSdk`, `FullscreenAdGate`, `ConsentManager`, or catalog during place.
-6. Later placement work (`add-admob-*`) may edit catalog files (`*AdKey`, `*AdConfig`) + `gmaAds/build.gradle.kts` `resValue` units + `:data` RC — still leave the engine alone unless changing engine behavior on purpose.
+6. Later placement work (`sonicg-admob-*`) may edit catalog files (`*AdKey`, `*AdConfig`) + `gmaAds/build.gradle.kts` `resValue` units + `:data` RC — still leave the engine alone unless changing engine behavior on purpose.
 
 ## Call shapes
 
@@ -110,7 +110,7 @@ Files: `appOpen/AppOpenAdConfig.kt`, `AppOpenAdKey`
 - **true** — `AppOpenLoadingActivity` loads then shows `LIFECYCLE`. Do not preload or reload after dismiss.
 - **false** — load `LIFECYCLE` in `MainActivity` (home shell); `AppOpenLifecycle` shows it and reloads after dismiss.
 
-`StartupFragment` calls `blockAppOpen()`. Keep blocked through the whole `StartupActivity` funnel. `MainActivity` calls `unblockAppOpen()`. Skills: `sonicg-add-admob-appOpen-Entrance`, `sonicg-add-admob-appOpen-lifecycle`.
+`StartupFragment` calls `blockAppOpen()`. Keep blocked through the whole `StartupActivity` funnel. `MainActivity` calls `unblockAppOpen()`. Skills: `sonicg-admob-appOpen-Startup`, `sonicg-admob-appOpen-lifecycle`.
 
 ---
 
@@ -136,7 +136,7 @@ binding.bannerAdViewYours.clearView() // onDestroyView
 destroyBannerAd(BannerAdKey.YOURS)    // onDestroy when leaving for good
 ```
 
-No Startup preload. No split load then show. Skill: `sonicg-add-admob-banner`.
+No Startup preload. No split load then show. Skill: `sonicg-admob-banner`.
 
 ---
 
@@ -157,7 +157,7 @@ loadInterstitialAd(InterstitialAdKey.YOURS)
 showInterstitialAd(InterstitialAdKey.YOURS) { /* navigate */ }
 ```
 
-Skill: `sonicg-add-admob-interstitial`.
+Skill: `sonicg-admob-interstitial`.
 
 ---
 
@@ -178,7 +178,7 @@ loadNativeAd(NativeAdKey.HOME, binding.nativeAdViewHome)
 destroyNativeAd(NativeAdKey.FEATURE_ONE) // cache = false, screen finished
 ```
 
-Skill: `sonicg-add-admob-native`.
+Skill: `sonicg-admob-native`.
 
 ---
 
@@ -192,7 +192,7 @@ loadRewardedInterstitialAd(RewardedInterstitialAdKey.HOME)
 showRewardedInterstitialAd(RewardedInterstitialAdKey.HOME) { granted -> }
 ```
 
-Always check `granted`. Skills: `sonicg-add-admob-rewarded`, `sonicg-add-admob-rewarded-interstitial`.
+Always check `granted`. Skills: `sonicg-admob-rewarded`, `sonicg-admob-rewarded-interstitial`.
 
 ---
 

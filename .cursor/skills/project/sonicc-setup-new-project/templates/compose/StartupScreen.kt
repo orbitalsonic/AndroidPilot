@@ -14,7 +14,7 @@ const val STARTUP_ROUTE = "startup"
 
 /**
  * Start destination of StartupNavGraph (StartupActivity). Init + routing only — see 29-screen-startup.
- * Sibling routes added by sonicc-create-mvi: STARTUP_LANGUAGE_ROUTE, STARTUP_PREMIUM_ROUTE ("startup_premium/{isFirstTime}"),
+ * Sibling routes added by sonicc-mvi: STARTUP_LANGUAGE_ROUTE, STARTUP_PREMIUM_ROUTE ("startup_premium/{isFirstTime}"),
  * STARTUP_INTRO_ROUTE, STARTUP_WELCOME_BACK_ROUTE.
  */
 @Composable

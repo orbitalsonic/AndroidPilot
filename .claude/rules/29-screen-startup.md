@@ -69,7 +69,7 @@ Implement via `GetStartupDestinationUseCase` (or equivalent) — heavy logic not
 - `StartupActivity`: `initSplashScreen()` → `installSplashScreen()`; insets default `InsetsMode.TOP_BOTTOM` (`19-base-ui`) — override `getInsetsMode()` only when the design needs `EDGE_TO_EDGE`
 - Remote Config fetch starts here (domain/data, not live RC in UI)
 - **No Startup ads:** navigate when Remote Config returns or after **5 seconds** (`sonic-setup-new-project`)
-- **Startup ads wired:** ignore the Remote Config result. Then consent (8s) → AdMob init → ad calls (8s) → navigate. Do not navigate from Remote Config (`sonic-implement-admob-ads`)
+- **Startup ads wired:** ignore the Remote Config result. Then consent (8s) → AdMob init → ad calls (8s) → navigate. Do not navigate from Remote Config (`sonic-setup-admob-ads`)
 - **Purchased (`isAppPurchased`):** cancel ads. First-time users still go to Startup Language / Startup Intro. Returning users go straight to `MainActivity` and skip Startup Welcome Back / Startup Premium
 
 ## Forbidden
