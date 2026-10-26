@@ -100,7 +100,7 @@ Every forward `<action>` in `nav_graph_main` (and nested graphs) must set the re
 | `popEnterAnim` | `@anim/slide_in_left` |
 | `popExitAnim` | `@anim/slide_out_right` |
 
-Required files in `:core-ui` (create during `sonic-setup-new-project` if missing):
+Required files in `:core-ui` (create during `sonicc-setup-new-project` if missing):
 
 ```
 res/anim/slide_in_right.xml

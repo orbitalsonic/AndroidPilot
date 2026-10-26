@@ -10,7 +10,7 @@ paths:
 
 # Premium / paywall screens (two)
 
-Full billing playbook: [reference/premium-billing.md](reference/premium-billing.md). Skills: `sonicc-implement-in-app-billing`, `sonicc-add-subscription-packages`, `sonicc-add-inapp-packages`.
+Full billing playbook: [reference/premium-billing.md](reference/premium-billing.md). Skills: `sonic-implement-in-app-billing`, `sonic-add-subscription-packages`, `sonic-add-inapp-packages`.
 
 | | **Startup** paywall | **In-app** paywall |
 |---|---|---|

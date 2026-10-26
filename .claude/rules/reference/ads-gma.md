@@ -2,7 +2,7 @@
 
 Source of truth for module behavior: [orbitalsonic/Admob-Ads](https://github.com/orbitalsonic/Admob-Ads) `gmaAds/README.md`. Local learn path: `E:\SohaibAhmed\Github\Admob-Ads`.
 
-Skills: `sonicc-implement-admob-ads`, `sonicc-add-admob-*`. Rule stub: `21-ads-billing`.
+Skills: `sonic-implement-admob-ads`, `sonic-add-admob-*`. Rule stub: `21-ads-billing`.
 
 ## Architecture
 
@@ -101,7 +101,7 @@ Files: `appOpen/AppOpenAdConfig.kt`, `AppOpenAdKey`
 - **true** — `AppOpenLoadingActivity` loads then shows `LIFECYCLE`. Do not preload or reload after dismiss.
 - **false** — load `LIFECYCLE` in `MainActivity` (home shell); `AppOpenLifecycle` shows it and reloads after dismiss.
 
-`StartupFragment` calls `blockAppOpen()`. Keep blocked through the whole `StartupActivity` funnel. `MainActivity` calls `unblockAppOpen()`. Skills: `sonicc-add-admob-appOpen-Entrance`, `sonicc-add-admob-appOpen-lifecycle`.
+`StartupFragment` calls `blockAppOpen()`. Keep blocked through the whole `StartupActivity` funnel. `MainActivity` calls `unblockAppOpen()`. Skills: `sonic-add-admob-appOpen-Entrance`, `sonic-add-admob-appOpen-lifecycle`.
 
 ---
 
@@ -127,7 +127,7 @@ binding.bannerAdViewYours.clearView() // onDestroyView
 destroyBannerAd(BannerAdKey.YOURS)    // onDestroy when leaving for good
 ```
 
-No Startup preload. No split load then show. Skill: `sonicc-add-admob-banner`.
+No Startup preload. No split load then show. Skill: `sonic-add-admob-banner`.
 
 ---
 
@@ -148,7 +148,7 @@ loadInterstitialAd(InterstitialAdKey.YOURS)
 showInterstitialAd(InterstitialAdKey.YOURS) { /* navigate */ }
 ```
 
-Skill: `sonicc-add-admob-interstitial`.
+Skill: `sonic-add-admob-interstitial`.
 
 ---
 
@@ -169,7 +169,7 @@ loadNativeAd(NativeAdKey.HOME, binding.nativeAdViewHome)
 destroyNativeAd(NativeAdKey.FEATURE_ONE) // cache = false, screen finished
 ```
 
-Skill: `sonicc-add-admob-native`.
+Skill: `sonic-add-admob-native`.
 
 ---
 
@@ -183,7 +183,7 @@ loadRewardedInterstitialAd(RewardedInterstitialAdKey.HOME)
 showRewardedInterstitialAd(RewardedInterstitialAdKey.HOME) { granted -> }
 ```
 
-Always check `granted`. Skills: `sonicc-add-admob-rewarded`, `sonicc-add-admob-rewarded-interstitial`.
+Always check `granted`. Skills: `sonic-add-admob-rewarded`, `sonic-add-admob-rewarded-interstitial`.
 
 ---
 

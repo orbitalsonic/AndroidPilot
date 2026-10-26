@@ -23,4 +23,4 @@ When [`.agents/project-settings.json`](project-settings.json) exists, obey `uiFr
 
 Invoke with `@` using the skill folder name (`@sonicg-create-screen`, `@sonicg-create-mvi`, `@sonicg-figma-to-xml`, `@sonicg-figma-to-compose`, `@sonicg-localize`, …). Descriptions start with **OrbitalSonic Gemini Skill:** — do not pick Figma plugin skills ("Created by Figma") for Android screens. Full map and rules index: [README.md](README.md).
 
-Cursor twins: `/sonic-…` under `.cursor/`. Claude Code twins: `/sonicc-…` under `.claude/`. Keep all three in sync (`MUST_READ_BEFORE_SKILL_CHANGES.md`).
+Cursor twins: `/sonicc-…` under `.cursor/`. Claude Code twins: `/sonic-…` under `.claude/`. Keep all three in sync (`MUST_READ_BEFORE_SKILL_CHANGES.md`).

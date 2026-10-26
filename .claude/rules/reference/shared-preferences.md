@@ -84,7 +84,7 @@ Register in `data/di/DataModule.kt` (or split module val).
 
 ## Remote Config cache pattern (optional)
 
-`RemoteConfigRepositoryImpl` may write fetched RC ints into `SharedPrefManager` properties inside repository (on IO dispatcher), same as reference app. Extra keys on an existing cache → skill **`sonicc-add-firebase-remote-config`**.
+`RemoteConfigRepositoryImpl` may write fetched RC ints into `SharedPrefManager` properties inside repository (on IO dispatcher), same as reference app. Extra keys on an existing cache → skill **`sonic-add-firebase-remote-config`**.
 
 ## Consumption
 

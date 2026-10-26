@@ -13,7 +13,7 @@ Prefer existing `InternetManager` (`:core-platform`) for connectivity checks bef
 | `:domain` | Domain models + repository interface — no Retrofit types |
 | `:core-platform` | Connectivity only (`InternetManager`) — not the full Retrofit stack |
 
-- Do **not** create an empty `:core-network` on every `sonic-setup-new-project` — add when networking API is approved
+- Do **not** create an empty `:core-network` on every `sonicc-setup-new-project` — add when networking API is approved
 - Prefer existing `InternetManager` (`:core-platform`) for connectivity checks before calls
 
 ## Setup

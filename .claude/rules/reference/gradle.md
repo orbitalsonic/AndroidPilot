@@ -271,28 +271,28 @@ implementation("androidx.core:core-ktx:1.12.0")
 - Prefer stable over alpha/beta/rc unless the user explicitly asks for a pre-release
 - Keep **AGP 9.3+** (latest stable 9.x) and the Gradle wrapper compatible when bumping. Do **not** apply `org.jetbrains.kotlin.android`
 - Update the version in `[versions]` only — all aliases using `version.ref` pick it up
-- When scaffolding a new project (`sonicc-setup-new-project`), seed the catalog with latest stable for the whole core stack
-- **`sonicc-setup-new-project` mandatory:** Firebase BOM + `firebase-analytics` / `firebase-crashlytics` / `firebase-messaging` on **`:core-platform`**; `firebase-config` + `kotlinx-coroutines-play-services` on **`:data`** (see `sonicc-implement-firebase-messaging` — no MessagingService). Place `kotlinx-coroutines-play-services` under `# Kotlin Coroutines` / `// Kotlin Coroutines`.
+- When scaffolding a new project (`sonic-setup-new-project`), seed the catalog with latest stable for the whole core stack
+- **`sonic-setup-new-project` mandatory:** Firebase BOM + `firebase-analytics` / `firebase-crashlytics` / `firebase-messaging` on **`:core-platform`**; `firebase-config` + `kotlinx-coroutines-play-services` on **`:data`** (see `sonic-implement-firebase-messaging` — no MessagingService). Place `kotlinx-coroutines-play-services` under `# Kotlin Coroutines` / `// Kotlin Coroutines`.
 
-### `sonicc-gradle-update` (mandatory behavior)
+### `sonic-gradle-update` (mandatory behavior)
 
-When the user runs **`sonicc-gradle-update`** (or asks to bump dependencies):
+When the user runs **`sonic-gradle-update`** (or asks to bump dependencies):
 
-1. If Groovy `build.gradle` / `settings.gradle` remain → convert to Kotlin DSL **first** (same contract as `sonicc-setup-old-project` Step 2 / `sonicc-gradle-update` Step 0). Keep versions during conversion; bump after.
-2. Bump to **AGP 9.3+** (latest stable 9.x). Remove `kotlin-android` / `kotlin-kapt` / `android.kotlinOptions` / `android.builtInKotlin=false` (`sonicc-gradle-update` Step 0.5). Built-in Kotlin — do not re-add the Kotlin Android plugin. Then migrate legacy minify/ProGuard to `optimization { enable = true }` + `src/main/keepRules/*.keep` (Step 0.6).
+1. If Groovy `build.gradle` / `settings.gradle` remain → convert to Kotlin DSL **first** (same contract as `sonic-setup-old-project` Step 2 / `sonic-gradle-update` Step 0). Keep versions during conversion; bump after.
+2. Bump to **AGP 9.3+** (latest stable 9.x). Remove `kotlin-android` / `kotlin-kapt` / `android.kotlinOptions` / `android.builtInKotlin=false` (`sonic-gradle-update` Step 0.5). Built-in Kotlin — do not re-add the Kotlin Android plugin. Then migrate legacy minify/ProGuard to `optimization { enable = true }` + `src/main/keepRules/*.keep` (Step 0.6).
 3. Inventory **both** `libs.versions.toml` `[versions]` **and** every hardcoded `"group:artifact:version"` in module Gradle scripts
 4. Resolve latest stable for **each** (do not skip Glide / ads / Firebase / etc. because they were hardcoded)
-5. If `gradle/libs.versions.toml` is missing → **create** it (`[versions]` / `[plugins]` / `[libraries]` + section comments per this doc / `sonicc-gradle-organize`)
+5. If `gradle/libs.versions.toml` is missing → **create** it (`[versions]` / `[plugins]` / `[libraries]` + section comments per this doc / `sonic-gradle-organize`)
 6. Migrate each hardcoded dep into the catalog (version key + library alias under the correct section, e.g. `# Glide`), then replace with `implementation(libs.…)`
 7. Place module `implementation` lines under the matching `//` header (`// Glide`, not under `// Testing`)
 8. Migrating an **existing** hardcoded dependency into the catalog is **not** “adding a new library” — it is required on every update run
 9. Leave **zero** hardcoded Maven coordinates in `*.gradle.kts` when the update finishes
 10. Leave **zero** Groovy module/settings scripts when conversion was possible
 
-Editing this section → also update `sonicc-gradle-update`, `sonicc-gradle-organize`, `sonicc-setup-old-project` (+ `migration.md`), `08-gradle.md`, and `.cursor` / `.agents` twins.
+Editing this section → also update `sonic-gradle-update`, `sonic-gradle-organize`, `sonic-setup-old-project` (+ `migration.md`), `08-gradle.md`, and `.cursor` / `.agents` twins.
 
 ```kotlin
-// ❌ BAD — leftover hardcode after sonicc-gradle-update
+// ❌ BAD — leftover hardcode after sonic-gradle-update
 implementation("com.github.bumptech.glide:glide:5.0.5")
 
 // ✅ GOOD — catalog + correct section
@@ -380,7 +380,7 @@ Do **not** disable obfuscation to “fix” crashes — add a targeted keep inst
 
 ### Migrating old ProGuard files
 
-When `proguard-rules.pro` / `consumer-rules.pro` / `proguardFiles` / `isMinifyEnabled` still exist (`sonicc-gradle-update` Step 0.6 / `sonicc-setup-old-project`):
+When `proguard-rules.pro` / `consumer-rules.pro` / `proguardFiles` / `isMinifyEnabled` still exist (`sonic-gradle-update` Step 0.6 / `sonic-setup-old-project`):
 
 1. Copy rule bodies into `src/main/keepRules/rules.keep` on the **same module** (create the folder). Update class names if packages moved.
 2. Delete the `.pro` files.

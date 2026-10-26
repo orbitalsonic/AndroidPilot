@@ -26,7 +26,9 @@ There are **two** language screens with different hosts, classes and layouts. Ne
 | Ads (if wired) | Native (bottom container) + splash interstitial on Next | Banner (bottom) |
 | Analytics | `startup_language_screen` | `language_screen` |
 
-Shared pieces live once: `LanguageAdapter` (`ListAdapter` + DiffUtil), `LanguageUiItem`, `LanguageDataSource` (`:data`), `GetLanguagesUseCase` / `SaveLanguageUseCase` (`:domain`). Only the Fragments, layouts and ViewModels are duplicated.
+Shared pieces live once: `LanguageAdapter` (`ListAdapter` + DiffUtil), `LanguageUiItem`, `LanguageDataSource` (`:data`; legacy / reference apps name it **`DpLanguages`** with `getLanguagesList(languageCode)`), `GetLanguagesUseCase` / `SaveLanguageUseCase` (`:domain`). Only the Fragments, layouts and ViewModels are duplicated.
+
+**Language list = catalog.** The supported languages (code, English name, `English (native)` display name, `flag_*` drawable, Android `values-*` folder, RTL) are fixed in [reference/languages.md](reference/languages.md) — 104 languages, English first. `DpLanguages` / `LanguageDataSource` builds its `LanguageItem` rows from that catalog only; a product may ship a subset. New language → add the catalog row first, then the data source row, then run the localize skill (`sonicc-localize` / `sonic-localize` / `sonicg-localize`) for its folder.
 
 ## Behavior
 
@@ -34,6 +36,8 @@ Shared pieces live once: `LanguageAdapter` (`ListAdapter` + DiffUtil), `Language
 - When implementing a design that pre-selects a language, **ask** whether English should be selected by default
 - Startup: Continue in the toolbar (not a sticky footer) unless Figma says otherwise; in-app: list fills between search and banner
 - Search: filter on `doAfterTextChanged` → Intent `SearchChanged(query)`; filtering in ViewModel/UseCase, never in the Fragment
+- Rows: flag + display name come from the data source list (catalog). Display name is `English (native)` by design and is **not** translated (`translatable="false"` if ever moved to resources); search matches English name and native name
+- Saved locale = the catalog `languageCode` (`zh-CN`, `ceb`, `jw`, …). Convert to the Android folder / `Locale` only at the apply step — never rewrite the stored code
 
 ## UI helpers
 
@@ -50,5 +54,7 @@ screenStarted() // launchWhenResumed { handleIntent(ScreenStarted) } when approp
 - One `LanguageFragment` serving both hosts via nav args / flags
 - Search field on the startup language screen
 - Back button on the startup language screen
-- Hardcoded language display names in Kotlin when they belong in `strings.xml`
+- Hardcoded language display names in Fragments / ViewModels / `*ScreenContent` — they come from the data source list (`reference/languages.md`); use `strings.xml` (`translatable="false"`) only if the product moves them to resources
+- A language code that is not in `reference/languages.md` (ask, add the catalog row, then the data source)
+- Two `values-*` folders for one language (`values-he` and `values-iw`, `values-id` and `values-in`) — see the catalog folder rules
 - Setting `layoutManager` in Kotlin for a fixed vertical list

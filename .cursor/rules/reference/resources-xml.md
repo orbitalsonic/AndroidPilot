@@ -226,10 +226,10 @@ Order in `themes.xml` (section comments): **App** → **Shapes** → **Text Styl
 
 - On `Base.Theme.App` set `bottomNavigationStyle` → e.g. `@style/Widget.App.BottomNavigationView`
 - That style sets `itemIconTint` / `itemTextColor` to color state lists using theme attrs (selected ≈ `colorPrimary` or Figma semantic; unselected ≈ `colorOnSurfaceVariant` / Figma icon secondary)
-- Map concrete colors from Figma during `sonic-setup-design-system` — do not leave Material default tints that ignore app tokens
+- Map concrete colors from Figma during `sonicc-setup-design-system` — do not leave Material default tints that ignore app tokens
 - Avoid one-off `app:itemIconTint` only on the BNV XML unless Figma forces a one-screen exception
 
-Default window fill: `android:windowBackground` on the app theme — see Colors above. Figma design-system import: `sonic-setup-design-system`.
+Default window fill: `android:windowBackground` on the app theme — see Colors above. Figma design-system import: `sonicc-setup-design-system`.
 
 ### `ButtonStyle.IconButton` (mandatory when missing)
 
@@ -256,7 +256,7 @@ Layouts may override `app:iconTint` (`?attr/colorIconSecondary`, brand color, or
 - Material widgets: `MaterialTextView`, `MaterialButton`, `MaterialCardView`, `ShapeableImageView`
 - **Images (non-clickable):** always `ShapeableImageView` — never `ImageView` / `AppCompatImageView`; IDs use `siv` prefix
 - **Programmatic image loads:** always Glide via `ImageView.loadImage(...)` (`:core-ui` `ImageViewExtensions`) — never `setImageResource` / `setImageBitmap` / raw `Glide.with` in adapters/Fragments for content images
-  - Template: `sonic-setup-new-project/templates/base/ImageViewExtensions.kt`
+  - Template: `sonicc-setup-new-project/templates/base/ImageViewExtensions.kt`
   - Supports `@DrawableRes`, URL `String`, `Uri`, etc.; optional `placeholder` / `error` / `CachePolicy`
   - Static icons declared in XML with `app:srcCompat` / `app:icon` are fine; dynamic/list/remote/drawable-from-code → `loadImage`
 - **Clickable icons / icon-only actions:** always `MaterialButton` with `ButtonStyle.IconButton` — **not** `ShapeableImageView` + click listener

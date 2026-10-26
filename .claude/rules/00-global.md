@@ -9,7 +9,7 @@ You are working on a production Android application.
 - Kotlin only
 - UI from `.claude/project-settings.json` **`uiFramework`**: `"xml"` (default if missing) = XML + View Binding; `"compose"` = Jetpack Compose + `:feature-*` modules (AnimeHub). Never mix as the app UI stack. Never Data Binding
 - Clean Architecture (Presentation → Domain → Data)
-- MVVM + MVI (Intent / State / Effect) for **feature screens** — **not** ads (`:gmaAds`); ads use Fragment/Activity extensions + managers — never MVI unless the user explicitly asks (`21-ads-billing`, `reference/ads-gma.md`, `sonicc-implement-admob-ads` / `sonicc-add-admob-*` skills)
+- MVVM + MVI (Intent / State / Effect) for **feature screens** — **not** ads (`:gmaAds`); ads use Fragment/Activity extensions + managers — never MVI unless the user explicitly asks (`21-ads-billing`, `reference/ads-gma.md`, `sonic-implement-admob-ads` / `sonic-add-admob-*` skills)
 - Repository pattern
 - Multi-module architecture
 - DI via the project's existing framework (default: Koin)

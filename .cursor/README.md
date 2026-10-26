@@ -18,16 +18,16 @@ This folder is part of the [AndroidPilot](https://github.com/orbitalsonic/Androi
 
 ## Sonic skill names
 
-- Invoke as **`/sonic-…`** (type `/sonic` with no space after — Cursor matches the **folder** name)
+- Invoke as **`/sonicc-…`** (type `/sonicc` with no space after — Cursor matches the **folder** name)
 - Description always starts with **Sonic Cursor Skill:**
-- Skill folders are also `sonic-*` (example: `ui/sonic-figma-to-xml`)
-- Claude Code twins in this repo use **`/sonicc-…`**
+- Skill folders are also `sonicc-*` (example: `ui/sonicc-figma-to-xml`)
+- Claude Code twins in this repo use **`/sonic-…`**
 - Gemini twins in this repo use **`@sonicg-…`** (description starts with **OrbitalSonic Gemini Skill:**)
-- Do not pick Figma plugin skills (`figma:design-to-code`, "Created by Figma") for Android screens — `/sonic-figma-to-xml` / `/sonic-figma-to-compose` load those internally
+- Do not pick Figma plugin skills (`figma:design-to-code`, "Created by Figma") for Android screens — `/sonicc-figma-to-xml` / `/sonicc-figma-to-compose` load those internally
 
 ## Project settings
 
-After `sonic-setup-new-project` / `sonic-setup-old-project` (or when joining an app), settings live in:
+After `sonicc-setup-new-project` / `sonicc-setup-old-project` (or when joining an app), settings live in:
 
 **[`.cursor/project-settings.json`](project-settings.json)**
 
@@ -40,70 +40,70 @@ All feature/UI/test skills **must read and obey** this file when present:
 | `themeModes`             | `day` / `night` / `both`          | Day / night / both theme resources                                                                                                        |
 | `applicationId`          | string                            | Root package / applicationId                                                                                                              |
 | `appName`                | string                            | Display name                                                                                                                              |
-| `figmaDesignSystemUrl`   | Figma `/design/` URL or omit/`""` | Optional; Figma file for `sonic-setup-design-system`                                                                                            |
+| `figmaDesignSystemUrl`   | Figma `/design/` URL or omit/`""` | Optional; Figma file for `sonicc-setup-design-system`                                                                                            |
 | `uiFramework`            | `xml` / `compose`                 | App UI stack. **xml** = View Binding + `:presentation`. **compose** = Jetpack Compose + `:feature-*` (AnimeHub). Default `xml` if missing |
 
 ## Skill map
 
 ```
-project/sonic-setup-new-project          Bootstrap multi-module app + persist settings (Firebase BOM + analytics/crashlytics/messaging + RC cache)
-project/sonic-setup-old-project          Migrate existing production app to sonic-setup-new-project architecture; preserve product behavior; confirm settings first
-project/sonic-setup-design-system        Figma design-system file → :core-ui tokens/themes (+ AppTheme in core/ui/theme/ when compose)
-feature/sonic-create-screen              Full screen: UI (sonic-figma-to-xml|compose) + sonic-create-mvi + sonic-create-clean-architecture when needed
-feature/sonic-create-mvi                 Presentation MVI only (no domain/data) — Fragment if xml, `*Screen` in `:feature-*` if compose
-feature/sonic-create-clean-architecture  Domain + data + core pieces as needed
-ui/sonic-figma-to-xml                    XML layouts (+ Figma design-to-code); `uiFramework` xml only
-ui/sonic-figma-to-compose                Compose screens (AnimeHub `*Screen` / `*ScreenContent`); `uiFramework` compose
-ui/sonic-create-dialog                   Dialog UI — XML if xml, Compose `*Dialog` if compose
-ui/sonic-create-bottom-sheet             Bottom sheet UI — XML if xml, Compose `*BottomSheet` if compose
-ui/sonic-create-custom-view              Custom View (xml) or reusable composable (compose)
-i18n/sonic-localize                      Native string localization — one worker per language (`values-*` only)
-review/sonic-review-architecture         Architecture / MVI / boundaries
-review/sonic-review-performance          ANR / lists / dispatchers
-review/sonic-review-security             Secrets / manifest / PII
-review/sonic-review-cleanup              Unused code/resources / app size / release shrink
-review/sonic-review-complete             Runs all review-* + summary report
-test/sonic-test-unit                     Write+run JVM unit/Flow tests; consent before fix
-test/sonic-test-integration              Write+run multi-layer tests; consent before fix
-test/sonic-test-e2e                      Write+run E2E on device; consent before fix
-test/sonic-test-complete                 Full run + walkthrough; consent before fix
-gradle/sonic-gradle-organize             Catalog + android/base/dependencies section order (signingConfigs, bundle, R8 optimization/keepRules)
-gradle/sonic-gradle-update               Groovy→KTS if needed; AGP 9.3+; R8 optimization + keepRules; bump all deps (catalog + hardcodes)
-build/sonic-build-debug-apk              Debug APK → device install + launch
-build/sonic-build-release-apk           Release signing + APK → device install + launch
-build/sonic-build-release-bundle        Release signing + AAB (no device)
-platform/sonic-implement-in-app-update   Play In-App Updates
-platform/sonic-implement-in-app-review   Play In-App Review
-platform/sonic-implement-firebase-messaging  firebase-messaging dep (:core-platform) only
-firebase/sonic-implement-firebase-messaging  firebase-messaging dep (:core-platform) only
-firebase/sonic-implement-firebase-remote-config  First-time RC + SharedPref cache + Startup fetch
-firebase/sonic-add-firebase-remote-config  Add RC keys to existing SharedPref + Remote Config classes
-firebase/sonic-implement-firebase-events  First-time full-app Analytics (screen_view + ui_click)
-firebase/sonic-add-firebase-events       Add Analytics events for selected screens
-premium/sonic-implement-in-app-billing   Greenfield Play billing (subs + in-app, v4 stack)
-billing/sonic-update-in-app-billing      Migrate orbitalsonic SonicInApp v3 → v4.0.0
-premium/sonic-add-subscription-packages  Add subscription tiers to existing billing
-premium/sonic-add-inapp-packages         Add one-time in-app products to existing billing
-admob/sonic-implement-admob-ads          First-time AdMob screen wiring (:gmaAds from GitHub)
-admob/sonic-add-admob-banner             Add banner placement to existing :gmaAds
-admob/sonic-add-admob-interstitial       Add interstitial placement
-admob/sonic-add-admob-native             Add native placement
-admob/sonic-add-admob-rewarded           Add rewarded placement
-admob/sonic-add-admob-rewarded-interstitial  Add rewarded interstitial placement
-admob/sonic-add-admob-appOpen-Entrance   Wire App Open ENTRANCE (splash/consent)
-admob/sonic-add-admob-appOpen-lifecycle  Wire App Open LIFECYCLE (resume)
+project/sonicc-setup-new-project          Bootstrap multi-module app + persist settings (Firebase BOM + analytics/crashlytics/messaging + RC cache)
+project/sonicc-setup-old-project          Migrate existing production app to sonicc-setup-new-project architecture; preserve product behavior; confirm settings first
+project/sonicc-setup-design-system        Figma design-system file → :core-ui tokens/themes (+ AppTheme in core/ui/theme/ when compose)
+feature/sonicc-create-screen              Full screen: UI (sonicc-figma-to-xml|compose) + sonicc-create-mvi + sonicc-create-clean-architecture when needed
+feature/sonicc-create-mvi                 Presentation MVI only (no domain/data) — Fragment if xml, `*Screen` in `:feature-*` if compose
+feature/sonicc-create-clean-architecture  Domain + data + core pieces as needed
+ui/sonicc-figma-to-xml                    XML layouts (+ Figma design-to-code); `uiFramework` xml only
+ui/sonicc-figma-to-compose                Compose screens (AnimeHub `*Screen` / `*ScreenContent`); `uiFramework` compose
+ui/sonicc-create-dialog                   Dialog UI — XML if xml, Compose `*Dialog` if compose
+ui/sonicc-create-bottom-sheet             Bottom sheet UI — XML if xml, Compose `*BottomSheet` if compose
+ui/sonicc-create-custom-view              Custom View (xml) or reusable composable (compose)
+i18n/sonicc-localize                      Native string localization — one worker per language (`values-*` only)
+review/sonicc-review-architecture         Architecture / MVI / boundaries
+review/sonicc-review-performance          ANR / lists / dispatchers
+review/sonicc-review-security             Secrets / manifest / PII
+review/sonicc-review-cleanup              Unused code/resources / app size / release shrink
+review/sonicc-review-complete             Runs all review-* + summary report
+test/sonicc-test-unit                     Write+run JVM unit/Flow tests; consent before fix
+test/sonicc-test-integration              Write+run multi-layer tests; consent before fix
+test/sonicc-test-e2e                      Write+run E2E on device; consent before fix
+test/sonicc-test-complete                 Full run + walkthrough; consent before fix
+gradle/sonicc-gradle-organize             Catalog + android/base/dependencies section order (signingConfigs, bundle, R8 optimization/keepRules)
+gradle/sonicc-gradle-update               Groovy→KTS if needed; AGP 9.3+; R8 optimization + keepRules; bump all deps (catalog + hardcodes)
+build/sonicc-build-debug-apk              Debug APK → device install + launch
+build/sonicc-build-release-apk           Release signing + APK → device install + launch
+build/sonicc-build-release-bundle        Release signing + AAB (no device)
+platform/sonicc-implement-in-app-update   Play In-App Updates
+platform/sonicc-implement-in-app-review   Play In-App Review
+platform/sonicc-implement-firebase-messaging  firebase-messaging dep (:core-platform) only
+firebase/sonicc-implement-firebase-messaging  firebase-messaging dep (:core-platform) only
+firebase/sonicc-implement-firebase-remote-config  First-time RC + SharedPref cache + Startup fetch
+firebase/sonicc-add-firebase-remote-config  Add RC keys to existing SharedPref + Remote Config classes
+firebase/sonicc-implement-firebase-events  First-time full-app Analytics (screen_view + ui_click)
+firebase/sonicc-add-firebase-events       Add Analytics events for selected screens
+premium/sonicc-implement-in-app-billing   Greenfield Play billing (subs + in-app, v4 stack)
+billing/sonicc-update-in-app-billing      Migrate orbitalsonic SonicInApp v3 → v4.0.0
+premium/sonicc-add-subscription-packages  Add subscription tiers to existing billing
+premium/sonicc-add-inapp-packages         Add one-time in-app products to existing billing
+admob/sonicc-implement-admob-ads          First-time AdMob screen wiring (:gmaAds from GitHub)
+admob/sonicc-add-admob-banner             Add banner placement to existing :gmaAds
+admob/sonicc-add-admob-interstitial       Add interstitial placement
+admob/sonicc-add-admob-native             Add native placement
+admob/sonicc-add-admob-rewarded           Add rewarded placement
+admob/sonicc-add-admob-rewarded-interstitial  Add rewarded interstitial placement
+admob/sonicc-add-admob-appOpen-Entrance   Wire App Open ENTRANCE (splash/consent)
+admob/sonicc-add-admob-appOpen-lifecycle  Wire App Open LIFECYCLE (resume)
 release/pre-release                Ship checklist
 ```
 
 ### Typical feature flow
 
-**Shortcut:** `/sonic-create-screen` runs steps 3–5 in one invoke (UI → optional domain/data → MVI). Prefer it when you would otherwise attach all three leaf skills.
+**Shortcut:** `/sonicc-create-screen` runs steps 3–5 in one invoke (UI → optional domain/data → MVI). Prefer it when you would otherwise attach all three leaf skills.
 
-1. `sonic-setup-new-project` (greenfield) or `sonic-setup-old-project` (existing production app) — persist **`uiFramework`**
-2. `sonic-setup-design-system` — Figma tokens/themes in `:core-ui` (Compose `AppTheme` in `core/ui/theme/` when compose)
-3. `sonic-figma-to-xml` if `uiFramework` is `xml`; `sonic-figma-to-compose` if `compose` (or dialog / bottom-sheet)
-4. `sonic-create-mvi` — Intent/State/Effect/VM + Fragment **or** `*Screen` in `:feature-*`
-5. `sonic-create-clean-architecture` — when new domain/data is required
+1. `sonicc-setup-new-project` (greenfield) or `sonicc-setup-old-project` (existing production app) — persist **`uiFramework`**
+2. `sonicc-setup-design-system` — Figma tokens/themes in `:core-ui` (Compose `AppTheme` in `core/ui/theme/` when compose)
+3. `sonicc-figma-to-xml` if `uiFramework` is `xml`; `sonicc-figma-to-compose` if `compose` (or dialog / bottom-sheet)
+4. `sonicc-create-mvi` — Intent/State/Effect/VM + Fragment **or** `*Screen` in `:feature-*`
+5. `sonicc-create-clean-architecture` — when new domain/data is required
 
 Data patterns (Retrofit, Room, SharedPreferences) live in **rules** + [`.cursor/rules/reference/`](rules/reference/) — not separate skills.
 
@@ -139,6 +139,7 @@ Data patterns (Retrofit, Room, SharedPreferences) live in **rules** + [`.cursor/
 | `premium-billing.md`                                | `21-ads-billing` / `33`   |
 | `ads-gma.md`                                        | `21-ads-billing`          |
 | `app-flow.md`                                       | `29`–`32` screen rules    |
+| `languages.md`                                      | `30-screen-language` + localize skill (104-language catalog, `values-*` map, RTL) |
 
 ## Future distribution (not in v1)
 
@@ -147,6 +148,6 @@ Data patterns (Retrofit, Room, SharedPreferences) live in **rules** + [`.cursor/
 ## How teammates use this
 
 1. Open project with this `.cursor/` present.
-2. Type `/` and pick a skill (e.g. `sonic-create-screen`, `sonic-figma-to-xml` / `sonic-figma-to-compose`, `sonic-create-mvi`).
+2. Type `/` and pick a skill (e.g. `sonicc-create-screen`, `sonicc-figma-to-xml` / `sonicc-figma-to-compose`, `sonicc-create-mvi`).
 3. Obey rules automatically while editing matching files.
-4. Before PRs: `/sonic-review-complete` or individual `sonic-review-*` skills.
+4. Before PRs: `/sonicc-review-complete` or individual `sonicc-review-*` skills.

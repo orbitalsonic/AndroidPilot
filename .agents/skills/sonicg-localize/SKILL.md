@@ -1,6 +1,6 @@
 ---
 name: sonicg-localize
-description: OrbitalSonic Gemini Skill: Native-quality Android string localization. Discover LanguageDataSource.kt, ask language and complete/missing MCQs, then translate in parallel — one agent per language writing only that locale's values-* folder. Use when the user says localize, translate strings, add locale strings.xml, missing translations, or native localization. Invoke with @sonicg-localize.
+description: OrbitalSonic Gemini Skill: Native-quality Android string localization. Discover DpLanguages.kt (or LanguageDataSource.kt), validate codes against the 104-language catalog in rules/reference/languages.md, ask language and complete/missing MCQs, then translate in parallel — one agent per language writing only that locale's values-* folder. Use when the user says localize, translate strings, add locale strings.xml, missing translations, or native localization. Invoke with @sonicg-localize.
 ---
 
 # Localize
@@ -9,25 +9,47 @@ You are the **coordinator**. Discover languages, ask the two required questions,
 
 Do not write any localization file until both MCQs are answered.
 
+Canonical language list, `LanguageItem` shape, code → `values-*` folder rules and RTL set: [rules/reference/languages.md](../../rules/reference/languages.md). Read it before Step 1.
+
 ---
 
 ## 0. Hard rules
 
-1. Search `LanguageDataSource.kt` first. Do not invent languages.
+1. Search `DpLanguages.kt` first, then `LanguageDataSource.kt` (filename match). Check every code against `rules/reference/languages.md`. Do not invent languages.
 2. Native translation (meaning + UI context), not word-for-word.
 3. One worker = one language. Launch **all** workers in **one** parallel turn. Never wait for language 1 before starting language 2.
 4. Each worker writes **only** `**/res/values-<qual>/**` for its locale. Two workers must never touch the same file.
 5. Preserve resource `name` keys, placeholders, formatting, XML validity, section comment order.
-6. Do not change `LanguageDataSource.kt`, Gradle, architecture, or extract hardcoded Kotlin/Compose strings unless the user explicitly asks.
+6. Do not change `DpLanguages.kt` / `LanguageDataSource.kt`, Gradle, architecture, or extract hardcoded Kotlin/Compose strings unless the user explicitly asks.
 7. Never delete resources. Never rename keys. Never remove an existing translation just because it differs from the source.
 
 ---
 
-## 1. Discover `LanguageDataSource.kt`
+## 1. Discover the language source (`DpLanguages.kt` → `LanguageDataSource.kt`)
 
-Search the whole project for the file `LanguageDataSource.kt` (filename match — do not search for an annotation named LanguageDataSource). Open that file and read the class plus nearby enums, sealed classes, lists, constants, or objects that hold language codes.
+Search the whole project by **filename**, in this order, and use the first hit:
 
-Examples of shapes (do **not** assume these are the project):
+1. `DpLanguages.kt` — reference / legacy apps (QiblaCompass): `class DpLanguages { fun getLanguagesList(languageCode: String = ""): List<LanguageItem> }`
+2. `LanguageDataSource.kt` — template name on new projects (`:data`), same list shape
+
+Do not search for an annotation named `LanguageDataSource`. Open the file and read every `LanguageItem(...)` row (or the enum / list / constants that hold codes). The **first argument** of each row is the language code the app stores (`"en"`, `"zh-CN"`, `"ceb"`, `"jw"`, …); then English name, display name (`English (native)`), `flag_*` drawable, `selected`.
+
+```kotlin
+class DpLanguages {
+
+    fun getLanguagesList(languageCode: String = ""): List<LanguageItem> {
+        val list = arrayListOf(
+            LanguageItem("en", "English", "English", R.drawable.flag_united_states_america, false),
+            LanguageItem("ar", "Arabic", "Arabic (عربي)", R.drawable.flag_saudi_arabia, false),
+            LanguageItem("zh-CN", "Chinese-Simplified", "Chinese-Simplified (简体中文)", R.drawable.flag_china, false),
+            // … up to 104 rows — see rules/reference/languages.md
+        )
+        return list.map { it.copy(selected = it.languageCode == languageCode) }
+    }
+}
+```
+
+Other shapes you may still meet (do **not** assume these are the project):
 
 ```kotlin
 class LanguageDataSource {
@@ -46,17 +68,17 @@ object SupportedLanguages {
 }
 ```
 
-Use the project's actual source of truth.
+Use the project's actual source of truth. Then look up every discovered code in the catalog (`rules/reference/languages.md`): English name, `values-*` folder, RTL. A code that is in the app but **not** in the catalog is still localized when the user picks it — mark it `(not in catalog)` in the MCQ and map its folder with the catalog's "Code → folder rules".
 
 ### Not found
 
 Ask exactly this, then wait:
 
 ```text
-I couldn't find LanguageDataSource.kt in the project.
+I couldn't find DpLanguages.kt or LanguageDataSource.kt in the project.
 
 Please either:
-A. Add/restore LanguageDataSource.kt, or
+A. Add/restore DpLanguages.kt (or LanguageDataSource.kt) with the LanguageItem list, or
 B. Provide the language code(s) manually.
 ```
 
@@ -66,15 +88,15 @@ If the user chooses B, continue with those codes. Do not guess.
 
 ## 2. Language MCQ (mandatory — wait)
 
-Show the detected codes numbered, then ask exactly:
+Show the detected codes numbered — one per line with the catalog's English name, `values-*` folder and `RTL` when it applies — then ask exactly:
 
 ```text
-I found these language codes in LanguageDataSource.kt:
+I found these language codes in DpLanguages.kt:
 
-1. en
-2. ur
-3. es
-4. ms
+1. en — English (source locale, skipped)
+2. ur — Urdu (values-ur, RTL)
+3. es — Spanish (values-es)
+4. zh-CN — Chinese-Simplified (values-zh-rCN)
 
 Which languages should I localize?
 
@@ -83,10 +105,10 @@ B. Select specific languages
 C. Other — enter language code(s)
 ```
 
-Replace the numbered list with the real codes. The user must choose.
+Replace the numbered list with the real codes and the real file name. Name / folder / RTL come from `rules/reference/languages.md`; append `(not in catalog)` to codes the catalog does not list. Show **every** detected code, even for the full 104-language list — do not truncate. The user must choose.
 
 - **B** → ask for the codes, then continue.
-- **C** → accept any codes (`ur`, `fr-CA`, `pt-BR`, `zh-CN`, …). Do not reject a code because it was not in `LanguageDataSource.kt`. Explicitly say it is outside the discovered language source.
+- **C** → accept any codes (`ur`, `fr-CA`, `pt-BR`, `zh-CN`, …). Do not reject a code because it was not in `DpLanguages.kt` / `LanguageDataSource.kt`. Explicitly say it is outside the discovered language source and resolve its folder with the catalog's "Code → folder rules".
 
 Do not infer languages. Do not start work.
 
@@ -120,12 +142,14 @@ Do not modify files until the user chooses A or B.
 Do this once, fast, before any worker starts.
 
 1. **Source locale** = the project's default `res/values/` (usually `:core-ui` `values/strings.xml`). Do not assume English just because the text looks English. Inspect project config and existing folders.
-2. **Folder map** — use existing project convention; do not blindly transform codes:
+2. **Folder map** — resolve every code with the catalog (`rules/reference/languages.md`, "Code → folder rules"); when the project already has a folder for that language, reuse it instead of creating a second spelling:
    - `ur` → `values-ur/`
-   - `fr-CA` → `values-fr-rCA/`
-   - `pt-BR` → `values-pt-rBR/`
-   - `zh-CN` → `values-zh-rCN/`
-   If mapping is ambiguous, ask. Do not guess.
+   - `zh-CN` → `values-zh-rCN/`, `zh-TW` → `values-zh-rTW/`, `pt-BR` → `values-pt-rBR/`, `fr-CA` → `values-fr-rCA/`
+   - `he` → `values-iw/`, `id` → `values-in/`, `yi` → `values-ji/` (legacy Android codes; `values-he` / `values-id` / `values-yi` are equivalent — never create both)
+   - `jw` → `values-jv/` (deprecated ISO code in the app, current ISO 639-1 code on disk)
+   - `ceb` → `values-b+ceb/`, `haw` → `values-b+haw/`, `hmn` → `values-b+hmn/` (3-letter codes need the BCP 47 `b+` form; `values-ceb/` is invalid)
+   - `tl` → `values-tl/`, `no` → `values-no/`
+   If a code is outside the catalog and those rules do not settle it, ask. Do not guess.
 3. **Skip the source locale** (e.g. `en` when source is `values/`). Say you skipped it.
 4. Collect translatable `<string>`, `<string-array>`, `<plurals>`. Skip `translatable="false"`. Keep section comments (App → General → `cd_*` → screens) so workers can mirror order.
 5. For each target language, compute missing keys, existing keys, and whether the locale file/folder must be created.
@@ -133,7 +157,9 @@ Do this once, fast, before any worker starts.
 
 ```text
 languageCode:
-androidFolder:          # e.g. values-ur
+androidFolder:          # e.g. values-ur — from the catalog folder rules
+displayName:            # catalog English name, e.g. Urdu
+rtl: true | false       # from the catalog RTL set
 outputFiles:            # exact paths this worker may write
 mode: complete | missing-only
 sourceKeys:             # name → source value + type (string|array|plurals) + placeholders
@@ -177,11 +203,12 @@ If the host cannot spawn subagents: still isolate by language (one locale's file
 You are a native localizer for ONE language only.
 
 LANGUAGE=<code>
-FOLDER=<values-xx>          # Android resource folder qualifier
+FOLDER=<values-xx>          # Android resource folder qualifier (from the languages catalog)
+RTL=yes | no                # from the languages catalog
 OUTPUT=<exact file paths>
 MODE=complete | missing-only
 
-WRITE ONLY the OUTPUT paths under FOLDER. Do not touch any other locale, Kotlin, Gradle, or LanguageDataSource.kt.
+WRITE ONLY the OUTPUT paths under FOLDER. Do not touch any other locale, Kotlin, Gradle, DpLanguages.kt or LanguageDataSource.kt.
 
 Translate as a native product writer for LANGUAGE. Meaning + UI context, not word-for-word.
 
@@ -191,6 +218,7 @@ Must:
 - Preserve \n \t HTML/CDATA and required XML escaping (& < > ' ").
 - Valid Android XML. No duplicate names. Close every tag.
 - Plurals: use this locale's quantity categories (do not copy English one/other blindly).
+- RTL=yes: keep placeholders in logical order; wrap a Latin / numeric token inside RTL text with LRM (\u200E) when it would otherwise flip; never mirror numbers or placeholders.
 - Mirror source section comment order.
 - Skip translatable="false".
 - Do not translate product/brand/API/library names, URLs, emails, package names, or code identifiers unless existing translations in this project already do.
@@ -284,4 +312,4 @@ Do not translate: product names, company/brand names, API/library/framework name
 
 ## 10. Out of scope (stop and ask)
 
-Redesigning UI, extracting hardcoded strings, changing architecture, Gradle, locale-detection logic, or `LanguageDataSource.kt`.
+Redesigning UI, extracting hardcoded strings, changing architecture, Gradle, locale-detection logic, or `DpLanguages.kt` / `LanguageDataSource.kt`. Adding a **new language to the app** is also out of scope here: the user adds the row to `rules/reference/languages.md` and the data source first, then runs this skill for its `values-*` folder.

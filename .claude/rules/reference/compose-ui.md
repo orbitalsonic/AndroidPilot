@@ -278,7 +278,7 @@ Do **not** enable View Binding on Compose-only feature modules. XML `:core-ui` m
 
 **One module for the full design system** — same as xml. XML tokens in `res/values/`; Compose in Kotlin under `core/ui/theme/`:
 
-- `Color.kt` — primitive + semantic colors; light/dark `ColorScheme` mapping (`sonicc-setup-design-system`)
+- `Color.kt` — primitive + semantic colors; light/dark `ColorScheme` mapping (`sonic-setup-design-system`)
 - `Type.kt` — `Typography` from Figma `TextStyle.*` ramp (Poppins / design family)
 - `Theme.kt` — `@Composable fun AppTheme(darkTheme, content)` wrapping `MaterialTheme` — **no dynamic color** when Figma tokens exist
 - `themes.xml` / `colors.xml` still set `android:windowBackground`, splash (`Theme.App.Starting`), and Material bridge attrs

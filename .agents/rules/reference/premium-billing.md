@@ -265,7 +265,7 @@ koin.get<BillingDataSource>().start(applicationScope)
 
 ### 3.x → 4.0.0 migration
 
-**Workflow skill:** `billing/sonic-update-in-app-billing` (`.cursor`) / `sonicc-update-in-app-billing` (`.claude`) / `sonicg-update-in-app-billing` (`.agents`).
+**Workflow skill:** `billing/sonicc-update-in-app-billing` (`.cursor`) / `sonic-update-in-app-billing` (`.claude`) / `sonicg-update-in-app-billing` (`.agents`).
 
 | 3.x                                        | 4.0.0                                      |
 |--------------------------------------------|--------------------------------------------|

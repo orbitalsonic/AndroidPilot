@@ -14,7 +14,7 @@ paths:
 |---------|--------|
 | `InternetManager` | `:core-platform` |
 | `PlatformFirebase` object | `:core-platform` |
-| **`firebase-messaging` dependency** | `:core-platform` (mandatory on new projects via `sonicc-setup-new-project`; no service in template) |
+| **`firebase-messaging` dependency** | `:core-platform` (mandatory on new projects via `sonic-setup-new-project`; no service in template) |
 | Event name constants (`EventsProvider`) | `:core-common` |
 | Remote Config DataSource | `:data` |
 | RC cache in `SharedPrefManager` | `:data` |
@@ -22,7 +22,7 @@ paths:
 
 ## PlatformFirebase
 
-Speak-Translate shape (`:core-platform` `firebase/PlatformFirebase.kt` — see `sonicc-setup-new-project` template):
+Speak-Translate shape (`:core-platform` `firebase/PlatformFirebase.kt` — see `sonic-setup-new-project` template):
 
 ```kotlin
 object PlatformFirebase {
@@ -40,9 +40,9 @@ object PlatformFirebase {
 
 ## Firebase Cloud Messaging (new projects)
 
-- **`sonicc-setup-new-project`** must add `firebase-messaging` to the catalog + `implementation(libs.firebase.messaging)` on **`:core-platform`** only
+- **`sonic-setup-new-project`** must add `firebase-messaging` to the catalog + `implementation(libs.firebase.messaging)` on **`:core-platform`** only
 - Dependency only — **no** `FirebaseMessagingService`, manifest FCM entries, or token code in the template bootstrap
-- Later push handling: separate feature work; optional dep-only add for existing apps → skill `sonicc-implement-firebase-messaging`
+- Later push handling: separate feature work; optional dep-only add for existing apps → skill `sonic-implement-firebase-messaging`
 
 ## Analytics events
 
@@ -61,7 +61,7 @@ object PlatformFirebase {
 
 DataSource: **no** dispatcher. Repository: `withContext(ioDispatcher)`.
 
-Adding keys later (existing cache): skill **`sonicc-add-firebase-remote-config`**.
+Adding keys later (existing cache): skill **`sonic-add-firebase-remote-config`**.
 
 ## Connectivity
 

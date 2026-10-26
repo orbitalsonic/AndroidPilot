@@ -43,7 +43,7 @@ private fun onKoinStarted() {
 
 - Eager bindings are ready when `startKoin` returns; **`runOnKoinStarted`** for work that needs `lazyModules`
 - Same wait-for-lazy pattern on **StartupActivity** / **StartupFragment** (or compose **StartupScreen**) only when resolving **lazy** deps at start
-- **Cold-start graph (mandatory):** before shipping, verify the first resolve path cannot hit `No definition found` — `App` loads needed **eager** `module`s via `KoinModules` → `StartupActivity` injects → `StartupFragment` VM (legacy Splash) and **every** ctor dependency is registered (`viewModel` / `factory` / `single`). Adding a dep to Startup*/MainActivity without registering it on the eager list is a **Critical** crash (see `07`, `sonicc-review-architecture`)
+- **Cold-start graph (mandatory):** before shipping, verify the first resolve path cannot hit `No definition found` — `App` loads needed **eager** `module`s via `KoinModules` → `StartupActivity` injects → `StartupFragment` VM (legacy Splash) and **every** ctor dependency is registered (`viewModel` / `factory` / `single`). Adding a dep to Startup*/MainActivity without registering it on the eager list is a **Critical** crash (see `07`, `sonic-review-architecture`)
 
 ## Theme vs Koin
 

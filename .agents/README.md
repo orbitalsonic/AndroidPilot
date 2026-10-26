@@ -2,7 +2,7 @@
 
 Company-grade **rules** + **skills** for Clean Architecture Android apps (XML + View Binding **or** Jetpack Compose via `uiFramework`, MVI, Koin `module` / `lazyModule`).
 
-This folder is part of the [AndroidPilot](https://github.com/orbitalsonic/AndroidPilot) template for Android Studio Gemini. Cursor teammates use [`.cursor/`](../.cursor/) (`/sonic-…`). Claude Code teammates use [`.claude/`](../.claude/) (`/sonicc-…`). Keep all three in sync. Skills invoke as `@sonicg-…`.
+This folder is part of the [AndroidPilot](https://github.com/orbitalsonic/AndroidPilot) template for Android Studio Gemini. Cursor teammates use [`.cursor/`](../.cursor/) (`/sonicc-…`). Claude Code teammates use [`.claude/`](../.claude/) (`/sonic-…`). Keep all three in sync. Skills invoke as `@sonicg-…`.
 
 ## Rules vs Skills
 
@@ -21,8 +21,8 @@ This folder is part of the [AndroidPilot](https://github.com/orbitalsonic/Androi
 - Invoke as **`@sonicg-…`** (type `@sonicg` — Android Studio matches the **folder** name under `.agents/skills`, not `.skills` or `.gemini`)
 - Description always starts with **OrbitalSonic Gemini Skill:**
 - Skill folders are flat: `.agents/skills/sonicg-<name>/SKILL.md` (example: `sonicg-figma-to-xml`)
-- Cursor twins in this repo use **`/sonic-…`** (description starts with **Sonic Cursor Skill:**)
-- Claude Code twins in this repo use **`/sonicc-…`** (description starts with **OrbitalSonic Claude Skill:**)
+- Cursor twins in this repo use **`/sonicc-…`** (description starts with **Sonic Cursor Skill:**)
+- Claude Code twins in this repo use **`/sonic-…`** (description starts with **OrbitalSonic Claude Skill:**)
 - Do not pick Figma plugin skills ("Created by Figma") for Android screens — `@sonicg-figma-to-xml` / `@sonicg-figma-to-compose` load those internally
 
 ## Project settings
@@ -45,7 +45,7 @@ All feature/UI/test skills **must read and obey** this file when present:
 
 ## Skill map
 
-Invoke as `@sonicg-<name>`. Cursor twins use `/sonic-…`. Claude Code twins use `/sonicc-…`.
+Invoke as `@sonicg-<name>`. Cursor twins use `/sonicc-…`. Claude Code twins use `/sonic-…`.
 
 All skills live flat under `.agents/skills/sonicg-<name>/SKILL.md`.
 
@@ -141,6 +141,7 @@ Data patterns (Retrofit, Room, SharedPreferences) live in **rules** + [`.agents/
 | `premium-billing.md`                                | `21-ads-billing` / `33`   |
 | `ads-gma.md`                                        | `21-ads-billing`          |
 | `app-flow.md`                                       | `29`–`32` screen rules    |
+| `languages.md`                                      | `30-screen-language` + localize skill (104-language catalog, `values-*` map, RTL) |
 
 ## Future distribution (not in v1)
 

@@ -65,11 +65,11 @@ Implement via `GetStartupDestinationUseCase` (or equivalent) — heavy logic not
 
 - Helper: `screenStarted()` → `launchWhenResumed { handleIntent(ScreenStarted) }` when work must wait for resume
 - Wait for Koin if resolving deps at cold start (`23-app-startup`)
-- **DI (mandatory):** every `Startup*ViewModel` + `GetStartupDestinationUseCase` (and every ctor dep — prefs/RC/consent/ads/billing helpers used here) registered via **eager `module`** (`startupPresentationModule` / `startupFeatureModule` + domain `useCaseModule` / data bindings) and included in the composition-root **eager** list. Never add a Startup dependency without a Koin definition on the cold-start path (`07`, `sonicc-review-architecture` cold-start check)
+- **DI (mandatory):** every `Startup*ViewModel` + `GetStartupDestinationUseCase` (and every ctor dep — prefs/RC/consent/ads/billing helpers used here) registered via **eager `module`** (`startupPresentationModule` / `startupFeatureModule` + domain `useCaseModule` / data bindings) and included in the composition-root **eager** list. Never add a Startup dependency without a Koin definition on the cold-start path (`07`, `sonic-review-architecture` cold-start check)
 - `StartupActivity`: `initSplashScreen()` → `installSplashScreen()`; insets default `InsetsMode.TOP_BOTTOM` (`19-base-ui`) — override `getInsetsMode()` only when the design needs `EDGE_TO_EDGE`
 - Remote Config fetch starts here (domain/data, not live RC in UI)
-- **No Startup ads:** navigate when Remote Config returns or after **5 seconds** (`sonicc-setup-new-project`)
-- **Startup ads wired:** ignore the Remote Config result. Then consent (8s) → AdMob init → ad calls (8s) → navigate. Do not navigate from Remote Config (`sonicc-implement-admob-ads`)
+- **No Startup ads:** navigate when Remote Config returns or after **5 seconds** (`sonic-setup-new-project`)
+- **Startup ads wired:** ignore the Remote Config result. Then consent (8s) → AdMob init → ad calls (8s) → navigate. Do not navigate from Remote Config (`sonic-implement-admob-ads`)
 - **Purchased (`isAppPurchased`):** cancel ads. First-time users still go to Startup Language / Startup Intro. Returning users go straight to `MainActivity` and skip Startup Welcome Back / Startup Premium
 
 ## Forbidden

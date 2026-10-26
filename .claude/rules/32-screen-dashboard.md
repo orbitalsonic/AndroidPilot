@@ -36,7 +36,7 @@ When the shell must be a Fragment (e.g. a drawer host above it):
 
 1. Host nested `NavHostFragment` with `nav_graph_dashboard` (`defaultNavHost="false"`); tab destinations **only** in that graph
 2. Root graph holds `dashboardFragment`; child → root navigation via `navigateRootTo` (`17-navigation`)
-3. XML checklist: `fragment_dashboard.xml`, `menu_bottom_nav_dashboard.xml`, `nav_graph_dashboard.xml` — see **`sonicc-figma-to-xml`** “Dashboard + BottomNavigation”
+3. XML checklist: `fragment_dashboard.xml`, `menu_bottom_nav_dashboard.xml`, `nav_graph_dashboard.xml` — see **`sonic-figma-to-xml`** “Dashboard + BottomNavigation”
 
 ```kotlin
 private val navController by lazy {

@@ -18,7 +18,7 @@ When `uiFramework` is `compose`, do not scaffold `ParentFragment` / View Binding
 ```
 
 **Templates (copy + replace `YOUR.PACKAGE`):**  
-`.cursor/skills/project/sonic-setup-new-project/templates/base/`  
+`.cursor/skills/project/sonicc-setup-new-project/templates/base/`  
 See that folder’s `README.md`. Same shape as the company template; `ParentSheet` is null-safe (not `!!`).
 
 ### ParentFragment

@@ -11,7 +11,7 @@ Follow `.cursor/rules/08-gradle.mdc`, `13-libraries-stack.mdc`, `06-coroutines-f
 | `:domain` | Pure Kotlin entities + repository interface |
 
 - Room types stay in `:core-database` / data boundary — not in domain or presentation
-- Do **not** create an empty `:core-database` on every `sonic-setup-new-project` — add when Room is approved
+- Do **not** create an empty `:core-database` on every `sonicc-setup-new-project` — add when Room is approved
 
 ## Setup
 
